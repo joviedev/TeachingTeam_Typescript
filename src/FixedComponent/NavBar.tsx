@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
   // State to track the currently active navigation tab
@@ -9,6 +10,8 @@ const NavBar = () => {
   const [hoveredIcon, setHoveredIcon] = useState(false);
   // Role of the current user: either guest (not sign in), tutor, or lecturer
   const [userRole, setUserRole] = useState<'guest' | 'tutor' | 'lecturer'>('guest');
+  // Initialize navigate function
+  const navigate = useNavigate(); 
 
   // Called when a user logs out
   const handleSignOut = () => {
@@ -107,9 +110,10 @@ const NavBar = () => {
                 Sign In
               </button>
 
-              <button
+               <button
                 style={styles.authButton}
-                onClick={() => alert('Navigate to Sign Up')}
+                // Once select, navigate to /signup
+                onClick={() => navigate('/signup')} 
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
                   e.currentTarget.style.color = '#000';
