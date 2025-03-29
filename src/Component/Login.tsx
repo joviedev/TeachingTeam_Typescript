@@ -8,7 +8,7 @@ type LoginProps = {
 
 /**
  * Sign-in component for user login.
- * Validates email/password against dummy users and redirects by role.
+ * Matches email/password against dummy users and redirects by role.
  */
 const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   const navigate = useNavigate();
@@ -22,23 +22,11 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     { email: 'lecturer@example.com', password: 'Lecturer123!', role: 'lecturer' },
   ];
 
-  // Handle user login with validation
+  // Handle user login
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-    if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-
-    if (!strongPasswordRegex.test(password)) {
-      setError('Password must include uppercase, number, and symbol.');
-      return;
-    }
-
+    // Check credentials against dummy users
     const matchedUser = dummyUsers.find(
       (user) => user.email === email && user.password === password
     );
@@ -48,12 +36,13 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
       return;
     }
 
-    // Success: update auth state and redirect
+    // On success: update app state
     setError('');
     setIsSignedIn(true);
     setUserRole(matchedUser.role as 'tutor' | 'lecturer');
     alert(`✅ Login successful as ${matchedUser.role}`);
 
+    // Redirect to dashboard
     if (matchedUser.role === 'tutor') {
       navigate('/tutor-dashboard');
     } else {
@@ -62,68 +51,139 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-160px)] px-4 font-[Poppins] bg-white">
-      <h1 className="text-4xl font-bold text-[#085DB7] mb-6">Sign In</h1>
+    <div style={styles.container}>
+      <h1 style={styles.title}>Sign In</h1>
 
-      <form
-        onSubmit={handleLogin}
-        className="border border-[#085DB7] rounded-xl p-8 w-full max-w-md shadow-md"
-      >
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2 text-black">Email</label>
+      <form onSubmit={handleLogin} style={styles.form}>
+        {/* Email Field */}
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Email</label>
           <input
             type="email"
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-[#085DB7]"
+            style={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2 text-black">Password</label>
+        {/* Password Field */}
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Password</label>
           <input
             type="password"
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-[#085DB7]"
+            style={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
           />
         </div>
 
-        {error && <p className="text-red-600 text-sm mb-4 font-medium">{error}</p>}
+        {/* Error Message */}
+        {error && <p style={styles.error}>{error}</p>}
 
-        <div className="text-sm text-center mb-4 text-gray-600">
+        {/* Forgot Password */}
+        <div style={styles.textLine}>
           Can't remember your password?{' '}
-          <span className="text-[#085DB7] cursor-pointer hover:underline">Click Here</span>
+          <span style={styles.link}>Click Here</span>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-[#085DB7] text-white py-2 rounded-full font-semibold hover:opacity-90 transition"
-        >
+        {/* Submit Button */}
+        <button type="submit" style={styles.submitButton}>
           Submit
         </button>
 
-        <div className="text-sm text-center mt-4 text-gray-600">
+        {/* Redirect to Register */}
+        <div style={{ ...styles.textLine, marginTop: 16 }}>
           Need an account?{' '}
-          <span
-            className="text-[#085DB7] cursor-pointer hover:underline"
-            onClick={() => navigate('/signup')}
-          >
+          <span style={styles.link} onClick={() => navigate('/signup')}>
             Register Here
           </span>
         </div>
-      </form>
 
-      <div className="mt-6 text-sm text-center text-gray-600">
-        Questions? Contact our{' '}
-        <span className="text-[#085DB7] cursor-pointer hover:underline">
-          Membership Coordinator
-        </span>
-      </div>
+        {/* Footer Inside Form Box */}
+        <div style={{ ...styles.textLine, marginTop: 24 }}>
+          Questions? Contact our{' '}
+          <span style={styles.link}>Membership Coordinator</span>
+        </div>
+      </form>
     </div>
   );
+};
+
+const styles: { [key: string]: React.CSSProperties } = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 'calc(100vh - 160px)',
+    padding: '0 1rem',
+    backgroundColor: '#ffffff',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  title: {
+    fontSize: '2.25rem',
+    fontWeight: 700,
+    color: '#085DB7',
+    marginBottom: '1.5rem',
+  },
+  form: {
+    border: '1px solid #085DB7',
+    borderRadius: '1.25rem',
+    padding: '2rem',
+    width: '100%',
+    maxWidth: '400px',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+  },
+  inputGroup: {
+    marginBottom: '1rem',
+  },
+  label: {
+    display: 'block',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    marginBottom: '0.5rem',
+    color: '#000000',
+  },
+  input: {
+    width: '100%',
+    padding: '0.5rem 1rem',
+    border: '1px solid #ccc',
+    borderRadius: '0.375rem',
+    outline: 'none',
+    fontSize: '1rem',
+  },
+  error: {
+    color: '#dc2626',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    marginBottom: '1rem',
+  },
+  textLine: {
+    fontSize: '0.875rem',
+    color: '#4b5563',
+    textAlign: 'center',
+  },
+  link: {
+    color: '#085DB7',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    marginLeft: '0.25rem',
+  },
+  submitButton: {
+    width: '100%',
+    backgroundColor: '#085DB7',
+    color: '#ffffff',
+    padding: '0.5rem',
+    borderRadius: '9999px',
+    fontWeight: 600,
+    fontSize: '1rem',
+    marginTop: '0.5rem',
+    cursor: 'pointer',
+    border: 'none',
+    transition: 'opacity 0.3s ease-in-out',
+  },
 };
 
 export default Login;

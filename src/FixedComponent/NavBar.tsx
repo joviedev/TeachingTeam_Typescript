@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 // Define props for NavBar to receive authentication state and logout handler
 interface NavBarProps {
@@ -11,7 +12,8 @@ interface NavBarProps {
 // NavBar functional component
 const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) => {
   // State to track the currently active navigation tab
-  const [activeTab, setActiveTab] = useState('About');
+  const location = useLocation();
+  const currentPath = location.pathname;
   // Tracks hover state for the log out button
   const [hoveredIcon, setHoveredIcon] = useState(false);
   // Initialize navigate function
@@ -49,7 +51,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
   const renderNavItems = () => {
     if (!isSignedIn || userRole === 'guest') {
       return [
-        { label: 'About', path: '/about' },
+        { label: 'About', path: '/' },
         { label: 'Opportunity', path: '/opportunity' },
         { label: 'Become a Tutor', path: '/become-a-tutor' },
       ];
@@ -79,14 +81,12 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
       <div style={styles.navLinks}>
         {renderNavItems().map((item) => (
           <NavItem
-            key={item.label}
-            label={item.label}
-            isActive={activeTab === item.label}
-            onClick={() => {
-              setActiveTab(item.label);
-              navigate(item.path);
-            }}
-          />
+          key={item.label}
+          label={item.label}
+          isActive={currentPath === item.path}
+          onClick={() => navigate(item.path)}
+        />
+        
         ))}
       </div>
 

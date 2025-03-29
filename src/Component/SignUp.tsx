@@ -18,28 +18,33 @@ const SignUp = () => {
   );
 };
 
-// Inline styles
+// Inline styles (aligned with Sign In box styling)
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingTop: '40px',
+    justifyContent: 'center',
+    minHeight: 'calc(100vh - 160px)',
+    padding: '0 1rem',
+    backgroundColor: '#ffffff',
+    fontFamily: 'Poppins, sans-serif',
   },
   title: {
-    fontSize: '36px',
+    fontSize: '2.25rem',
     fontWeight: 700,
-    marginBottom: '20px',
-    color: '#1f1f1f',
+    color: '#085DB7',
+    marginBottom: '1.5rem',
   },
   formBox: {
-    border: '2px solid #1A4AFF',
-    borderRadius: '10px',
-    padding: '30px',
-    width: '400px',
+    border: '1px solid #085DB7',
+    borderRadius: '0.75rem',
+    padding: '2rem',
+    width: '100%',
+    maxWidth: '400px',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
     backgroundColor: '#fff',
     display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
     textAlign: 'center',
   },
