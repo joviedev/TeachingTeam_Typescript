@@ -1,12 +1,12 @@
 import React from 'react';
 
-const Lecturer = () => {
+const LecturerDashboard = () => {
   return (
     <div style={{ padding: '40px', textAlign: 'center' }}>
       <h2>Lecturer Dashboard</h2>
-      <p>This is where lecturers will review and rank tutor applications.</p>
+      <p>This is.</p>
     </div>
   );
 };
 
-export default Lecturer;
+export default LecturerDashboard;

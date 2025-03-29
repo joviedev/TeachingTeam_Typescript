@@ -11,7 +11,7 @@ const NavBar = () => {
   // Role of the current user: either guest (not sign in), tutor, or lecturer
   const [userRole, setUserRole] = useState<'guest' | 'tutor' | 'lecturer'>('guest');
   // Initialize navigate function
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // Called when a user logs out
   const handleSignOut = () => {
@@ -22,7 +22,7 @@ const NavBar = () => {
     alert('You have been logged out.');
   };
 
-   // Called when a user logs in (either tutor or lecturer)
+  // Called when a user logs in (either tutor or lecturer)
   const handleSignIn = (role: 'tutor' | 'lecturer') => {
     setIsSignedIn(true);
     setUserRole(role);
@@ -60,15 +60,29 @@ const NavBar = () => {
   // Returns diff specific nav items based on role (either guest, tutor or lecturer)
   const renderNavItems = () => {
     if (!isSignedIn || userRole === 'guest') {
-      return ['About', 'Opportunity', 'Become a Tutor'];
+      return [
+        { label: 'About', path: '/about' },
+        { label: 'Opportunity', path: '/opportunity' },
+        { label: 'Become a Tutor', path: '/become-a-tutor' },
+      ];
     }
+
     if (userRole === 'tutor') {
-      return ['Dashboard', 'My Applications', 'Edit Profile'];
+      return [
+        { label: 'Dashboard', path: '/tutor-dashboard' },
+        { label: 'My Applications', path: '/my-applications' },
+      ];
     }
+
     if (userRole === 'lecturer') {
-      return ['Dashboard', 'Applications', 'Review Tutors'];
+      return [
+        { label: 'Dashboard', path: '/lecturer-dashboard' },
+        { label: 'Applications', path: '/applications' },
+        { label: 'Review Tutors', path: '/review-tutors' },
+      ];
     }
-    return [];
+
+    return []; // Ensure fallback return
   };
 
   return (
@@ -77,10 +91,13 @@ const NavBar = () => {
       <div style={styles.navLinks}>
         {renderNavItems().map((item) => (
           <NavItem
-            key={item}
-            label={item}
-            isActive={activeTab === item}
-            onClick={() => setActiveTab(item)}
+            key={item.label}
+            label={item.label}
+            isActive={activeTab === item.label}
+            onClick={() => {
+              setActiveTab(item.label);
+              navigate(item.path);
+            }}
           />
         ))}
       </div>
@@ -110,10 +127,10 @@ const NavBar = () => {
                 Sign In
               </button>
 
-               <button
+              <button
                 style={styles.authButton}
                 // Once select, navigate to /signup
-                onClick={() => navigate('/signup')} 
+                onClick={() => navigate('/signup')}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
                   e.currentTarget.style.color = '#000';
