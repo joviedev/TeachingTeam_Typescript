@@ -1,33 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const NavBar = () => {
+// Define props for NavBar to receive authentication state and logout handler
+interface NavBarProps {
+  isSignedIn: boolean;
+  userRole: 'guest' | 'tutor' | 'lecturer';
+  handleSignOut: () => void;
+}
+
+// NavBar functional component
+const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) => {
   // State to track the currently active navigation tab
   const [activeTab, setActiveTab] = useState('About');
-  // Whether a user is signed in or not
-  const [isSignedIn, setIsSignedIn] = useState(false);
   // Tracks hover state for the log out button
   const [hoveredIcon, setHoveredIcon] = useState(false);
-  // Role of the current user: either guest (not sign in), tutor, or lecturer
-  const [userRole, setUserRole] = useState<'guest' | 'tutor' | 'lecturer'>('guest');
   // Initialize navigate function
   const navigate = useNavigate();
-
-  // Called when a user logs out
-  const handleSignOut = () => {
-    setIsSignedIn(false);
-    setUserRole('guest');
-    // Landing page always at 'About'
-    setActiveTab('About');
-    alert('You have been logged out.');
-  };
-
-  // Called when a user logs in (either tutor or lecturer)
-  const handleSignIn = (role: 'tutor' | 'lecturer') => {
-    setIsSignedIn(true);
-    setUserRole(role);
-    alert(`Signed in successfully as ${role}`);
-  };
 
   // Navigation item component for reusability, on click, on hover effect
   const NavItem = ({
@@ -113,7 +101,7 @@ const NavBar = () => {
             <>
               <button
                 style={styles.authButton}
-                onClick={() => handleSignIn('tutor')}
+                onClick={() => navigate('/login')}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
                   e.currentTarget.style.color = '#000';
