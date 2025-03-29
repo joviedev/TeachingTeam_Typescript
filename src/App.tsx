@@ -2,21 +2,29 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './FixedComponent/Header';
 import NavBar from './FixedComponent/NavBar';
-import SignUp from './Component/SignUp';
+
+import About from './Pages/About';         // Landing page
+import SignUp from './Component/SignUp';   // Sign-up page
+import Tutor from './Pages/Tutor';         // Tutor dashboard (placeholder)
+import Lecturer from './Pages/Lecturer';   // Lecturer dashboard (placeholder)
+import JoinUs from './Pages/JoinUs';       // Join Us page (placeholder)
+
 import './App.css';
 
 // Main landing page component
 function App() {
   return (
     <Router>
-      <div style={{ backgroundColor: '#F8F9FA', minHeight: '100vh' }}>
-        <Header /> {/*  Display the header component on all pages*/}
-        <NavBar /> {/*  Display the navbar component on all pages */}
+      <div style={{ backgroundColor: '#F8F9FA', minHeight: '100vh', fontFamily: "'Poppins', sans-serif" }}>
+        <Header />
+        <NavBar />
 
-        {/* Define application routes */}
         <Routes>
-          {/* Route for the sign-up page */}
+          <Route path="/" element={<About />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/tutor" element={<Tutor />} />
+          <Route path="/lecturer" element={<Lecturer />} />
+          <Route path="/join" element={<JoinUs />} />
         </Routes>
       </div>
     </Router>
