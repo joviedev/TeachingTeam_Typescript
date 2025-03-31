@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import heroImage from '../assets/study-group.jpg';
 
-const About = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const About: React.FC = () => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
     <div className="font-sans text-gray-800">
@@ -139,7 +139,9 @@ const About = () => {
         transition={{ duration: 0.6 }}
       >
         <h3 className="text-3xl font-bold mb-4">Ready to join TeachTeam?</h3>
-        <p className="text-lg mb-8">Sign up today and start shaping the future of tutoring at the School of Computer Science.</p>
+        <p className="text-lg mb-8">
+          Sign up today and start shaping the future of tutoring at the School of Computer Science.
+        </p>
         <div className="flex justify-center gap-6 flex-wrap">
           <motion.a
             href="/signup"
