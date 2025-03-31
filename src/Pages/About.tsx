@@ -2,231 +2,241 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import heroImage from '../assets/study-group.jpg';
 import ScrollToggle from '../FixedComponent/ScrollToggle';
+import Footer from '../FixedComponent/Footer';
+
+const styles: { [key: string]: React.CSSProperties } = {
+  heroSection: {
+    backgroundImage: `url(${heroImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '90vh',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    position: 'relative',
+    padding: '0 3rem',
+  },
+  overlay: {
+    position: 'absolute',
+    inset: '0',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  sectionDivider: {
+    borderTop: '1px solid #e5e7eb',
+  },
+  ctaSection: {
+    padding: '5rem 1.5rem',
+    background: 'linear-gradient(to right, #1d4ed8, #3b82f6)',
+    color: 'white',
+    textAlign: 'center',
+  },
+};
 
 const About: React.FC = () => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="font-sans text-gray-800">
-
+    <div style={{ fontFamily: 'sans-serif', color: '#1f2937' }}>
       {/* Hero Section */}
-      <section
-        className="relative h-[90vh] text-white flex items-center justify-center text-center px-4 md:px-12"
-        style={styles.heroSection}
-      >
-        <div className="absolute inset-0 bg-black opacity-60" />
+      <section style={styles.heroSection}>
+        <div style={styles.overlay}></div>
         <motion.div
-          className="relative z-10 max-w-3xl"
+          style={{ position: 'relative', zIndex: 10, maxWidth: '768px' }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1.5rem', lineHeight: '1.25' }}>
             Empowering Tutors. Simplifying Selection.
           </h1>
-          <p className="text-lg md:text-xl mb-8 drop-shadow-sm text-gray-100">
+          <p style={{ fontSize: '1.125rem', marginBottom: '2rem', color: '#f3f4f6' }}>
             TeachTeam helps students and lecturers connect through an efficient tutoring platform.
             Apply, review, and collaborate – all in one place.
           </p>
           <motion.a
             href="#features"
             whileHover={{ scale: 1.05 }}
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-medium transition duration-200"
+            style={{
+              display: 'inline-block',
+              backgroundColor: '#2563eb',
+              color: 'white',
+              padding: '0.75rem 2rem',
+              borderRadius: '9999px',
+              fontWeight: 500,
+              textDecoration: 'none',
+            }}
           >
             Learn How It Works
           </motion.a>
         </motion.div>
       </section>
 
-      <div className="border-t border-gray-200" />
+      {/* Divider */}
+      <div style={styles.sectionDivider} />
 
       {/* Features Section */}
-      <section id="features" className="bg-white py-20 px-6 md:px-20">
+      <section id="features" style={{ backgroundColor: 'white', padding: '5rem 1.5rem' }}>
         <motion.h2
-          className="text-3xl font-bold text-center text-blue-800 mb-12"
+          style={{ fontSize: '2rem', fontWeight: 700, textAlign: 'center', color: '#1e40af', marginBottom: '3rem' }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
           How TeachTeam Helps
         </motion.h2>
-        <div className="grid md:grid-cols-2 gap-12">
-          <motion.div
-            className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition"
-            whileHover={{ scale: 1.02 }}
-          >
-            <h3 className="text-2xl font-semibold text-blue-700 mb-4">For Tutors</h3>
-            <ul className="list-disc pl-5 space-y-2 text-gray-700">
-              <li>Apply for open tutoring roles easily</li>
-              <li>Showcase your skills & availability</li>
-              <li>Maintain an active tutoring profile</li>
-            </ul>
-          </motion.div>
-          <motion.div
-            className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition"
-            whileHover={{ scale: 1.02 }}
-          >
-            <h3 className="text-2xl font-semibold text-blue-700 mb-4">For Lecturers</h3>
-            <ul className="list-disc pl-5 space-y-2 text-gray-700">
-              <li>Browse and shortlist qualified applicants</li>
-              <li>Rank tutors based on your preferences</li>
-              <li>Provide feedback and manage matches</li>
-            </ul>
-          </motion.div>
+        <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+          {['For Tutors', 'For Lecturers'].map((title, i) => (
+            <motion.div
+              key={title}
+              whileHover={{ scale: 1.02 }}
+              style={{
+                backgroundColor: '#f9fafb',
+                padding: '1.5rem',
+                borderRadius: '0.75rem',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+              }}
+            >
+              <h3 style={{ fontSize: '1.5rem', color: '#1d4ed8', fontWeight: 600, marginBottom: '1rem' }}>{title}</h3>
+              <ul style={{ paddingLeft: '1.25rem', color: '#374151' }}>
+                {i === 0 ? (
+                  <>
+                    <li>Apply for open tutoring roles easily</li>
+                    <li>Showcase your skills & availability</li>
+                    <li>Maintain an active tutoring profile</li>
+                  </>
+                ) : (
+                  <>
+                    <li>Browse and shortlist qualified applicants</li>
+                    <li>Rank tutors based on your preferences</li>
+                    <li>Provide feedback and manage matches</li>
+                  </>
+                )}
+              </ul>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      <div className="border-t border-gray-200" />
+      {/* Divider */}
+      <div style={styles.sectionDivider} />
 
       {/* Application Process Section */}
-      <section id="how-to-apply" className="bg-gray-100 py-20 px-6 md:px-20">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+      <section id="how-to-apply" style={{ backgroundColor: '#f3f4f6', padding: '5rem 1.5rem' }}>
+        <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           <motion.img
             src={heroImage}
             alt="Students collaborating"
-            className="rounded-xl shadow-md w-full h-auto object-cover"
+            style={{ borderRadius: '1rem', width: '100%', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
             initial={{ scale: 0.9, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8 }}
           />
           <motion.div
-            className="bg-white rounded-xl shadow p-6"
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '1rem',
+              padding: '1.5rem',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+            }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <div
-              className="flex justify-between items-center cursor-pointer"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
               onClick={() => setIsExpanded(!isExpanded)}
             >
-              <h3 className="text-xl font-semibold text-blue-700">How do I apply?</h3>
-              <span className="text-yellow-500 text-3xl font-bold select-none">
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1d4ed8' }}>How do I apply?</h3>
+              <span style={{ color: '#facc15', fontSize: '1.75rem', fontWeight: 'bold' }}>
                 {isExpanded ? '−' : '+'}
               </span>
             </div>
             {isExpanded && (
               <motion.div
-                className="mt-4 text-sm text-gray-700 space-y-4"
+                style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#374151' }}
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 transition={{ duration: 0.4 }}
               >
                 <p>To apply, log in or create an account on TeachTeam and follow these steps:</p>
-                <ul className="list-disc pl-5 space-y-2">
+                <ul style={{ paddingLeft: '1.25rem', marginTop: '1rem' }}>
                   <li>Upload proof of right to work (citizenship or visa)</li>
                   <li>Provide your full name and contact details</li>
                   <li>List your qualifications and education</li>
                   <li>Add employment history</li>
                   <li>Submit two references with contact info</li>
                 </ul>
-                <p>Your profile will remain active for two years and can be updated anytime.</p>
+                <p style={{ marginTop: '1rem' }}>
+                  Your profile will remain active for two years and can be updated anytime.
+                </p>
               </motion.div>
             )}
           </motion.div>
         </div>
       </section>
 
-      <div className="border-t border-gray-200" />
+      {/* Divider */}
+      <div style={styles.sectionDivider} />
 
       {/* CTA Section */}
       <motion.section
-        className="py-20 bg-gradient-to-r from-blue-700 to-blue-500 text-white text-center px-6"
+        style={styles.ctaSection}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <h3 className="text-3xl font-bold mb-4">Ready to join TeachTeam?</h3>
-        <p className="text-lg mb-8">
+        <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>
+          Ready to join TeachTeam?
+        </h3>
+        <p style={{ fontSize: '1.125rem', marginBottom: '2rem' }}>
           Sign up today and start shaping the future of tutoring at the School of Computer Science.
         </p>
-        <div className="flex justify-center gap-6 flex-wrap">
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
           <motion.a
             href="/signup"
             whileHover={{ scale: 1.05 }}
-            className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
+            style={{
+              backgroundColor: 'white',
+              color: '#1d4ed8',
+              fontWeight: 600,
+              padding: '0.75rem 1.5rem',
+              borderRadius: '9999px',
+              textDecoration: 'none',
+            }}
           >
             Create Account
           </motion.a>
           <motion.a
             href="/login"
             whileHover={{ scale: 1.05 }}
-            className="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-blue-700 transition"
+            style={{
+              border: '2px solid white',
+              color: 'white',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '9999px',
+              textDecoration: 'none',
+            }}
           >
             Sign In
           </motion.a>
         </div>
       </motion.section>
 
-      <div className="border-t border-gray-300" />
+      {/* Divider */}
+      <div style={styles.sectionDivider} />
 
-      {/* Footer */}
-      <footer className="bg-gray-100 text-gray-700 px-6 md:px-20 py-12 mt-10">
-        <div className="grid md:grid-cols-4 gap-8 mb-8 text-sm">
-          <div>
-            <h4 className="text-lg font-semibold text-blue-900 mb-4">Contact</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="font-medium text-blue-800">Online enquiry</a></li>
-              <li>Future students <br /><span className="font-semibold text-blue-800">1800 626 481</span></li>
-              <li>Current students <br /><span className="font-semibold text-blue-800">1800 72 4357</span></li>
-              <li>International agents <br /><span className="font-semibold text-blue-800">+61 2 6620 3876</span></li>
-              <li>24/7 Mental Health <br /><span className="font-semibold text-blue-800">1300 782 676</span></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-semibold text-blue-900 mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:underline">Directory</a></li>
-              <li><a href="#" className="hover:underline">How to apply</a></li>
-              <li><a href="#" className="hover:underline">News</a></li>
-              <li><a href="#" className="hover:underline">Careers</a></li>
-              <li><a href="#" className="hover:underline">A-Z Courses</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-semibold text-blue-900 mb-4">Information for</h4>
-            <ul className="space-y-2">
-              <li>Students</li>
-              <li>Lecturers</li>
-              <li>Alumni</li>
-              <li>Partners</li>
-              <li>Staff</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-lg font-semibold text-blue-900 mb-4">About</h4>
-            <ul className="space-y-2">
-              <li>Our Team</li>
-              <li>Vision & Mission</li>
-              <li>Privacy Policy</li>
-              <li>Terms of Service</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 border-t border-gray-300 pt-4">
-          <p>© {new Date().getFullYear()} TeachTeam | School of Computer Science</p>
-          <div className="mt-2 md:mt-0 flex gap-4">
-            <a href="#" className="hover:underline">Feedback</a>
-            <a href="#" className="hover:underline">Accessibility</a>
-            <a href="#" className="hover:underline">Sitemap</a>
-          </div>
-        </div>
-      </footer>
-      <ScrollToggle /> {/* Add the ScrollToggle component here */}
+      {/* Footer and Scroll Toggle */}
+      <Footer />
+      <ScrollToggle />
     </div>
   );
 };
 
 export default About;
-
-// Styles extracted for cleaner JSX
-const styles: { [key: string]: React.CSSProperties } = {
-  heroSection: {
-    backgroundImage: `url(${heroImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-};
