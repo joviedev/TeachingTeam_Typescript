@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import heroImage from '../assets/study-group.jpg'; // Make sure this exists
+import { motion } from 'framer-motion';
+import heroImage from '../assets/study-group.jpg';
 
 const About = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -17,7 +18,12 @@ const About = () => {
         }}
       >
         <div className="absolute inset-0 bg-black opacity-60" />
-        <div className="relative z-10 max-w-3xl">
+        <motion.div
+          className="relative z-10 max-w-3xl"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
             Empowering Tutors. Simplifying Selection.
           </h1>
@@ -25,55 +31,73 @@ const About = () => {
             TeachTeam helps students and lecturers connect through an efficient tutoring platform.
             Apply, review, and collaborate – all in one place.
           </p>
-          <a
+          <motion.a
             href="#features"
+            whileHover={{ scale: 1.05 }}
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-medium transition duration-200"
           >
             Learn How It Works
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </section>
 
-      {/* Divider */}
       <div className="border-t border-gray-200" />
 
       {/* Features Section */}
       <section id="features" className="bg-white py-20 px-6 md:px-20">
-        <h2 className="text-3xl font-bold text-center text-blue-800 mb-12">How TeachTeam Helps</h2>
+        <motion.h2
+          className="text-3xl font-bold text-center text-blue-800 mb-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          How TeachTeam Helps
+        </motion.h2>
         <div className="grid md:grid-cols-2 gap-12">
-          <div className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          <motion.div
+            className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition"
+            whileHover={{ scale: 1.02 }}
+          >
             <h3 className="text-2xl font-semibold text-blue-700 mb-4">For Tutors</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700">
               <li>Apply for open tutoring roles easily</li>
               <li>Showcase your skills & availability</li>
               <li>Maintain an active tutoring profile</li>
             </ul>
-          </div>
-          <div className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+          </motion.div>
+          <motion.div
+            className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition"
+            whileHover={{ scale: 1.02 }}
+          >
             <h3 className="text-2xl font-semibold text-blue-700 mb-4">For Lecturers</h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700">
               <li>Browse and shortlist qualified applicants</li>
               <li>Rank tutors based on your preferences</li>
               <li>Provide feedback and manage matches</li>
             </ul>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Divider */}
       <div className="border-t border-gray-200" />
 
       {/* Application Process Section */}
       <section id="how-to-apply" className="bg-gray-100 py-20 px-6 md:px-20">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/* Image */}
-          <img
+          <motion.img
             src={heroImage}
             alt="Students collaborating"
             className="rounded-xl shadow-md w-full h-auto object-cover"
+            initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8 }}
           />
-          {/* Accordion */}
-          <div className="bg-white rounded-xl shadow p-6">
+          <motion.div
+            className="bg-white rounded-xl shadow p-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
             <div
               className="flex justify-between items-center cursor-pointer"
               onClick={() => setIsExpanded(!isExpanded)}
@@ -84,10 +108,13 @@ const About = () => {
               </span>
             </div>
             {isExpanded && (
-              <div className="mt-4 text-sm text-gray-700 space-y-4">
-                <p>
-                  To apply, log in or create an account on TeachTeam and follow these steps:
-                </p>
+              <motion.div
+                className="mt-4 text-sm text-gray-700 space-y-4"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                transition={{ duration: 0.4 }}
+              >
+                <p>To apply, log in or create an account on TeachTeam and follow these steps:</p>
                 <ul className="list-disc pl-5 space-y-2">
                   <li>Upload proof of right to work (citizenship or visa)</li>
                   <li>Provide your full name and contact details</li>
@@ -95,39 +122,42 @@ const About = () => {
                   <li>Add employment history</li>
                   <li>Submit two references with contact info</li>
                 </ul>
-                <p>
-                  Your profile will remain active for two years and can be updated anytime.
-                </p>
-              </div>
+                <p>Your profile will remain active for two years and can be updated anytime.</p>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Divider */}
       <div className="border-t border-gray-200" />
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-700 text-white text-center px-6">
+      <motion.section
+        className="py-20 bg-gradient-to-r from-blue-700 to-blue-500 text-white text-center px-6"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
         <h3 className="text-3xl font-bold mb-4">Ready to join TeachTeam?</h3>
         <p className="text-lg mb-8">Sign up today and start shaping the future of tutoring at the School of Computer Science.</p>
         <div className="flex justify-center gap-6 flex-wrap">
-          <a
+          <motion.a
             href="/signup"
+            whileHover={{ scale: 1.05 }}
             className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
           >
             Create Account
-          </a>
-          <a
+          </motion.a>
+          <motion.a
             href="/login"
+            whileHover={{ scale: 1.05 }}
             className="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-blue-700 transition"
           >
             Sign In
-          </a>
+          </motion.a>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Divider */}
       <div className="border-t border-gray-300" />
 
       {/* Footer */}
