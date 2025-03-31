@@ -4,8 +4,11 @@ import { useLocation } from 'react-router-dom';
 
 // Define props for NavBar to receive authentication state and logout handler
 interface NavBarProps {
+  // Boolean flag is to determine if the user is currently signed in
   isSignedIn: boolean;
+  // Sign in as what role (guest is when a user did not sign in to account)
   userRole: 'guest' | 'tutor' | 'lecturer';
+  // Execute when the user select "Log Out"
   handleSignOut: () => void;
 }
 
@@ -18,7 +21,6 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
   const [hoveredIcon, setHoveredIcon] = useState(false);
   // Initialize navigate function
   const navigate = useNavigate();
-
   // Navigation item component for reusability, on click, on hover effect
   const NavItem = ({
     label,
@@ -49,6 +51,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
 
   // Returns diff specific nav items based on role (either guest, tutor or lecturer)
   const renderNavItems = () => {
+    // guest doesnt has any account to sign in, thus limited access to the website
     if (!isSignedIn || userRole === 'guest') {
       return [
         { label: 'About', path: '/' },
@@ -56,14 +59,14 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
         { label: 'Become a Tutor', path: '/become-a-tutor' },
       ];
     }
-
+    // if sign in as tutor, will see tutor dashboard and applications
     if (userRole === 'tutor') {
       return [
         { label: 'Dashboard', path: '/tutor-dashboard' },
         { label: 'My Applications', path: '/my-applications' },
       ];
     }
-
+    // if sing in as lecturer, will see lecturer dashboard, tutor applications to review and post applications
     if (userRole === 'lecturer') {
       return [
         { label: 'Dashboard', path: '/lecturer-dashboard' },
@@ -81,12 +84,11 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
       <div style={styles.navLinks}>
         {renderNavItems().map((item) => (
           <NavItem
-          key={item.label}
-          label={item.label}
-          isActive={currentPath === item.path}
-          onClick={() => navigate(item.path)}
-        />
-        
+            key={item.label}
+            label={item.label}
+            isActive={currentPath === item.path}
+            onClick={() => navigate(item.path)}
+          />
         ))}
       </div>
 
@@ -99,6 +101,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
         <div style={styles.buttonGroup}>
           {!isSignedIn ? (
             <>
+              {/* Sign In Button */}
               <button
                 style={styles.authButton}
                 onClick={() => navigate('/login')}
@@ -115,6 +118,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
                 Sign In
               </button>
 
+              {/* Create Account Button */}
               <button
                 style={styles.authButton}
                 // Once select, navigate to /signup
@@ -132,13 +136,18 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
               </button>
             </>
           ) : (
+            // Logout Button with redirect to home
             <button
               style={{
                 ...styles.authButton,
                 opacity: hoveredIcon ? 0.5 : 1,
                 transition: 'opacity 0.2s ease-in-out',
               }}
-              onClick={handleSignOut}
+              onClick={() => {
+                // Perform logout and hard redirect to homepage
+                handleSignOut();
+                window.location.href = 'http://localhost:3001/#';
+              }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
                 e.currentTarget.style.color = '#000';
