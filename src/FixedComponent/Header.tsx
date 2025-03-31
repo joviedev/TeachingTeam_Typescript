@@ -18,11 +18,14 @@ const Header = () => {
 // Inline styling for the Header component
 const styles: { [key: string]: React.CSSProperties } = {
   headerContainer: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 1000, 
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#F3F9FF',
     padding: '15px 40px 5px 40px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+    boxShadow: '0 2px 2px rgba(0, 0, 0, 0.05)',
   },
   logoSection: {
     display: 'flex',

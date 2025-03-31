@@ -59,12 +59,14 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
     if (userRole === 'tutor') {
       return [
         { label: 'Dashboard', path: '/tutor-dashboard' },
+        { label: 'Opportunity', path: '/opportunity' },
         { label: 'My Applications', path: '/my-applications' },
       ];
     }
     if (userRole === 'lecturer') {
       return [
         { label: 'Dashboard', path: '/lecturer-dashboard' },
+        { label: 'Opportunity', path: '/opportunity' },
         { label: 'Applications', path: '/applications' },
         { label: 'Review Tutors', path: '/review-tutors' },
       ];
@@ -173,6 +175,9 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
 // Styling object for NavBar
 const styles: { [key: string]: React.CSSProperties } = {
   navBar: {
+    position: 'sticky', 
+    top: 84, 
+    zIndex: 1000,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',

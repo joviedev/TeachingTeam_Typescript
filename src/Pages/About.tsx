@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import heroImage from '../assets/study-group.jpg';
+import ScrollToggle from '../FixedComponent/ScrollToggle';
 
 const About: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -218,6 +219,7 @@ const About: React.FC = () => {
           </div>
         </div>
       </footer>
+      <ScrollToggle /> {/* Add the ScrollToggle component here */}
     </div>
   );
 };
