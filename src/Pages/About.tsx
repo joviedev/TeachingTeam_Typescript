@@ -12,11 +12,7 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <section
         className="relative h-[90vh] text-white flex items-center justify-center text-center px-4 md:px-12"
-        style={{
-          backgroundImage: `url(${heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
+        style={styles.heroSection}
       >
         <div className="absolute inset-0 bg-black opacity-60" />
         <motion.div
@@ -225,3 +221,12 @@ const About: React.FC = () => {
 };
 
 export default About;
+
+// Styles extracted for cleaner JSX
+const styles: { [key: string]: React.CSSProperties } = {
+  heroSection: {
+    backgroundImage: `url(${heroImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+};
