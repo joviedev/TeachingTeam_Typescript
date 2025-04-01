@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import heroImage from '../assets/study-group.jpg';
+import { useNavigate } from 'react-router-dom';
+
+import heroImage from '../assets/study-group2.jpg';
+import applicationImage from '../assets/study-group4.jpg';
+
 import ScrollToggle from '../FixedComponent/ScrollToggle';
 import Footer from '../FixedComponent/Footer';
 
@@ -36,6 +40,7 @@ const styles: { [key: string]: React.CSSProperties } = {
 
 const About: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div style={{ fontFamily: 'sans-serif', color: '#1f2937' }}>
@@ -73,7 +78,6 @@ const About: React.FC = () => {
         </motion.div>
       </section>
 
-      {/* Divider */}
       <div style={styles.sectionDivider} />
 
       {/* Features Section */}
@@ -119,14 +123,13 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Divider */}
       <div style={styles.sectionDivider} />
 
-      {/* Application Process Section */}
+      {/* Application Process Section + Option Cards Combined */}
       <section id="how-to-apply" style={{ backgroundColor: '#f3f4f6', padding: '5rem 1.5rem' }}>
         <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           <motion.img
-            src={heroImage}
+            src={applicationImage}
             alt="Students collaborating"
             style={{ borderRadius: '1rem', width: '100%', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
             initial={{ scale: 0.9, opacity: 0 }}
@@ -139,6 +142,9 @@ const About: React.FC = () => {
               borderRadius: '1rem',
               padding: '1.5rem',
               boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.5rem',
             }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -160,7 +166,7 @@ const About: React.FC = () => {
             </div>
             {isExpanded && (
               <motion.div
-                style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#374151' }}
+                style={{ fontSize: '0.875rem', color: '#374151' }}
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 transition={{ duration: 0.4 }}
@@ -178,11 +184,14 @@ const About: React.FC = () => {
                 </p>
               </motion.div>
             )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <OptionCard title="Become a Tutor" route="/become-a-tutor" />
+              <OptionCard title="Opportunity" route="/opportunity" />
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Divider */}
       <div style={styles.sectionDivider} />
 
       {/* CTA Section */}
@@ -229,14 +238,40 @@ const About: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* Divider */}
       <div style={styles.sectionDivider} />
 
-      {/* Footer and Scroll Toggle */}
       <Footer />
       <ScrollToggle />
     </div>
   );
 };
 
+const OptionCard: React.FC<{ title: string; route: string }> = ({ title, route }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      onClick={() => navigate(route)}
+      style={{
+        backgroundColor: '#eff6ff',
+        padding: '1.25rem 1.5rem',
+        borderRadius: '0.5rem',
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        border: '1px solid #bfdbfe',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+        transition: 'all 0.2s ease',
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#dbeafe'}
+      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#eff6ff'}
+    >
+      <span style={{ fontSize: '1.125rem', fontWeight: 600, color: '#1e40af' }}>{title}</span>
+      <span style={{ fontSize: '1.5rem', color: '#1e40af' }}>➔</span>
+    </div>
+  );
+};
+
 export default About;
+
