@@ -38,7 +38,7 @@ export const courses = [
   {
     "code": "COSC1663",
     "title": "COSC1663 - Mobile App Development",
-    "description": "A detailed look into Mobile App Development, part of our Diploma program.",
+    "description": "This course provides a solid foundation in mobile app development, focusing on creating native applications for both iOS and Android platforms.",
     "location": "Melbourne City",
     "courseType": "Diploma",
     "opening": "Summer Intake",
@@ -49,7 +49,7 @@ export const courses = [
   {
     "code": "COSC1664",
     "title": "COSC1664 - Cloud Computing",
-    "description": "A detailed look into Cloud Computing, part of our Bachelor Degrees program.",
+    "description": "This course introduces students to cloud computing concepts and practices, preparing them for roles in cloud infrastructure, services, and application development. ",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -60,7 +60,7 @@ export const courses = [
   {
     "code": "COSC1665",
     "title": "COSC1665 - Cyber Security Fundamentals",
-    "description": "A detailed look into Cyber Security Fundamentals, part of our Bachelor Degrees program.",
+    "description": "Students will learn about the various types of cyber threats, security protocols, and defense mechanisms used to protect data and networks. ",
     "location": "Online",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -71,7 +71,7 @@ export const courses = [
   {
     "code": "COSC1666",
     "title": "COSC1666 - Artificial Intelligence",
-    "description": "A detailed look into Artificial Intelligence, part of our Master by Research program.",
+    "description": "This research-driven program focuses on advancing knowledge in cutting-edge research and contribute to innovative developments in AI technologies. . ",
     "location": "Melbourne City",
     "courseType": "Master by Research",
     "opening": "Apply Now",
@@ -82,7 +82,7 @@ export const courses = [
   {
     "code": "COSC1667",
     "title": "COSC1667 - Data Science",
-    "description": "A detailed look into Data Science, part of our Master by Coursework program.",
+    "description": "The course focuses on key aspects of data analysis, machine learning, big data, and data visualization, with an emphasis on applying these techniques to solve real-world business and scientific problems.",
     "location": "Online",
     "courseType": "Master by Coursework",
     "opening": "Semester 2",
@@ -93,7 +93,7 @@ export const courses = [
   {
     "code": "COSC1668",
     "title": "COSC1668 - Database Concepts",
-    "description": "A detailed look into Database Concepts, part of our Bachelor Degrees program.",
+    "description": "Students will deepen their understanding of database design, management, and optimization techniques, as well as learn about the latest advancements in data storage, big data, and cloud-based database solutions.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -104,7 +104,7 @@ export const courses = [
   {
     "code": "COSC1669",
     "title": "COSC1669 - Software Engineering Fundamentals",
-    "description": "A detailed look into Software Engineering Fundamentals, part of our Bachelor Degrees program.",
+    "description": "The course covers key concepts such as software development methodologies, system design, project management, and testing, preparing students to build high-quality software systems.",
     "location": "Online",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -115,7 +115,7 @@ export const courses = [
   {
     "code": "COSC1670",
     "title": "COSC1670 - Computer Architecture",
-    "description": "A detailed look into Computer Architecture, part of our Bachelor Degrees program.",
+    "description": "The course covers topics such as processor design, memory hierarchy, I/O systems, and parallel computing, providing a strong foundation for careers in hardware design, systems engineering, and embedded systems.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 2",
@@ -126,7 +126,7 @@ export const courses = [
   {
     "code": "COSC1671",
     "title": "COSC1671 - Machine Learning",
-    "description": "A detailed look into Machine Learning, part of our Master by Research program.",
+    "description": "Students will engage in original research under the guidance of academic mentors, focusing on areas such as deep learning, reinforcement learning, natural language processing, and computer vision. ",
     "location": "Melbourne City",
     "courseType": "Master by Research",
     "opening": "Summer Intake",
@@ -137,7 +137,7 @@ export const courses = [
   {
     "code": "COSC1672",
     "title": "COSC1672 - Internet of Things",
-    "description": "A detailed look into Internet of Things, part of our Vocational program.",
+    "description": "Students will explore the integration of physical devices with software systems, learning how to create smart, interconnected systems using sensors, actuators, and microcontrollers. ",
     "location": "Melbourne City",
     "courseType": "vocational",
     "opening": "Apply Now",
@@ -148,7 +148,7 @@ export const courses = [
   {
     "code": "COSC1673",
     "title": "COSC1673 - DevOps and Deployment",
-    "description": "A detailed look into DevOps and Deployment, part of our Diploma program.",
+    "description": "This diploma program focuses on the principles and practices of DevOps, aiming to provide students with the tools and techniques required to streamline software development and deployment processes. ",
     "location": "Melbourne City",
     "courseType": "Diploma",
     "opening": "Semester 1",
@@ -159,7 +159,7 @@ export const courses = [
   {
     "code": "COSC1674",
     "title": "COSC1674 - Networks and Communication",
-    "description": "A detailed look into Networks and Communication, part of our Bachelor Degrees program.",
+    "description": "The course covers network architecture, protocols, security, and emerging communication technologies, with a strong emphasis on hands-on learning and real-world applications in both local and wide area networks (LAN/WAN).",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -170,7 +170,7 @@ export const courses = [
   {
     "code": "COSC1675",
     "title": "COSC1675 - Advanced Web Development",
-    "description": "A detailed look into Advanced Web Development, part of our Diploma program.",
+    "description": "The course covers modern web frameworks, database management, and advanced programming concepts, preparing students for complex web development projects in real-world environments.",
     "location": "Online",
     "courseType": "Diploma",
     "opening": "Summer Intake",
@@ -181,7 +181,7 @@ export const courses = [
   {
     "code": "COSC1676",
     "title": "COSC1676 - Blockchain Technologies",
-    "description": "A detailed look into Blockchain Technologies, part of our Master by Coursework program.",
+    "description": "Students will learn the underlying principles of blockchain, smart contracts, and decentralized applications (dApps).",
     "location": "Melbourne City",
     "courseType": "Master by Coursework",
     "opening": "Apply Now",
@@ -192,7 +192,7 @@ export const courses = [
   {
     "code": "COSC1677",
     "title": "COSC1677 - Software Testing and QA",
-    "description": "A detailed look into Software Testing and QA, part of our Bachelor Degrees program.",
+    "description": " Students will gain an in-depth understanding of testing methodologies, tools, and techniques used to ensure the functionality, performance, and security of software applications.",
     "location": "Online",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -203,7 +203,7 @@ export const courses = [
   {
     "code": "COSC1678",
     "title": "COSC1678 - Ethical Hacking",
-    "description": "A detailed look into Ethical Hacking, part of our Master by Research program.",
+    "description": "Students will conduct original research into vulnerabilities, security flaws, and innovative techniques for penetration testing, digital forensics, and network security.",
     "location": "Melbourne City",
     "courseType": "Master by Research",
     "opening": "Semester 2",
@@ -214,7 +214,7 @@ export const courses = [
   {
     "code": "COSC1679",
     "title": "COSC1679 - Robotics Programming",
-    "description": "A detailed look into Robotics Programming, part of our Master by Coursework program.",
+    "description": "This program provides students with a comprehensive understanding of robotics programming, focusing on the development and control of robotic systems. ",
     "location": "Melbourne City",
     "courseType": "Master by Coursework",
     "opening": "Summer Intake",
@@ -225,7 +225,7 @@ export const courses = [
   {
     "code": "COSC1680",
     "title": "COSC1680 - User Experience Design",
-    "description": "A detailed look into User Experience Design, part of our Vocational program.",
+    "description": "Students will learn the principles of UX design, including research, prototyping, and testing, to create intuitive and user-friendly interfaces for digital products.",
     "location": "Melbourne City",
     "courseType": "vocational",
     "opening": "Apply Now",
@@ -236,7 +236,7 @@ export const courses = [
   {
     "code": "COSC1681",
     "title": "COSC1681 - Digital Systems",
-    "description": "A detailed look into Digital Systems, part of our Bachelor Degrees program.",
+    "description": "This degree program provides students with an in-depth understanding of digital systems, focusing on the design, implementation, and optimization of digital circuits and systems.",
     "location": "Online",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -247,7 +247,7 @@ export const courses = [
   {
     "code": "COSC1682",
     "title": "COSC1682 - Programming for Data Analysis",
-    "description": "A detailed look into Programming for Data Analysis, part of our Diploma program.",
+    "description": "Students will learn how to work with large datasets, apply statistical techniques, and use programming languages such as Python and R to extract meaningful insights from data.",
     "location": "Melbourne City",
     "courseType": "Diploma",
     "opening": "Semester 2",
@@ -258,7 +258,7 @@ export const courses = [
   {
     "code": "COSC1683",
     "title": "COSC1683 - IT Project Management",
-    "description": "A detailed look into IT Project Management, part of our Master by Coursework program.",
+    "description": "Students will learn to plan, execute, and oversee projects involving software development, system integration, and technological innovations.",
     "location": "Online",
     "courseType": "Master by Coursework",
     "opening": "Summer Intake",
@@ -269,7 +269,7 @@ export const courses = [
   {
     "code": "COSC1684",
     "title": "COSC1684 - Game Development",
-    "description": "A detailed look into Game Development, part of our Bachelor Degrees program.",
+    "description": "The course combines technical skills with creative approaches to game production, preparing graduates to work in the dynamic and rapidly evolving game industry.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -280,7 +280,7 @@ export const courses = [
   {
     "code": "COSC1685",
     "title": "COSC1685 - AI in Industry",
-    "description": "A detailed look into AI in Industry, part of our Master by Research program.",
+    "description": "Students will engage in original research to develop innovative AI solutions for challenges in sectors such as manufacturing, healthcare, logistics, and finance.",
     "location": "Melbourne City",
     "courseType": "Master by Research",
     "opening": "Semester 1",
@@ -291,7 +291,7 @@ export const courses = [
   {
     "code": "COSC1686",
     "title": "COSC1686 - Information Retrieval",
-    "description": "A detailed look into Information Retrieval, part of our Master by Coursework program.",
+    "description": "Students will learn the fundamental theories and advanced methods behind search engines, data mining, and content-based retrieval systems.",
     "location": "Melbourne City",
     "courseType": "Master by Coursework",
     "opening": "Semester 2",
@@ -302,7 +302,7 @@ export const courses = [
   {
     "code": "COSC1687",
     "title": "COSC1687 - Natural Language Processing",
-    "description": "A detailed look into Natural Language Processing, part of our Master by Research program.",
+    "description": "This research-based program is designed for students interested in advancing the field of Natural Language Processing (NLP) through original research. ",
     "location": "Online",
     "courseType": "Master by Research",
     "opening": "Summer Intake",
@@ -313,7 +313,7 @@ export const courses = [
   {
     "code": "COSC1688",
     "title": "COSC1688 - Mobile Web Design",
-    "description": "A detailed look into Mobile Web Design, part of our Master by Coursework program.",
+    "description": "Students will learn advanced web design techniques using modern web technologies such as HTML5, CSS3, JavaScript, and mobile-first design principles.",
     "location": "Melbourne City",
     "courseType": "Master by Coursework",
     "opening": "Apply Now",
@@ -324,7 +324,7 @@ export const courses = [
   {
     "code": "COSC1689",
     "title": "COSC1689 - Scripting for Cyber Security",
-    "description": "A detailed look into Scripting for Cyber Security, part of our Bachelor Degrees program.",
+    "description": "Students will learn how to develop scripts and tools to identify vulnerabilities, automate threat detection, and respond to security incidents.",
     "location": "Online",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -335,7 +335,7 @@ export const courses = [
   {
     "code": "COSC1690",
     "title": "COSC1690 - Originate and Develop Concepts",
-    "description": "A detailed look into Originate and Develop Concepts, part of our Diploma program.",
+    "description": "Students will learn creative thinking methods, ideation techniques, and prototyping processes to transform abstract ideas into tangible, impactful solutions. ",
     "location": "Melbourne City",
     "courseType": "Diploma",
     "opening": "Apply Now",
@@ -346,7 +346,7 @@ export const courses = [
   {
     "code": "COSC1691",
     "title": "COSC1691 - Apply IP, Ethics and Privacy in ICT Environments",
-    "description": "A detailed look into Apply IP, Ethics and Privacy in ICT Environments, part of our Diploma program.",
+    "description": "Students will explore the legal frameworks surrounding IP, data protection, and privacy regulations, with a focus on ethical practices in the digital world.",
     "location": "Melbourne City",
     "courseType": "Diploma",
     "opening": "Semester 2",
@@ -357,7 +357,7 @@ export const courses = [
   {
     "code": "COSC1692",
     "title": "COSC1692 - Introduction to Professional Engineering Practice",
-    "description": "A detailed look into Introduction to Professional Engineering Practice, part of our Bachelor Degrees program.",
+    "description": "The course emphasizes the integration of technical knowledge with practical, ethical, and professional skills required for success in engineering.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -368,7 +368,7 @@ export const courses = [
   {
     "code": "COSC1693",
     "title": "COSC1693 - Java Programming Studio",
-    "description": "A detailed look into Java Programming Studio, part of our Bachelor Degrees program.",
+    "description": "Students will gain expertise in object-oriented programming (OOP), software design patterns, and Java frameworks.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -379,7 +379,7 @@ export const courses = [
   {
     "code": "COSC1694",
     "title": "COSC1694 - Mathematics for ECE",
-    "description": "A detailed look into Mathematics for ECE, part of our Bachelor Degrees program.",
+    "description": "The course focuses on mathematical modeling, linear algebra, calculus, and differential equations, with an emphasis on their application in solving engineering problems.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -390,7 +390,7 @@ export const courses = [
   {
     "code": "COSC1695",
     "title": "COSC1695 - Foundations of Artificial Intelligence for STEM",
-    "description": "A detailed look into Foundations of Artificial Intelligence for STEM, part of our Bachelor Degrees program.",
+    "description": "The course covers key AI techniques, including machine learning, search algorithms, neural networks, and natural language processing, with applications across various STEM disciplines.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Summer Intake",
@@ -401,7 +401,7 @@ export const courses = [
   {
     "code": "COSC1696",
     "title": "COSC1696 - Algorithms and Analysis",
-    "description": "A detailed look into Algorithms and Analysis, part of our Bachelor Degrees program.",
+    "description": "Students will learn about algorithmic design techniques, complexity theory, and the application of algorithms to solve real-world problems.",
     "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
@@ -412,7 +412,7 @@ export const courses = [
   {
     "code": "COSC1697",
     "title": "COSC1697 - Algorithms and Analysis",
-    "description": "A detailed look into Algorithms and Analysis, part of our Master by Coursework program.",
+    "description": "Students will explore advanced algorithmic techniques, algorithmic optimization, and the application of algorithms in areas like data science, machine learning, and systems engineering.",
     "location": "Melbourne City",
     "courseType": "Master by Coursework",
     "opening": "Apply Now",
