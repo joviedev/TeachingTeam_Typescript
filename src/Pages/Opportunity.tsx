@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import CustomDropdown from '../FixedComponent/CustomDropdown';
+import ScrollToggle from '../FixedComponent/ScrollToggle';
+import teachingImage from '../assets/teaching.jpg';
+import Footer from '../FixedComponent/Footer';
+import SearchFilterBar from '../FixedComponent/SearchFilterBar';
+
 
 const Opportunity: React.FC = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedOpening, setSelectedOpening] = useState('');
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToSlide = (index: number) => {
+    if (carouselRef.current) {
+      const container = carouselRef.current;
+      const scrollAmount = index === 0 ? 0 : container.scrollWidth - container.clientWidth;
+      container.scrollTo({
+        left: scrollAmount,
+        behavior: 'smooth',
+      });
+      setCurrentSlide(index);
+    }
+  };
 
   const courseOptions = [
     { value: '', label: 'All Courses' },
     { value: 'vocational', label: 'Vocational' },
     { value: 'diploma', label: 'Diploma' },
     { value: 'bachelor degree', label: 'Bachelor Degrees' },
-    { value: 'associate degree', label: 'Associate Degrees' },
     { value: 'master coursework', label: 'Master by Coursework' },
     { value: 'master research', label: 'Master by Research' },
   ];
@@ -30,67 +49,87 @@ const Opportunity: React.FC = () => {
     { value: 'summer', label: 'Summer Intake' },
   ];
 
+  const courseCards = [
+    {
+      title: 'Vocational',
+      description: 'Practical courses to support vocational pathways.',
+      image: require('../assets/vocational.jpg'),
+    },
+    {
+      title: 'Diploma',
+      description: 'Industry-relevant training and applied knowledge.',
+      image: require('../assets/diploma.jpg'),
+    },
+    {
+      title: 'Bachelor Degrees',
+      description: 'Undergraduate academic degrees for various disciplines.',
+      image: require('../assets/bachelor.jpg'),
+    },
+    {
+      title: 'Master by Coursework',
+      description: 'Advanced coursework programs across fields.',
+      image: require('../assets/coursework.jpg'),
+    },
+    {
+      title: 'Master by Research',
+      description: 'Research-based postgraduate degrees.',
+      image: require('../assets/research.jpg'),
+    },
+  ];
+
   return (
     <div style={styles.page}>
-      {/* Opportunity Banner */}
-      <div style={styles.opportunityBanner}>
-        <div style={styles.bannerText}>
-          <h1 style={styles.bannerTitle}>Explore Casual Tutoring Roles</h1>
-          <p style={styles.bannerSubtitle}>
-            Discover opportunities that align with your academic path and location.
-          </p>
+      <div style={styles.bannerWrapper}>
+        <div style={styles.overlay} />
+        <div style={styles.opportunityBanner}>
+          <div style={styles.bannerText}>
+            <h1 style={styles.bannerTitle}>Explore Casual Tutoring Roles</h1>
+            <p style={styles.bannerSubtitle}>
+              Discover opportunities that align with your academic path and location.
+            </p>
+          </div>
         </div>
-        <div style={styles.imageBox}>
-          {/* Image placeholder */}
-        </div>
+        <SearchFilterBar
+          selectedCourse={selectedCourse}
+          setSelectedCourse={setSelectedCourse}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          selectedOpening={selectedOpening}
+          setSelectedOpening={setSelectedOpening}
+        />  
       </div>
 
-      {/* Search Bar */}
-      <div style={styles.searchBar}>
-        {/* Course Type */}
-        <div style={styles.selectWrapper}>
-          <CustomDropdown
-            value={selectedCourse}
-            onChange={(value) => setSelectedCourse(value)}
-            options={courseOptions}
-          />
+      {/* Carousel */}
+      <div style={styles.carouselContainer}>
+        <div style={styles.carouselTrack} ref={carouselRef}>
+          {courseCards.map((course, index) => (
+            <div key={index} style={styles.carouselCard}>
+              <img src={course.image} alt={course.title} style={styles.courseImage} />
+              <div style={styles.courseCardContent}>
+                <h3 style={styles.courseTitle}>{course.title}</h3>
+                <p style={styles.courseDesc}>{course.description}</p>
+                <button style={styles.courseButton}>Apply Now</button>
+              </div>
+            </div>
+          ))}
         </div>
-
-        {/* Location */}
-        <div style={styles.selectWrapper}>
-          <CustomDropdown
-            value={selectedLocation}
-            onChange={(value) => setSelectedLocation(value)}
-            options={locationOptions}
+        <div style={styles.dotsWrapper}>
+        {[0, 1].map((dotIdx) => (
+          <span
+            key={dotIdx}
+            style={{
+              ...styles.dot,
+              backgroundColor: currentSlide === dotIdx ? '#085DB7' : '#cbd5e1',
+            }}
+            onClick={() => scrollToSlide(dotIdx)}
           />
+        ))}
         </div>
-
-        {/* Opening */}
-        <div style={styles.selectWrapper}>
-          <CustomDropdown
-            value={selectedOpening}
-            onChange={(value) => setSelectedOpening(value)}
-            options={openingOptions}
-          />
-        </div>
-
-        {/* Search Button */}
-        <button
-          style={styles.searchButton}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-            e.currentTarget.style.color = '#000';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#085DB7';
-            e.currentTarget.style.color = '#fff';
-          }}
-        >
-          <span className="material-icons" style={styles.icon}>search</span>
-          SEARCH
-        </button>
       </div>
+    <ScrollToggle />
+    <Footer />
     </div>
+    
   );
 };
 
@@ -100,49 +139,64 @@ const styles: { [key: string]: React.CSSProperties } = {
     backgroundColor: '#F9FAFB',
     minHeight: '100vh',
   },
+  bannerWrapper: {
+    backgroundImage: `url(${teachingImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    paddingTop: '45px',
+    paddingBottom: '45px',
+    position: 'relative',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    zIndex: 1,
+  },
   opportunityBanner: {
+    position: 'relative',
+    zIndex: 2,
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
     borderRadius: '16px',
     padding: '40px',
     margin: '20px auto',
     maxWidth: '1100px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+    backgroundColor: 'transparent',
     flexWrap: 'wrap',
   },
   bannerText: {
-    maxWidth: '600px',
-    flex: 1,
+    maxWidth: '800px',
+    textAlign: 'center',
   },
   bannerTitle: {
-    fontSize: '32px',
+    fontSize: '36px',
     fontWeight: 700,
     marginBottom: '10px',
-    color: '#111827',
+    color: '#ffffff',
+    textShadow: '0 2px 4px rgba(0,0,0,0.3)',
   },
   bannerSubtitle: {
-    fontSize: '16px',
-    color: '#4B5563',
-  },
-  imageBox: {
-    width: '280px',
-    height: '180px',
-    backgroundColor: '#E5E7EB',
-    borderRadius: '12px',
-    flexShrink: 0,
-    marginTop: '20px',
+    fontSize: '18px',
+    color: '#f3f4f6',
+    textShadow: '0 1px 3px rgba(0,0,0,0.2)',
   },
   searchBar: {
+    position: 'relative',
+    zIndex: 2,
     display: 'flex',
-    gap: '40px',
+    gap: '30px',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(243, 249, 255, 0.65)',
+    backdropFilter: 'blur(8px)',
     borderRadius: '12px',
-    padding: '40px',
-    margin: '30px auto',
+    padding: '30px 30px 15px',
+    margin: '30px auto 20px',
     maxWidth: '1100px',
     flexWrap: 'wrap',
   },
@@ -166,10 +220,79 @@ const styles: { [key: string]: React.CSSProperties } = {
     textAlign: 'center',
   },
   icon: {
-    fontSize: '25px',
+    fontSize: '22px',
     color: 'inherit',
+  },
+  browseAllWrapper: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10px',
+  },
+  carouselContainer: {
+    margin: '30px auto',
+    padding: '10px 0',
+    maxWidth: '1140px',
+    overflow: 'hidden',
+  },
+  carouselTrack: {
+    display: 'flex',
+    overflowX: 'auto',
+    gap: '20px',
+    scrollSnapType: 'x mandatory',
+    paddingBottom: '10px',
+    scrollbarWidth: 'none',
+  },
+  carouselCard: {
+    flex: '0 0 auto',
+    width: '280px',
+    scrollSnapAlign: 'start',
+    borderRadius: '16px',
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+  },
+  courseImage: {
+    width: '100%',
+    height: '160px',
+    objectFit: 'cover',
+  },
+  courseCardContent: {
+    padding: '20px',
+  },
+  courseTitle: {
+    fontSize: '20px',
+    fontWeight: 700,
+    marginBottom: '10px',
+    color: '#1F2937',
+  },
+  courseDesc: {
+    fontSize: '14px',
+    color: '#6B7280',
+    marginBottom: '15px',
+  },
+  courseButton: {
+    backgroundColor: '#085DB7',
+    color: '#fff',
+    fontWeight: 600,
+    border: 'none',
+    padding: '10px 18px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+  },
+  dotsWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10px',
+    gap: '10px',
+  },
+  dot: {
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
   },
 };
 
 export default Opportunity;
-

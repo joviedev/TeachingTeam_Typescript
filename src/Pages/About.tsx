@@ -38,13 +38,22 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
 };
 
+const cardVariant = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.2 },
+  }),
+};
+
 const About: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isSelectionExpanded, setSelectionExpanded] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <div style={{ fontFamily: 'sans-serif', color: '#1f2937' }}>
-      {/* Hero Section */}
+    <div style={{ fontFamily: 'sans-serif', color: '#1f2937', scrollBehavior: 'smooth' }}>
       <section style={styles.heroSection}>
         <div style={styles.overlay}></div>
         <motion.div
@@ -80,7 +89,6 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      {/* Features Section */}
       <section id="features" style={{ backgroundColor: 'white', padding: '5rem 1.5rem' }}>
         <motion.h2
           style={{ fontSize: '2rem', fontWeight: 700, textAlign: 'center', color: '#1e40af', marginBottom: '3rem' }}
@@ -94,7 +102,11 @@ const About: React.FC = () => {
           {['For Tutors', 'For Lecturers'].map((title, i) => (
             <motion.div
               key={title}
-              whileHover={{ scale: 1.02 }}
+              variants={cardVariant}
+              initial="hidden"
+              whileInView="visible"
+              custom={i}
+              viewport={{ once: true }}
               style={{
                 backgroundColor: '#f9fafb',
                 padding: '1.5rem',
@@ -125,7 +137,6 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      {/* Application Process Section + Option Cards Combined */}
       <section id="how-to-apply" style={{ backgroundColor: '#f3f4f6', padding: '5rem 1.5rem' }}>
         <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           <motion.img
@@ -150,40 +161,37 @@ const About: React.FC = () => {
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                cursor: 'pointer',
-              }}
-              onClick={() => setIsExpanded(!isExpanded)}
+            <Accordion
+              title="How do I apply?"
+              expanded={isExpanded}
+              toggle={() => setIsExpanded(!isExpanded)}
             >
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1d4ed8' }}>How do I apply?</h3>
-              <span style={{ color: '#facc15', fontSize: '1.75rem', fontWeight: 'bold' }}>
-                {isExpanded ? '−' : '+'}
-              </span>
-            </div>
-            {isExpanded && (
-              <motion.div
-                style={{ fontSize: '0.875rem', color: '#374151' }}
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              >
-                <p>To apply, log in or create an account on TeachTeam and follow these steps:</p>
-                <ul style={{ paddingLeft: '1.25rem', marginTop: '1rem' }}>
-                  <li>Upload proof of right to work (citizenship or visa)</li>
-                  <li>Provide your full name and contact details</li>
-                  <li>List your qualifications and education</li>
-                  <li>Add employment history</li>
-                  <li>Submit two references with contact info</li>
-                </ul>
-                <p style={{ marginTop: '1rem' }}>
-                  Your profile will remain active for two years and can be updated anytime.
-                </p>
-              </motion.div>
-            )}
+              <p>To apply, log in or create an account on TeachTeam and follow these steps:</p>
+              <ul style={{ paddingLeft: '1.25rem', marginTop: '1rem' }}>
+                <li>Upload proof of right to work (citizenship or visa)</li>
+                <li>Provide your full name and contact details</li>
+                <li>List your qualifications and education</li>
+                <li>Add employment history</li>
+                <li>Submit two references with contact info</li>
+              </ul>
+              <p style={{ marginTop: '1rem' }}>
+                Your profile will remain active for two years and can be updated anytime.
+              </p>
+            </Accordion>
+            <Accordion
+              title="How does the selection process work?"
+              expanded={isSelectionExpanded}
+              toggle={() => setSelectionExpanded(!isSelectionExpanded)}
+            >
+              <p>Recruitment and appointment are based on merit and equal opportunity principles.</p>
+              <ul style={{ paddingLeft: '1.25rem', marginTop: '1rem' }}>
+                <li>A right to work in Australia with no relevant work restrictions</li>
+                <li>Formal tertiary qualifications and/or relevant work experience (AQF)</li>
+                <li>Strong verbal and written communication and interpersonal skills</li>
+                <li>Relevant and recent industry or academic experience</li>
+                <li>Working with Children Check and membership verification if required</li>
+              </ul>
+            </Accordion>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <OptionCard title="Become a Tutor" route="/become-a-tutor" />
               <OptionCard title="Opportunity" route="/opportunity" />
@@ -194,7 +202,6 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      {/* CTA Section */}
       <motion.section
         style={styles.ctaSection}
         initial={{ opacity: 0 }}
@@ -239,7 +246,6 @@ const About: React.FC = () => {
       </motion.section>
 
       <div style={styles.sectionDivider} />
-
       <Footer />
       <ScrollToggle />
     </div>
@@ -248,30 +254,64 @@ const About: React.FC = () => {
 
 const OptionCard: React.FC<{ title: string; route: string }> = ({ title, route }) => {
   const navigate = useNavigate();
-
   return (
-    <div
+    <motion.button
+      whileHover={{ scale: 1.02 }}
       onClick={() => navigate(route)}
       style={{
         backgroundColor: '#eff6ff',
         padding: '1.25rem 1.5rem',
         borderRadius: '0.5rem',
-        cursor: 'pointer',
+        border: '1px solid #bfdbfe',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        border: '1px solid #bfdbfe',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-        transition: 'all 0.2s ease',
+        cursor: 'pointer',
+        fontSize: '1.125rem',
+        fontWeight: 600,
+        color: '#1e40af',
+        transition: 'background 0.2s ease',
       }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#dbeafe'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#eff6ff'}
     >
-      <span style={{ fontSize: '1.125rem', fontWeight: 600, color: '#1e40af' }}>{title}</span>
-      <span style={{ fontSize: '1.5rem', color: '#1e40af' }}>➔</span>
-    </div>
+      <span>{title}</span>
+      <span style={{ fontSize: '1.5rem' }}>➔</span>
+    </motion.button>
   );
 };
 
-export default About;
+const Accordion: React.FC<{
+  title: string;
+  expanded: boolean;
+  toggle: () => void;
+  children: React.ReactNode;
+}> = ({ title, expanded, toggle, children }) => (
+  <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '1rem' }}>
+    <div
+      onClick={toggle}
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        cursor: 'pointer',
+      }}
+    >
+      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1d4ed8' }}>{title}</h3>
+      <span style={{ color: '#facc15', fontSize: '1.75rem', fontWeight: 'bold' }}>
+        {expanded ? '−' : '+'}
+      </span>
+    </div>
+    {expanded && (
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: 'auto', opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        style={{ marginTop: '1rem' }}
+      >
+        {children}
+      </motion.div>
+    )}
+  </div>
+);
 
+export default About;

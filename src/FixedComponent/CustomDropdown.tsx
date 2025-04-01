@@ -93,7 +93,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   dropdownMenu: {
     listStyle: 'none',
     margin: 0,
-    padding: 0,
+    padding: '8px 0',
     position: 'absolute',
     top: 'calc(100% + 8px)',
     left: 0,
@@ -107,6 +107,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: '8px',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
     fontSize: '12px',
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#ccc transparent',
   },
   dropdownItem: {
     padding: '10px 18px',

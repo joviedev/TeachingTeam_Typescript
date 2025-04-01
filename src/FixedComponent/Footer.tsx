@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const styles: { [key: string]: React.CSSProperties } = {
   footer: {
@@ -110,3 +109,4 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
+
