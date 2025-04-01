@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const styles: { [key: string]: React.CSSProperties } = {
   footer: {
@@ -47,28 +48,31 @@ const Footer: React.FC = () => {
   return (
     <footer style={styles.footer}>
       <div style={styles.row}>
+        {/* Contact */}
         <div style={styles.column}>
           <h4 style={styles.heading}>Contact</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             <li style={styles.listItem}><a href="#" style={styles.link}>Online enquiry</a></li>
-            <li style={styles.listItem}>Future students <br /><span style={styles.link}>1800 626 481</span></li>
-            <li style={styles.listItem}>Current students <br /><span style={styles.link}>1800 72 4357</span></li>
-            <li style={styles.listItem}>International agents <br /><span style={styles.link}>+61 2 6620 3876</span></li>
-            <li style={styles.listItem}>24/7 Mental Health <br /><span style={styles.link}>1300 782 676</span></li>
+            <li style={styles.listItem}>Future students: <span style={styles.link}>1800 626 481</span></li>
+            <li style={styles.listItem}>Current students: <span style={styles.link}>1800 72 4357</span></li>
+            <li style={styles.listItem}>International agents: <span style={styles.link}>+61 2 6620 3876</span></li>
+            <li style={styles.listItem}>24/7 Mental Health: <span style={styles.link}>1300 782 676</span></li>
           </ul>
         </div>
 
+        {/* Quick Links */}
         <div style={styles.column}>
           <h4 style={styles.heading}>Quick Links</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             <li style={styles.listItem}><a href="#" style={styles.link}>Directory</a></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>How to apply</a></li>
+            <li style={styles.listItem}><Link to="/become-a-tutor" style={styles.link}>How to apply</Link></li>
             <li style={styles.listItem}><a href="#" style={styles.link}>News</a></li>
             <li style={styles.listItem}><a href="#" style={styles.link}>Careers</a></li>
             <li style={styles.listItem}><a href="#" style={styles.link}>A-Z Courses</a></li>
           </ul>
         </div>
 
+        {/* Info For */}
         <div style={styles.column}>
           <h4 style={styles.heading}>Information for</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -80,6 +84,7 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
+        {/* About */}
         <div style={styles.column}>
           <h4 style={styles.heading}>About</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -91,8 +96,9 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
+      {/* Bottom bar */}
       <div style={styles.bottomBar}>
-        <p>© {new Date().getFullYear()} TeachTeam | School of Computer Science</p>
+        <p>© {new Date().getFullYear()} TeachTeam, RMIT University</p>
         <div style={{ display: 'flex', gap: '1rem' }}>
           <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Feedback</a>
           <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Accessibility</a>
@@ -104,4 +110,3 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
-
