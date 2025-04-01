@@ -1,5 +1,6 @@
 import React from 'react';
 import CustomDropdown from './CustomDropdown'; 
+import { useNavigate } from 'react-router-dom';
 
 interface Option {
   value: string;
@@ -13,30 +14,32 @@ interface Props {
   setSelectedLocation: (value: string) => void;
   selectedOpening: string;
   setSelectedOpening: (value: string) => void;
-  onSearch?: () => void;
+  mode?: 'search' | 'reset';
+  onSearch?: () => void; 
+  onReset?: () => void;
 }
 
 const courseOptions: Option[] = [
   { value: '', label: 'All Courses' },
-  { value: 'vocational', label: 'Vocational' },
-  { value: 'diploma', label: 'Diploma' },
-  { value: 'bachelor degree', label: 'Bachelor Degrees' },
-  { value: 'master coursework', label: 'Master by Coursework' },
-  { value: 'master research', label: 'Master by Research' },
+  { value: 'Vocational', label: 'Vocational' },
+  { value: 'Diploma', label: 'Diploma' },
+  { value: 'Bachelor Degrees', label: 'Bachelor Degrees' },
+  { value: 'Master by Coursework', label: 'Master by Coursework' },
+  { value: 'Master by Research', label: 'Master by Research' },
 ];
 
 const locationOptions: Option[] = [
   { value: '', label: 'Location' },
-  { value: 'melbourne', label: 'Melbourne City' },
-  { value: 'online', label: 'Online' },
+  { value: 'Melbourne City', label: 'Melbourne City' },
+  { value: 'Online', label: 'Online' },
 ];
 
 const openingOptions: Option[] = [
   { value: '', label: 'Opening' },
-  { value: 'apply now', label: 'Apply Now' },
-  { value: 'semester 1', label: 'Semester 1' },
-  { value: 'semester 2', label: 'Semester 2' },
-  { value: 'summer', label: 'Summer Intake' },
+  { value: 'Apply Now', label: 'Apply Now' },
+  { value: 'Semester 1', label: 'Semester 1' },
+  { value: 'Semester 2', label: 'Semester 2' },
+  { value: 'Summer Intake', label: 'Summer Intake' },
 ];
 
 const SearchFilterBar: React.FC<Props> = ({
@@ -47,7 +50,12 @@ const SearchFilterBar: React.FC<Props> = ({
   selectedOpening,
   setSelectedOpening,
   onSearch,
+  mode,         
+  onReset
 }) => {
+
+const navigate = useNavigate();
+
   return (
     <div style={styles.searchBar}>
       <div style={styles.selectWrapper}>
@@ -59,26 +67,45 @@ const SearchFilterBar: React.FC<Props> = ({
       <div style={styles.selectWrapper}>
         <CustomDropdown value={selectedOpening} onChange={setSelectedOpening} options={openingOptions} />
       </div>
-
-      <button
-        style={styles.searchButton}
-        onClick={onSearch}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-          e.currentTarget.style.color = '#000';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#085DB7';
-          e.currentTarget.style.color = '#fff';
-        }}
-      >
-        <span className="material-icons" style={styles.icon}>search</span>
-        SEARCH
-      </button>
+    
+      {mode === 'reset' ? (
+        <button
+            style={styles.searchButton}
+            onClick={onReset}
+            onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
+            e.currentTarget.style.color = '#000';
+            }}
+            onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#085DB7';
+            e.currentTarget.style.color = '#fff';
+            }}
+        >
+            <span className="material-icons" style={styles.icon}>refresh</span>
+            Reset
+        </button>
+        ) : (
+        <button
+            style={styles.searchButton}
+            onClick={onSearch}
+            onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
+            e.currentTarget.style.color = '#000';
+            }}
+            onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#085DB7';
+            e.currentTarget.style.color = '#fff';
+            }}
+        >
+            <span className="material-icons" style={styles.icon}>search</span>
+            SEARCH
+        </button>
+        )}
 
       <div style={styles.browseAllWrapper}>
         <button
             style={styles.searchButton}
+            onClick={() => navigate('/browse-all')}
             onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
             e.currentTarget.style.color = '#000';

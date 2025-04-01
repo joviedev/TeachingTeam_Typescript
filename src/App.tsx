@@ -14,6 +14,7 @@ import MyApplication from './Pages/MyApplication';  // Tutor lists of applicatio
 import LecturerDashboard from './Pages/LecturerDashboard';  // Lecturer dashboard page
 import ReviewTutors from './Pages/ReviewTutors';  // Page for lecturer to review tutors, to accept or reject and leave comments
 import TutorDashboard from './Pages/TutorDashboard';  // Tutor dashboard page
+import BrowseAll from './Pages/BrowseAll';
 
 // Main landing page component
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route path="/applications" element={<Applications />} />
           <Route path="/my-application" element={<MyApplication />} />
           <Route path="/review-tutors" element={<ReviewTutors />} />
+          <Route path="/browse-all" element={<BrowseAll />} />
           <Route
             path="/login"
             element={

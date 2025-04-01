@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
-import CustomDropdown from '../FixedComponent/CustomDropdown';
 import ScrollToggle from '../FixedComponent/ScrollToggle';
 import teachingImage from '../assets/teaching.jpg';
 import Footer from '../FixedComponent/Footer';
 import SearchFilterBar from '../FixedComponent/SearchFilterBar';
-
 
 const Opportunity: React.FC = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
@@ -18,36 +16,10 @@ const Opportunity: React.FC = () => {
     if (carouselRef.current) {
       const container = carouselRef.current;
       const scrollAmount = index === 0 ? 0 : container.scrollWidth - container.clientWidth;
-      container.scrollTo({
-        left: scrollAmount,
-        behavior: 'smooth',
-      });
+      container.scrollTo({ left: scrollAmount, behavior: 'smooth' });
       setCurrentSlide(index);
     }
   };
-
-  const courseOptions = [
-    { value: '', label: 'All Courses' },
-    { value: 'vocational', label: 'Vocational' },
-    { value: 'diploma', label: 'Diploma' },
-    { value: 'bachelor degree', label: 'Bachelor Degrees' },
-    { value: 'master coursework', label: 'Master by Coursework' },
-    { value: 'master research', label: 'Master by Research' },
-  ];
-
-  const locationOptions = [
-    { value: '', label: 'Location' },
-    { value: 'melbourne', label: 'Melbourne City' },
-    { value: 'online', label: 'Online' },
-  ];
-
-  const openingOptions = [
-    { value: '', label: 'Opening' },
-    { value: 'apply now', label: 'Apply Now' },
-    { value: 'semester 1', label: 'Semester 1' },
-    { value: 'semester 2', label: 'Semester 2' },
-    { value: 'summer', label: 'Summer Intake' },
-  ];
 
   const courseCards = [
     {
@@ -81,6 +53,7 @@ const Opportunity: React.FC = () => {
     <div style={styles.page}>
       <div style={styles.bannerWrapper}>
         <div style={styles.overlay} />
+
         <div style={styles.opportunityBanner}>
           <div style={styles.bannerText}>
             <h1 style={styles.bannerTitle}>Explore Casual Tutoring Roles</h1>
@@ -89,6 +62,7 @@ const Opportunity: React.FC = () => {
             </p>
           </div>
         </div>
+
         <SearchFilterBar
           selectedCourse={selectedCourse}
           setSelectedCourse={setSelectedCourse}
@@ -96,10 +70,9 @@ const Opportunity: React.FC = () => {
           setSelectedLocation={setSelectedLocation}
           selectedOpening={selectedOpening}
           setSelectedOpening={setSelectedOpening}
-        />  
+        />
       </div>
 
-      {/* Carousel */}
       <div style={styles.carouselContainer}>
         <div style={styles.carouselTrack} ref={carouselRef}>
           {courseCards.map((course, index) => (
@@ -108,28 +81,28 @@ const Opportunity: React.FC = () => {
               <div style={styles.courseCardContent}>
                 <h3 style={styles.courseTitle}>{course.title}</h3>
                 <p style={styles.courseDesc}>{course.description}</p>
-                <button style={styles.courseButton}>Apply Now</button>
+                <button style={styles.courseButton}>View List</button>
               </div>
             </div>
           ))}
         </div>
         <div style={styles.dotsWrapper}>
-        {[0, 1].map((dotIdx) => (
-          <span
-            key={dotIdx}
-            style={{
-              ...styles.dot,
-              backgroundColor: currentSlide === dotIdx ? '#085DB7' : '#cbd5e1',
-            }}
-            onClick={() => scrollToSlide(dotIdx)}
-          />
-        ))}
+          {[0, 1].map((dotIdx) => (
+            <span
+              key={dotIdx}
+              style={{
+                ...styles.dot,
+                backgroundColor: currentSlide === dotIdx ? '#085DB7' : '#cbd5e1',
+              }}
+              onClick={() => scrollToSlide(dotIdx)}
+            />
+          ))}
         </div>
       </div>
-    <ScrollToggle />
-    <Footer />
+
+      <ScrollToggle />
+      <Footer />
     </div>
-    
   );
 };
 
@@ -184,50 +157,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: '18px',
     color: '#f3f4f6',
     textShadow: '0 1px 3px rgba(0,0,0,0.2)',
-  },
-  searchBar: {
-    position: 'relative',
-    zIndex: 2,
-    display: 'flex',
-    gap: '30px',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(243, 249, 255, 0.65)',
-    backdropFilter: 'blur(8px)',
-    borderRadius: '12px',
-    padding: '30px 30px 15px',
-    margin: '30px auto 20px',
-    maxWidth: '1100px',
-    flexWrap: 'wrap',
-  },
-  selectWrapper: {
-    position: 'relative',
-    minWidth: '200px',
-  },
-  searchButton: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '10px 25px',
-    border: 'none',
-    borderRadius: '999px',
-    color: '#ffffff',
-    backgroundColor: '#085DB7',
-    fontWeight: 600,
-    cursor: 'pointer',
-    fontSize: '16px',
-    justifyContent: 'center',
-    textAlign: 'center',
-  },
-  icon: {
-    fontSize: '22px',
-    color: 'inherit',
-  },
-  browseAllWrapper: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '10px',
   },
   carouselContainer: {
     margin: '30px auto',

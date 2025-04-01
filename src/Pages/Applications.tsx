@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Applications = () => {
+const BrowseAll = () => {
   return (
     <div style={{ padding: '40px', textAlign: 'center' }}>
       <h2>Applications Dashboard</h2>
@@ -9,4 +9,4 @@ const Applications = () => {
   );
 };
 
-export default Applications;
+export default BrowseAll;
