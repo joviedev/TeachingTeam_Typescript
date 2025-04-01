@@ -3,6 +3,7 @@ import ScrollToggle from '../FixedComponent/ScrollToggle';
 import teachingImage from '../assets/teaching.jpg';
 import Footer from '../FixedComponent/Footer';
 import SearchFilterBar from '../FixedComponent/SearchFilterBar';
+import { useNavigate } from 'react-router-dom';
 
 const Opportunity: React.FC = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
@@ -11,6 +12,7 @@ const Opportunity: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const carouselRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
   const scrollToSlide = (index: number) => {
     if (carouselRef.current) {
@@ -19,6 +21,15 @@ const Opportunity: React.FC = () => {
       container.scrollTo({ left: scrollAmount, behavior: 'smooth' });
       setCurrentSlide(index);
     }
+  };
+
+  // 🔍 Navigate to /browse-all with filters
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (selectedCourse) params.append('course', selectedCourse);
+    if (selectedLocation) params.append('location', selectedLocation);
+    if (selectedOpening) params.append('opening', selectedOpening);
+    navigate(`/browse-all?${params.toString()}`);
   };
 
   const courseCards = [
@@ -63,6 +74,7 @@ const Opportunity: React.FC = () => {
           </div>
         </div>
 
+        {/* 🔗 Search Filter Bar with navigation handler */}
         <SearchFilterBar
           selectedCourse={selectedCourse}
           setSelectedCourse={setSelectedCourse}
@@ -70,6 +82,7 @@ const Opportunity: React.FC = () => {
           setSelectedLocation={setSelectedLocation}
           selectedOpening={selectedOpening}
           setSelectedOpening={setSelectedOpening}
+          onSearch={handleSearch}
         />
       </div>
 
@@ -105,6 +118,8 @@ const Opportunity: React.FC = () => {
     </div>
   );
 };
+
+export default Opportunity;
 
 const styles: { [key: string]: React.CSSProperties } = {
   page: {
@@ -223,5 +238,3 @@ const styles: { [key: string]: React.CSSProperties } = {
     transition: 'background-color 0.3s ease',
   },
 };
-
-export default Opportunity;

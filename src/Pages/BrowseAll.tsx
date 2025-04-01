@@ -3,11 +3,16 @@ import Footer from '../FixedComponent/Footer';
 import SearchFilterBar from '../FixedComponent/SearchFilterBar';
 import { courses } from '../Data/CourseList';
 import ScrollerToggle from '../FixedComponent/ScrollToggle';
+import { useLocation } from 'react-router-dom';
 
 const BrowseAll: React.FC = () => {
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedOpening, setSelectedOpening] = useState('');
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  // Read values from URL query parameters on page load
+  const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '');
+  const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || '');
+  const [selectedOpening, setSelectedOpening] = useState(searchParams.get('opening') || '');
 
   const filteredCourses = courses.filter((course) => {
     return (
@@ -38,41 +43,41 @@ const BrowseAll: React.FC = () => {
                     <p>{course.spacesLeft} spaces left</p>
                   </div>
                   <div style={styles.cardRight}>
-                <button
-                    style={styles.button}
-                    onMouseEnter={(e) => {
+                    <button
+                      style={styles.button}
+                      onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
                         e.currentTarget.style.color = '#000';
-                    }}
-                    onMouseLeave={(e) => {
+                      }}
+                      onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = '#085DB7';
                         e.currentTarget.style.color = '#fff';
-                    }}
+                      }}
                     >
-                        Apply Now
-                </button>
+                      Apply Now
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
 
             <div style={styles.sidebar}>
-            <div style={styles.searchFilterShadow}>
-            <SearchFilterBar
-                selectedCourse={selectedCourse}
-                setSelectedCourse={setSelectedCourse}
-                selectedLocation={selectedLocation}
-                setSelectedLocation={setSelectedLocation}
-                selectedOpening={selectedOpening}
-                setSelectedOpening={setSelectedOpening}
-                mode="reset"
-                onReset={() => {
-                  setSelectedCourse('');
-                  setSelectedLocation('');
-                  setSelectedOpening('');
-                }}
-            />
-            </div>
+              <div style={styles.searchFilterShadow}>
+                <SearchFilterBar
+                  selectedCourse={selectedCourse}
+                  setSelectedCourse={setSelectedCourse}
+                  selectedLocation={selectedLocation}
+                  setSelectedLocation={setSelectedLocation}
+                  selectedOpening={selectedOpening}
+                  setSelectedOpening={setSelectedOpening}
+                  mode="reset"
+                  onReset={() => {
+                    setSelectedCourse('');
+                    setSelectedLocation('');
+                    setSelectedOpening('');
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -164,5 +169,5 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: '28px',
     marginBottom: '16px',
     backgroundColor: '#F3F9FF',
-  },  
+  },
 };
