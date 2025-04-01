@@ -38,13 +38,26 @@ const BrowseAll: React.FC = () => {
                     <p>{course.spacesLeft} spaces left</p>
                   </div>
                   <div style={styles.cardRight}>
-                    <button style={styles.button}>Apply Now</button>
+                <button
+                    style={styles.button}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
+                        e.currentTarget.style.color = '#000';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#085DB7';
+                        e.currentTarget.style.color = '#fff';
+                    }}
+                    >
+                        Apply Now
+                </button>
                   </div>
                 </div>
               ))}
             </div>
 
             <div style={styles.sidebar}>
+            <div style={styles.searchFilterShadow}>
             <SearchFilterBar
                 selectedCourse={selectedCourse}
                 setSelectedCourse={setSelectedCourse}
@@ -54,11 +67,12 @@ const BrowseAll: React.FC = () => {
                 setSelectedOpening={setSelectedOpening}
                 mode="reset"
                 onReset={() => {
-                    setSelectedCourse('');
-                    setSelectedLocation('');
-                    setSelectedOpening('');
+                  setSelectedCourse('');
+                  setSelectedLocation('');
+                  setSelectedOpening('');
                 }}
             />
+            </div>
             </div>
           </div>
         </div>
@@ -141,5 +155,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: 'none',
     fontWeight: 600,
     cursor: 'pointer',
+    transition: 'all 0.3s ease',
   },
+  searchFilterShadow: {
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+    borderRadius: '12px',
+    border: '1px solid #e5e7eb',
+    marginTop: '28px',
+    marginBottom: '16px',
+    backgroundColor: '#F3F9FF',
+  },  
 };

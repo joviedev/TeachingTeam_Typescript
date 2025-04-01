@@ -103,20 +103,25 @@ const navigate = useNavigate();
         )}
 
       <div style={styles.browseAllWrapper}>
-        <button
-            style={styles.searchButton}
-            onClick={() => navigate('/browse-all')}
-            onMouseEnter={(e) => {
+      <button
+        style={styles.searchButton}
+        onClick={() => {
+            setSelectedCourse('');
+            setSelectedLocation('');
+            setSelectedOpening('');
+            navigate('/browse-all');
+        }}
+        onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
             e.currentTarget.style.color = '#000';
-            }}
-            onMouseLeave={(e) => {
+        }}
+        onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = '#085DB7';
             e.currentTarget.style.color = '#fff';
-            }}
+        }}
         >
-            Browse All
-        </button>
+        Browse All
+    </button>
         </div>
     </div>
   );

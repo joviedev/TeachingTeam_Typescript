@@ -5,7 +5,7 @@ export const courses = [
   {
     "code": "COSC1660",
     "title": "COSC1660 - Introduction to Programming",
-    "description": "A detailed look into Introduction to Programming, part of our Diploma program.",
+    "description": "This course provides a comprehensive introduction to programming, focusing on the fundamentals of coding in various programming languages.",
     "location": "Melbourne City",
     "courseType": "Diploma",
     "opening": "Apply Now",
@@ -16,7 +16,7 @@ export const courses = [
   {
     "code": "COSC1661",
     "title": "COSC1661 - Full Stack Development",
-    "description": "A detailed look into Full Stack Development, part of our Bachelor Degrees program.",
+    "description": "This course is part of the Full Stack Development track within the Diploma program, providing students with a thorough understanding of both front-end and back-end web development. ",
     "location": "",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
@@ -27,7 +27,7 @@ export const courses = [
   {
     "code": "COSC1662",
     "title": "COSC1662 - Web Programming",
-    "description": "A detailed look into Web Programming, part of our Vocational program.",
+    "description": "This course is designed for students pursuing a vocational education in web programming.",
     "location": "Melbourne City",
     "courseType": "vocational",
     "opening": "Semester 2",
