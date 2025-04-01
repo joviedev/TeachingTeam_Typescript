@@ -4,10 +4,12 @@ import SearchFilterBar from '../FixedComponent/SearchFilterBar';
 import { courses } from '../Data/CourseList';
 import ScrollerToggle from '../FixedComponent/ScrollToggle';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const BrowseAll: React.FC = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const navigate = useNavigate();
 
   // Read values from URL query parameters on page load
   const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '');
@@ -53,6 +55,7 @@ const BrowseAll: React.FC = () => {
                         e.currentTarget.style.backgroundColor = '#085DB7';
                         e.currentTarget.style.color = '#fff';
                       }}
+                      onClick={() => navigate('/apply')} 
                     >
                       Apply Now
                     </button>
