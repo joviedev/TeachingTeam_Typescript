@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './FixedComponent/Header';
 import NavBar from './FixedComponent/NavBar';
+import ScrollToTop from './FixedComponent/ScrollToTop';
 
 import About from './Pages/About';         // Landing page
 import SignUp from './Component/SignUp';   // Sign-up page
@@ -30,6 +31,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div style={{ backgroundColor: '#F8F9FA', minHeight: '100vh', fontFamily: "'Poppins', sans-serif" }}>
         <Header />
         <NavBar

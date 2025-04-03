@@ -94,7 +94,20 @@ const Opportunity: React.FC = () => {
               <div style={styles.courseCardContent}>
                 <h3 style={styles.courseTitle}>{course.title}</h3>
                 <p style={styles.courseDesc}>{course.description}</p>
-                <button style={styles.courseButton}>View List</button>
+                <button
+                  style={styles.courseButton}
+                  onClick={() => navigate(`/browse-all?course=${encodeURIComponent(course.title)}`)}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
+                    e.currentTarget.style.color = '#000';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#085DB7';
+                    e.currentTarget.style.color = '#fff';
+                  }}
+                >
+                  View List
+                </button>
               </div>
             </div>
           ))}
