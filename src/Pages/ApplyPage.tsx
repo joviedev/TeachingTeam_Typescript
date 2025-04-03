@@ -1,12 +1,14 @@
 import React from 'react';
 import Footer from '../FixedComponent/Footer';
 import ScrollToggle from '../FixedComponent/ScrollToggle';
-import applyBanner from '../assets/apply.jpg'; // Your provided image
+import applyBanner from '../assets/apply.jpg'; 
 import { courses } from '../Data/CourseList';
-
-const selectedCourse = courses.find(course => course.code === 'COSC1673'); // Pull COSC1673
+import { useParams } from 'react-router-dom';
 
 const ApplyPage: React.FC = () => {
+  const { code } = useParams();
+  const selectedCourse = courses.find(course => course.code.toLowerCase() === (code || '').toLowerCase());
+
   if (!selectedCourse) return <p>Course not found.</p>;
 
   return (
@@ -25,6 +27,8 @@ const ApplyPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+
 
       <ScrollToggle />
       <Footer />
@@ -84,7 +88,7 @@ const styles: { [key: string]: React.CSSProperties } = {
       gap: '16px',
     },
     applyBtn: {
-      backgroundColor: '#e60028',
+      backgroundColor: '#085DB7',
       color: '#fff',
       padding: '12px 24px',
       border: 'none',
@@ -103,5 +107,67 @@ const styles: { [key: string]: React.CSSProperties } = {
       fontSize: '16px',
       cursor: 'pointer',
     },
+    detailsSection: {
+      backgroundColor: '#F9FAFB',
+      padding: '30px 20px',
+      borderTop: '1px solid #e5e7eb',
+      marginTop: '40px',
+    },
+    
+    detailRow: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '30px',
+      justifyContent: 'space-between',
+      maxWidth: '1100px',
+      margin: '0 auto',
+    },
+    
+    detailItem: {
+      minWidth: '180px',
+      flex: '1 1 220px',
+    },
+    
+    label: {
+      fontWeight: 500,
+      marginBottom: '6px',
+      color: '#374151',
+    },
+    
+    buttonGroup: {
+      display: 'flex',
+      gap: '10px',
+      marginTop: '6px',
+    },
+    
+    selectButton: {
+      padding: '10px 20px',
+      border: '1.5px solid #0A0C4D',
+      borderRadius: '30px',
+      backgroundColor: '#fff',
+      color: '#0A0C4D',
+      cursor: 'pointer',
+      fontWeight: 500,
+    },
+    
+    selected: {
+      backgroundColor: '#fff',
+      borderColor: '#0A0C4D',
+      color: '#0A0C4D',
+      boxShadow: '0 0 0 2px #0A0C4D',
+    },
+    
+    disabled: {
+      backgroundColor: '#f3f4f6',
+      borderColor: '#cbd5e1',
+      color: '#6b7280',
+      cursor: 'not-allowed',
+    },
+    
+    link: {
+      color: '#1e3a8a',
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },    
   };
   

@@ -51,7 +51,7 @@ function App() {
           <Route path="/my-application" element={<MyApplication />} />
           <Route path="/review-tutors" element={<ReviewTutors />} />
           <Route path="/browse-all" element={<BrowseAll />} />
-          <Route path="/apply" element={<ApplyPage />} />
+          <Route path="/apply/:code" element={<ApplyPage />} />
           <Route
             path="/login"
             element={

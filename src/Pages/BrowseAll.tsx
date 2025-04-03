@@ -38,6 +38,9 @@ const BrowseAll: React.FC = () => {
                 <div key={idx} style={styles.courseCard}>
                   <div style={styles.cardLeft}>
                     <h3 style={styles.courseTitle}>{course.title}</h3>
+                    <span style={styles.courseTypeLabel}>
+                      {course.courseType.toUpperCase()}
+                    </span>
                     <p style={styles.location}>{course.location.toUpperCase()}</p>
                     <p style={styles.description}>{course.description}</p>
                     <p>{course.date}</p>
@@ -55,7 +58,7 @@ const BrowseAll: React.FC = () => {
                         e.currentTarget.style.backgroundColor = '#085DB7';
                         e.currentTarget.style.color = '#fff';
                       }}
-                      onClick={() => navigate('/apply')} 
+                      onClick={() => navigate(`/apply/${course.code}`)}
                     >
                       Apply Now
                     </button>
