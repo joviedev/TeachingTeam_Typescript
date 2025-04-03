@@ -17,6 +17,7 @@ import ReviewTutors from './Pages/ReviewTutors';  // Page for lecturer to review
 import TutorDashboard from './Pages/TutorDashboard';  // Tutor dashboard page
 import BrowseAll from './Pages/BrowseAll';
 import ApplyPage from './Pages/ApplyPage';
+import ApplyForm from './Pages/ApplyForm';
 
 // Main landing page component
 function App() {
@@ -52,6 +53,7 @@ function App() {
           <Route path="/review-tutors" element={<ReviewTutors />} />
           <Route path="/browse-all" element={<BrowseAll />} />
           <Route path="/apply/:code" element={<ApplyPage />} />
+          <Route path="/apply-form" element={<ApplyForm />} />
           <Route
             path="/login"
             element={

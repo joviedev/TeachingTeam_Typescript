@@ -3,9 +3,11 @@ import Footer from '../FixedComponent/Footer';
 import ScrollToggle from '../FixedComponent/ScrollToggle';
 import applyBanner from '../assets/apply.jpg'; 
 import { courses } from '../Data/CourseList';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+
 
 const ApplyPage: React.FC = () => {
+  const navigate = useNavigate();
   const { code } = useParams();
   const selectedCourse = courses.find(course => course.code.toLowerCase() === (code || '').toLowerCase());
 
@@ -22,9 +24,69 @@ const ApplyPage: React.FC = () => {
           <p style={styles.bannerDesc}>{selectedCourse.description}</p>
 
           <div style={styles.buttons}>
-            <button style={styles.applyBtn}>Apply</button>
-            <button style={styles.enquireBtn}>Enquire</button>
+          <button
+            style={styles.applyBtn}
+            onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#064A94';
+            e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#085DB7';
+            e.currentTarget.style.color = '#fff';
+            }}
+            onClick={() => navigate(`/ApplyForm`)}
+            >
+            Apply
+            </button>
+            <button
+            style={styles.enquireBtn}
+            onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#91A8C2';
+            e.currentTarget.style.color = '#000';
+            }}
+            onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#B7C9DF';
+            e.currentTarget.style.color = '#000';
+            }}
+            onClick={() => navigate(`/ApplyForm`)}
+            >
+            Enquiry
+            </button>
           </div>
+        </div>
+      </div>
+
+      <div style={styles.infoSection}>
+        <div style={styles.container}>
+        <div style={styles.infoRow}>
+          <div style={styles.infoItem}>
+            <span style={styles.infoLabel}>
+              <span className="material-icons" style={styles.icon}>location_on</span> Location:
+            </span>
+            <p style={styles.infoValue}>{selectedCourse.location}</p>
+          </div>
+
+          <div style={styles.infoItem}>
+            <span style={styles.infoLabel}>
+              <span className="material-icons" style={styles.icon}>schedule</span> Schedule:
+            </span>
+            <p style={styles.infoValue}><strong>{selectedCourse.date}</strong><br />{selectedCourse.time}</p>
+          </div>
+
+          <div style={styles.infoItem}>
+            <span style={styles.infoLabel}>
+              <span className="material-icons" style={styles.icon}>description</span> Course Materials:
+            </span>
+            <p style={styles.infoValue}><strong>All materials must be uploaded to Canvas.</strong></p>
+          </div>
+
+          <div style={styles.infoItem}>
+            <span style={styles.infoLabel}>
+              <span className="material-icons" style={styles.icon}>group</span> Spaces Left:
+            </span>
+            <p style={styles.infoValue}><strong>{selectedCourse.spacesLeft}</strong></p>
+          </div>
+        </div>
         </div>
       </div>
 
@@ -64,13 +126,13 @@ const styles: { [key: string]: React.CSSProperties } = {
       padding: '0 30px',
     },
     bannerTitle: {
-      fontSize: '36px',
+      fontSize: '42px',
       fontWeight: 'bold',
-      marginBottom: '10px',
+      marginBottom: '25px',
     },
     subtitleLabel: {
       display: 'inline-block',
-      fontSize: '14px',
+      fontSize: '20px',
       fontWeight: 600,
       backgroundColor: '#ffcc00',
       color: '#000',
@@ -79,95 +141,79 @@ const styles: { [key: string]: React.CSSProperties } = {
       marginBottom: '15px',
     },
     bannerDesc: {
-      fontSize: '16px',
-      marginBottom: '20px',
+      fontSize: '18px',
+      marginBottom: '40px',
       lineHeight: 1.6,
     },
     buttons: {
       display: 'flex',
-      gap: '16px',
+      gap: '50px',
     },
     applyBtn: {
       backgroundColor: '#085DB7',
       color: '#fff',
-      padding: '12px 24px',
+      padding: '12px 30px',
       border: 'none',
       borderRadius: '8px',
       fontWeight: 'bold',
-      fontSize: '16px',
+      fontSize: '18px',
       cursor: 'pointer',
     },
     enquireBtn: {
       backgroundColor: '#fff',
       color: '#000',
-      padding: '12px 24px',
+      padding: '12px 30px',
       border: '1px solid #ccc',
       borderRadius: '8px',
       fontWeight: 'bold',
-      fontSize: '16px',
+      fontSize: '18px',
       cursor: 'pointer',
     },
-    detailsSection: {
+    infoSection: {
       backgroundColor: '#F9FAFB',
-      padding: '30px 20px',
+      padding: '30px 40px',
       borderTop: '1px solid #e5e7eb',
-      marginTop: '40px',
+      marginTop: '0px',
+      justifyContent: 'center',
     },
-    
-    detailRow: {
+    infoRow: {
       display: 'flex',
-      flexWrap: 'wrap',
-      gap: '30px',
+      flexDirection: 'row',
       justifyContent: 'space-between',
-      maxWidth: '1100px',
-      margin: '0 auto',
+      gap: '60px',
+      flexWrap: 'nowrap',
     },
-    
-    detailItem: {
-      minWidth: '180px',
-      flex: '1 1 220px',
+    infoItem: {
+      flex: '1 1 0',
+      minWidth: '0',
+      maxWidth: '100%',
     },
-    
-    label: {
-      fontWeight: 500,
-      marginBottom: '6px',
-      color: '#374151',
-    },
-    
-    buttonGroup: {
-      display: 'flex',
-      gap: '10px',
-      marginTop: '6px',
-    },
-    
-    selectButton: {
-      padding: '10px 20px',
-      border: '1.5px solid #0A0C4D',
-      borderRadius: '30px',
-      backgroundColor: '#fff',
-      color: '#0A0C4D',
-      cursor: 'pointer',
-      fontWeight: 500,
-    },
-    
-    selected: {
-      backgroundColor: '#fff',
-      borderColor: '#0A0C4D',
-      color: '#0A0C4D',
-      boxShadow: '0 0 0 2px #0A0C4D',
-    },
-    
-    disabled: {
-      backgroundColor: '#f3f4f6',
-      borderColor: '#cbd5e1',
+    infoLabel: {
       color: '#6b7280',
-      cursor: 'not-allowed',
+      fontWeight: 500,
+      fontSize: '16px',
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '6px',
+    },
+    icon: {
+      fontSize: '20px',
+      marginRight: '6px',
+      color: '#1f1f1f',
+    },
+    infoValue: {
+      color: '#000038',
+      fontWeight: 600,
+      fontSize: '17px',
+      lineHeight: 1.4,
+    },
+    container: {
+      maxWidth: '1200px',
+      width: '100%',
+      padding: '0 60px', // equal left & right padding
+      boxSizing: 'border-box',
     },
     
-    link: {
-      color: '#1e3a8a',
-      textDecoration: 'underline',
-      cursor: 'pointer',
-    },    
+    
   };
   

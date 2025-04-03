@@ -10,7 +10,7 @@ export const courses = [
     "courseType": "Diploma",
     "opening": "Apply Now",
     "date": "14 Jul 2025 \u2013 14 Dec 2025",
-    "time": "00:00 PM \u2013 02:00 PM (GMT+10:00)",
+    "time": "12:00 PM \u2013 02:00 PM (GMT+10:00)",
     "spacesLeft": 10
   },
   {
@@ -131,7 +131,7 @@ export const courses = [
     "courseType": "Master by Research",
     "opening": "Summer Intake",
     "date": "15 Dec 2025 \u2013 28 Feb 2026",
-    "time": "00:00 PM \u2013 01:00 PM (GMT+10:00)",
+    "time": "12:00 PM \u2013 01:00 PM (GMT+10:00)",
     "spacesLeft": 24
   },
   {
@@ -285,7 +285,7 @@ export const courses = [
     "courseType": "Master by Research",
     "opening": "Semester 1",
     "date": "6 Mar 2026 \u2013 10 Jun 2026",
-    "time": "00:00 PM \u2013 01:00 PM (GMT+10:00)",
+    "time": "12:00 PM \u2013 01:00 PM (GMT+10:00)",
     "spacesLeft": 28
   },
   {
@@ -384,7 +384,7 @@ export const courses = [
     "courseType": "Bachelor Degrees",
     "opening": "Apply Now",
     "date": "14 Jul 2025 \u2013 14 Dec 2025",
-    "time": "00:00 PM \u2013 02:00 PM (GMT+10:00)",
+    "time": "12:00 PM \u2013 02:00 PM (GMT+10:00)",
     "spacesLeft": 22
   },
   {
