@@ -9,6 +9,11 @@ import ScrollToggle from '../FixedComponent/ScrollToggle';
 import Footer from '../FixedComponent/Footer';
 
 const styles: { [key: string]: React.CSSProperties } = {
+  pageWrapper: {
+    fontFamily: 'sans-serif',
+    color: '#1f2937',
+    scrollBehavior: 'smooth',
+  },
   heroSection: {
     backgroundImage: `url(${heroImage})`,
     backgroundSize: 'cover',
@@ -20,7 +25,27 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'center',
     textAlign: 'center',
     position: 'relative',
-    padding: '0 3rem',
+    padding: '0 48px',
+  },
+  heroTitle: {
+    fontSize: '40px',
+    fontWeight: 800,
+    marginBottom: '24px',
+    lineHeight: '1.25',
+  },
+  heroText: {
+    fontSize: '18px',
+    marginBottom: '32px',
+    color: '#f3f4f6',
+  },
+  heroButton: {
+    display: 'inline-block',
+    backgroundColor: '#2563eb',
+    color: 'white',
+    padding: '12px 32px',
+    borderRadius: '9999px',
+    fontWeight: 500,
+    textDecoration: 'none',
   },
   overlay: {
     position: 'absolute',
@@ -30,11 +55,72 @@ const styles: { [key: string]: React.CSSProperties } = {
   sectionDivider: {
     borderTop: '1px solid #e5e7eb',
   },
+  section: {
+    padding: '80px 24px',
+  },
+  sectionTitle: {
+    fontSize: '32px',
+    fontWeight: 700,
+    textAlign: 'center',
+    color: '#1e40af',
+    marginBottom: '48px',
+  },
+  card: {
+    backgroundColor: '#f9fafb',
+    padding: '24px',
+    borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+  },
+  cardTitle: {
+    fontSize: '24px',
+    color: '#1d4ed8',
+    fontWeight: 600,
+    marginBottom: '16px',
+  },
+  grid: {
+    display: 'grid',
+    gap: '48px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  },
+  img: {
+    borderRadius: '16px',
+    width: '100%',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+  },
+  applicationBox: {
+    backgroundColor: 'white',
+    borderRadius: '16px',
+    padding: '24px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+  },
+  optionCardGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
   ctaSection: {
-    padding: '5rem 1.5rem',
+    padding: '80px 24px',
     background: 'linear-gradient(to right, #1d4ed8, #3b82f6)',
     color: 'white',
     textAlign: 'center',
+  },
+  ctaTitle: {
+    fontSize: '32px',
+    fontWeight: 700,
+    marginBottom: '16px',
+  },
+  ctaText: {
+    fontSize: '18px',
+    marginBottom: '32px',
+  },
+  ctaButtonGroup: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '24px',
+    flexWrap: 'wrap',
   },
 };
 
@@ -53,7 +139,8 @@ const About: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ fontFamily: 'sans-serif', color: '#1f2937', scrollBehavior: 'smooth' }}>
+    <div style={styles.pageWrapper}>
+      {/* Hero */}
       <section style={styles.heroSection}>
         <div style={styles.overlay}></div>
         <motion.div
@@ -62,26 +149,12 @@ const About: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1.5rem', lineHeight: '1.25' }}>
-            Empowering Tutors. Simplifying Selection.
-          </h1>
-          <p style={{ fontSize: '1.125rem', marginBottom: '2rem', color: '#f3f4f6' }}>
+          <h1 style={styles.heroTitle}>Empowering Tutors. Simplifying Selection.</h1>
+          <p style={styles.heroText}>
             TeachTeam helps students and lecturers connect through an efficient tutoring platform.
             Apply, review, and collaborate – all in one place.
           </p>
-          <motion.a
-            href="#features"
-            whileHover={{ scale: 1.05 }}
-            style={{
-              display: 'inline-block',
-              backgroundColor: '#2563eb',
-              color: 'white',
-              padding: '0.75rem 2rem',
-              borderRadius: '9999px',
-              fontWeight: 500,
-              textDecoration: 'none',
-            }}
-          >
+          <motion.a href="#features" whileHover={{ scale: 1.05 }} style={styles.heroButton}>
             Learn How It Works
           </motion.a>
         </motion.div>
@@ -89,16 +162,12 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      <section id="features" style={{ backgroundColor: 'white', padding: '5rem 1.5rem' }}>
-        <motion.h2
-          style={{ fontSize: '2rem', fontWeight: 700, textAlign: 'center', color: '#1e40af', marginBottom: '3rem' }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
+      {/* Features */}
+      <section id="features" style={styles.section}>
+        <motion.h2 style={styles.sectionTitle} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }}>
           How TeachTeam Helps
         </motion.h2>
-        <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+        <div style={styles.grid}>
           {['For Tutors', 'For Lecturers'].map((title, i) => (
             <motion.div
               key={title}
@@ -107,15 +176,10 @@ const About: React.FC = () => {
               whileInView="visible"
               custom={i}
               viewport={{ once: true }}
-              style={{
-                backgroundColor: '#f9fafb',
-                padding: '1.5rem',
-                borderRadius: '0.75rem',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-              }}
+              style={styles.card}
             >
-              <h3 style={{ fontSize: '1.5rem', color: '#1d4ed8', fontWeight: 600, marginBottom: '1rem' }}>{title}</h3>
-              <ul style={{ paddingLeft: '1.25rem', color: '#374151' }}>
+              <h3 style={styles.cardTitle}>{title}</h3>
+              <ul style={{ paddingLeft: '20px', color: '#374151' }}>
                 {i === 0 ? (
                   <>
                     <li>Apply for open tutoring roles easily</li>
@@ -137,54 +201,26 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      <section id="how-to-apply" style={{ backgroundColor: '#f3f4f6', padding: '5rem 1.5rem' }}>
-        <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-          <motion.img
-            src={applicationImage}
-            alt="Students collaborating"
-            style={{ borderRadius: '1rem', width: '100%', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-          />
-          <motion.div
-            style={{
-              backgroundColor: 'white',
-              borderRadius: '1rem',
-              padding: '1.5rem',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.5rem',
-            }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            <Accordion
-              title="How do I apply?"
-              expanded={isExpanded}
-              toggle={() => setIsExpanded(!isExpanded)}
-            >
+      {/* How to Apply */}
+      <section id="how-to-apply" style={styles.section}>
+        <div style={{ display: 'grid', gap: '48px', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+          <motion.img src={applicationImage} alt="Students collaborating" style={styles.img} initial={{ scale: 0.9, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8 }} />
+          <motion.div style={styles.applicationBox} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
+            <Accordion title="How do I apply?" expanded={isExpanded} toggle={() => setIsExpanded(!isExpanded)}>
               <p>To apply, log in or create an account on TeachTeam and follow these steps:</p>
-              <ul style={{ paddingLeft: '1.25rem', marginTop: '1rem' }}>
+              <ul style={{ paddingLeft: '20px', marginTop: '16px' }}>
                 <li>Upload proof of right to work (citizenship or visa)</li>
                 <li>Provide your full name and contact details</li>
                 <li>List your qualifications and education</li>
                 <li>Add employment history</li>
                 <li>Submit two references with contact info</li>
               </ul>
-              <p style={{ marginTop: '1rem' }}>
-                Your profile will remain active for two years and can be updated anytime.
-              </p>
+              <p style={{ marginTop: '16px' }}>Your profile will remain active for two years and can be updated anytime.</p>
             </Accordion>
-            <Accordion
-              title="How does the selection process work?"
-              expanded={isSelectionExpanded}
-              toggle={() => setSelectionExpanded(!isSelectionExpanded)}
-            >
+
+            <Accordion title="How does the selection process work?" expanded={isSelectionExpanded} toggle={() => setSelectionExpanded(!isSelectionExpanded)}>
               <p>Recruitment and appointment are based on merit and equal opportunity principles.</p>
-              <ul style={{ paddingLeft: '1.25rem', marginTop: '1rem' }}>
+              <ul style={{ paddingLeft: '20px', marginTop: '16px' }}>
                 <li>A right to work in Australia with no relevant work restrictions</li>
                 <li>Formal tertiary qualifications and/or relevant work experience (AQF)</li>
                 <li>Strong verbal and written communication and interpersonal skills</li>
@@ -192,7 +228,8 @@ const About: React.FC = () => {
                 <li>Working with Children Check and membership verification if required</li>
               </ul>
             </Accordion>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+            <div style={styles.optionCardGroup}>
               <OptionCard title="Become a Tutor" route="/become-a-tutor" />
               <OptionCard title="Opportunity" route="/opportunity" />
             </div>
@@ -202,44 +239,15 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      <motion.section
-        style={styles.ctaSection}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>
-          Ready to join TeachTeam?
-        </h3>
-        <p style={{ fontSize: '1.125rem', marginBottom: '2rem' }}>
-          Sign up today and start shaping the future of tutoring at the School of Computer Science.
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-          <motion.a
-            href="/signup"
-            whileHover={{ scale: 1.05 }}
-            style={{
-              backgroundColor: 'white',
-              color: '#1d4ed8',
-              fontWeight: 600,
-              padding: '0.75rem 1.5rem',
-              borderRadius: '9999px',
-              textDecoration: 'none',
-            }}
-          >
+      {/* CTA */}
+      <motion.section style={styles.ctaSection} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+        <h3 style={styles.ctaTitle}>Ready to join TeachTeam?</h3>
+        <p style={styles.ctaText}>Sign up today and start shaping the future of tutoring at the School of Computer Science.</p>
+        <div style={styles.ctaButtonGroup}>
+          <motion.a href="/signup" whileHover={{ scale: 1.05 }} style={{ backgroundColor: 'white', color: '#1d4ed8', fontWeight: 600, padding: '12px 24px', borderRadius: '9999px', textDecoration: 'none' }}>
             Create Account
           </motion.a>
-          <motion.a
-            href="/login"
-            whileHover={{ scale: 1.05 }}
-            style={{
-              border: '2px solid white',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '9999px',
-              textDecoration: 'none',
-            }}
-          >
+          <motion.a href="/login" whileHover={{ scale: 1.05 }} style={{ border: '2px solid white', color: 'white', padding: '12px 24px', borderRadius: '9999px', textDecoration: 'none' }}>
             Sign In
           </motion.a>
         </div>
@@ -260,22 +268,21 @@ const OptionCard: React.FC<{ title: string; route: string }> = ({ title, route }
       onClick={() => navigate(route)}
       style={{
         backgroundColor: '#eff6ff',
-        padding: '1.25rem 1.5rem',
-        borderRadius: '0.5rem',
+        padding: '20px 24px',
+        borderRadius: '8px',
         border: '1px solid #bfdbfe',
         boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         cursor: 'pointer',
-        fontSize: '1.125rem',
+        fontSize: '18px',
         fontWeight: 600,
         color: '#1e40af',
-        transition: 'background 0.2s ease',
       }}
     >
       <span>{title}</span>
-      <span style={{ fontSize: '1.5rem' }}>➔</span>
+      <span style={{ fontSize: '24px' }}>➔</span>
     </motion.button>
   );
 };
@@ -286,28 +293,13 @@ const Accordion: React.FC<{
   toggle: () => void;
   children: React.ReactNode;
 }> = ({ title, expanded, toggle, children }) => (
-  <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '1rem' }}>
-    <div
-      onClick={toggle}
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        cursor: 'pointer',
-      }}
-    >
-      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1d4ed8' }}>{title}</h3>
-      <span style={{ color: '#facc15', fontSize: '1.75rem', fontWeight: 'bold' }}>
-        {expanded ? '−' : '+'}
-      </span>
+  <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '16px' }}>
+    <div onClick={toggle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+      <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#1d4ed8' }}>{title}</h3>
+      <span style={{ color: '#facc15', fontSize: '28px', fontWeight: 'bold' }}>{expanded ? '−' : '+'}</span>
     </div>
     {expanded && (
-      <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: 'auto', opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        style={{ marginTop: '1rem' }}
-      >
+      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} transition={{ duration: 0.4 }} style={{ marginTop: '16px' }}>
         {children}
       </motion.div>
     )}
