@@ -1,61 +1,72 @@
 import React, { useState } from 'react';
+import CustomDropdown from '../FixedComponent/CustomDropdown';
+
+const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const timeOptions = [
+  { value: '', label: 'Select Time Slot' },
+  { value: '9am-12pm', label: '9am – 12pm' },
+  { value: '1pm-5pm', label: '1pm – 5pm' },
+  { value: '5pm-9pm', label: '5pm – 9pm' },
+  { value: 'Full Day', label: 'Full Day' },
+];
 
 const ApplyForm: React.FC = () => {
   const [form, setForm] = useState({
     fullName: '',
+    preferredName: '',
     email: '',
+    gender: '',
     previousRole: '',
+    previousRoleOther: '',
     currentRole: '',
+    currentRoleOther: '',
+    field: '',
     experience: '',
-    availability: '',
   });
+
+  const [availability, setAvailability] = useState<{ [day: string]: string }>({});
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // ✅ Word count function
-  const getWordCount = (text: string) => {
-    return text.trim() ? text.trim().split(/\s+/).length : 0;
-  };
-
-  // ✅ Validation function
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
     if (!form.email.includes('@')) newErrors.email = 'Valid Email is required.';
-    if (!form.previousRole.trim()) newErrors.previousRole = 'Previous Role is required.';
-    if (!form.currentRole.trim()) newErrors.currentRole = 'Current Role is required.';
-    if (!form.experience.trim()) newErrors.experience = 'Experience details are required.';
-    if (!form.availability.trim()) newErrors.availability = 'Availability info is required.';
+    if (!form.gender) newErrors.gender = 'Gender is required.';
+    if (!form.previousRole) newErrors.previousRole = 'Previous Role is required.';
+    if (form.previousRole === 'Other' && !form.previousRoleOther.trim()) newErrors.previousRoleOther = 'Please specify other previous role.';
+    if (!form.currentRole) newErrors.currentRole = 'Current Role is required.';
+    if (form.currentRole === 'Other' && !form.currentRoleOther.trim()) newErrors.currentRoleOther = 'Please specify other current role.';
+    if (!form.field) newErrors.field = 'Field is required.';
+    if (!form.experience.trim()) newErrors.experience = 'Experience is required.';
+    daysOfWeek.forEach(day => {
+      if (!availability[day]) newErrors[day] = `Select time for ${day}`;
+    });
     return newErrors;
   };
 
-  // ✅ Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: '' });
+  };
 
-    // If experience or availability, limit 250 words
-    if (name === 'experience' || name === 'availability') {
-      const words = value.trim().split(/\s+/);
-      if (words.length <= 250) {
-        setForm({ ...form, [name]: value });
-      } else {
-        setForm({ ...form, [name]: words.slice(0, 250).join(' ') });
-      }
-    } else {
-      setForm({ ...form, [name]: value });
-    }
-
+  const handleDropdownChange = (name: string, value: string) => {
+    setForm({ ...form, [name]: value });
     setErrors({ ...errors, [name]: '' });
   };
 
-  // ✅ Handle form submit
+  const handleAvailabilityChange = (day: string, value: string) => {
+    setAvailability({ ...availability, [day]: value });
+    setErrors({ ...errors, [day]: '' });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log('Application Submitted:', form);
+      console.log('Application Submitted:', { ...form, availability });
       setSubmitted(true);
     }
   };
@@ -75,85 +86,143 @@ const ApplyForm: React.FC = () => {
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '30px' }}>
               {/* Full Name */}
-              <div>
-                <input
-                  type="text"
-                  name="fullName"
-                  placeholder="Full Name"
-                  value={form.fullName}
-                  onChange={handleChange}
-                  style={styles.input}
-                />
-                {errors.fullName && <div style={styles.errorText}>{errors.fullName}</div>}
-              </div>
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Full Name"
+                value={form.fullName}
+                onChange={handleChange}
+                style={styles.input}
+              />
+              {errors.fullName && <div style={styles.errorText}>{errors.fullName}</div>}
+
+              {/* Preferred Name */}
+              <input
+                type="text"
+                name="preferredName"
+                placeholder="Preferred Name"
+                value={form.preferredName}
+                onChange={handleChange}
+                style={styles.input}
+              />
 
               {/* Email */}
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={form.email}
-                  onChange={handleChange}
-                  style={styles.input}
-                />
-                {errors.email && <div style={styles.errorText}>{errors.email}</div>}
-              </div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={form.email}
+                onChange={handleChange}
+                style={styles.input}
+              />
+              {errors.email && <div style={styles.errorText}>{errors.email}</div>}
+
+              {/* Gender */}
+              <CustomDropdown
+                value={form.gender}
+                onChange={(value) => handleDropdownChange('gender', value)}
+                options={[
+                  { value: '', label: 'Select Gender' },
+                  { value: 'Male', label: 'Male' },
+                  { value: 'Female', label: 'Female' },
+                  { value: 'Non-Binary', label: 'Non-Binary' },
+                  { value: 'Prefer not to say', label: 'Prefer not to say' },
+                ]}
+              />
+              {errors.gender && <div style={styles.errorText}>{errors.gender}</div>}
 
               {/* Previous Role */}
-              <div>
+              <CustomDropdown
+                value={form.previousRole}
+                onChange={(value) => handleDropdownChange('previousRole', value)}
+                options={[
+                  { value: '', label: 'Previous Role' },
+                  { value: 'Student', label: 'Student' },
+                  { value: 'TA', label: 'Teaching Assistant' },
+                  { value: 'Tutor', label: 'Tutor' },
+                  { value: 'Other', label: 'Other' },
+                ]}
+              />
+              {form.previousRole === 'Other' && (
                 <input
                   type="text"
-                  name="previousRole"
-                  placeholder="Previous Role (e.g. Student, TA, Tutor)"
-                  value={form.previousRole}
+                  name="previousRoleOther"
+                  placeholder="Specify Other Previous Role"
+                  value={form.previousRoleOther}
                   onChange={handleChange}
                   style={styles.input}
                 />
-                {errors.previousRole && <div style={styles.errorText}>{errors.previousRole}</div>}
-              </div>
+              )}
+              {errors.previousRole && <div style={styles.errorText}>{errors.previousRole}</div>}
+              {errors.previousRoleOther && <div style={styles.errorText}>{errors.previousRoleOther}</div>}
 
               {/* Current Role */}
-              <div>
+              <CustomDropdown
+                value={form.currentRole}
+                onChange={(value) => handleDropdownChange('currentRole', value)}
+                options={[
+                  { value: '', label: 'Current Role' },
+                  { value: 'Student', label: 'Student' },
+                  { value: 'Graduate', label: 'Graduate' },
+                  { value: 'Lecturer', label: 'Lecturer' },
+                  { value: 'Other', label: 'Other' },
+                ]}
+              />
+              {form.currentRole === 'Other' && (
                 <input
                   type="text"
-                  name="currentRole"
-                  placeholder="Current Role (e.g. Student, Graduate, Lecturer)"
-                  value={form.currentRole}
+                  name="currentRoleOther"
+                  placeholder="Specify Other Current Role"
+                  value={form.currentRoleOther}
                   onChange={handleChange}
                   style={styles.input}
                 />
-                {errors.currentRole && <div style={styles.errorText}>{errors.currentRole}</div>}
-              </div>
+              )}
+              {errors.currentRole && <div style={styles.errorText}>{errors.currentRole}</div>}
+              {errors.currentRoleOther && <div style={styles.errorText}>{errors.currentRoleOther}</div>}
+
+              {/* Field */}
+              <CustomDropdown
+                value={form.field}
+                onChange={(value) => handleDropdownChange('field', value)}
+                options={[
+                  { value: '', label: 'Select Field' },
+                  { value: 'Computer Science', label: 'Computer Science' },
+                  { value: 'Business', label: 'Business' },
+                  { value: 'Engineering', label: 'Engineering' },
+                  { value: 'Design', label: 'Design' },
+                  { value: 'Other', label: 'Other' },
+                ]}
+              />
+              {errors.field && <div style={styles.errorText}>{errors.field}</div>}
 
               {/* Experience */}
-              <div>
-                <textarea
-                  name="experience"
-                  placeholder="Describe your tutoring or teaching experience"
-                  value={form.experience}
-                  onChange={handleChange}
-                  style={styles.textarea}
-                />
-                {errors.experience && <div style={styles.errorText}>{errors.experience}</div>}
-                <div style={{ textAlign: 'right', fontSize: '14px', color: getWordCount(form.experience) >= 250 ? '#dc2626' : '#6b7280' }}>
-                  {getWordCount(form.experience)} / 250 words
-                </div>
+              <textarea
+                name="experience"
+                placeholder="Describe your tutoring or teaching experience (max 250 characters)"
+                value={form.experience}
+                onChange={handleChange}
+                style={styles.textarea}
+                maxLength={250}
+              />
+              {errors.experience && <div style={styles.errorText}>{errors.experience}</div>}
+              <div style={{ textAlign: 'right', fontSize: '12px', color: '#64748b' }}>
+                {form.experience.length} / 250 characters
               </div>
 
               {/* Availability */}
-              <div>
-                <textarea
-                  name="availability"
-                  placeholder="Available days and times (e.g. Mon-Fri, 9AM-5PM)"
-                  value={form.availability}
-                  onChange={handleChange}
-                  style={styles.textarea}
-                />
-                {errors.availability && <div style={styles.errorText}>{errors.availability}</div>}
-                <div style={{ textAlign: 'right', fontSize: '14px', color: getWordCount(form.availability) >= 250 ? '#dc2626' : '#6b7280' }}>
-                  {getWordCount(form.availability)} / 250 words
-                </div>
+              <div style={styles.availabilitySection}>
+                {daysOfWeek.map((day) => (
+                  <div key={day} style={styles.availabilityRow}>
+                    <span>{day}</span>
+                    <CustomDropdown
+                      value={availability[day] || ''}
+                      onChange={(value) => handleAvailabilityChange(day, value)}
+                      options={timeOptions}
+                    />
+                    {errors[day] && <div style={styles.errorText}>{errors[day]}</div>}
+                  </div>
+                ))}
               </div>
 
               {/* Submit Button */}
@@ -181,14 +250,14 @@ const ApplyForm: React.FC = () => {
 
 export default ApplyForm;
 
-// Styles
+// -------------------- Styles --------------------
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: {
     backgroundColor: '#fff',
     minHeight: '100vh',
   },
   container: {
-    maxWidth: '800px',
+    maxWidth: '900px',
     margin: '0 auto',
     padding: '40px 20px',
   },
@@ -213,17 +282,29 @@ const styles: { [key: string]: React.CSSProperties } = {
   textarea: {
     width: '100%',
     padding: '12px',
-    height: '100px',
     borderRadius: '8px',
     border: '1px solid #cbd5e1',
     backgroundColor: '#f8fafc',
     fontSize: '14px',
     resize: 'vertical',
+    minHeight: '100px',
   },
   errorText: {
     color: '#dc2626',
     fontSize: '12px',
     marginTop: '4px',
+  },
+  availabilitySection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    marginTop: '20px',
+  },
+  availabilityRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '20px',
   },
   button: {
     backgroundColor: '#085DB7',
@@ -234,7 +315,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 600,
     fontSize: '16px',
     cursor: 'pointer',
-    transition: 'all 0.3s ease',
+    marginTop: '20px',
   },
   successBox: {
     backgroundColor: '#e0f2fe',
