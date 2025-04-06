@@ -34,7 +34,7 @@ const ApplyPage: React.FC = () => {
             e.currentTarget.style.backgroundColor = '#085DB7';
             e.currentTarget.style.color = '#fff';
             }}
-            onClick={() => navigate(`/ApplyForm`)}
+            onClick={() => navigate(`/apply-form`)}
             >
             Apply
             </button>
@@ -48,7 +48,7 @@ const ApplyPage: React.FC = () => {
             e.currentTarget.style.backgroundColor = '#B7C9DF';
             e.currentTarget.style.color = '#000';
             }}
-            onClick={() => navigate(`/ApplyForm`)}
+            onClick={() => navigate(`/apply-form`)}
             >
             Enquiry
             </button>
