@@ -12,6 +12,12 @@ const ApplyForm: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // ✅ Word count function
+  const getWordCount = (text: string) => {
+    return text.trim() ? text.trim().split(/\s+/).length : 0;
+  };
+
+  // ✅ Validation function
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
@@ -23,11 +29,26 @@ const ApplyForm: React.FC = () => {
     return newErrors;
   };
 
+  // ✅ Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' });
+    const { name, value } = e.target;
+
+    // If experience or availability, limit 250 words
+    if (name === 'experience' || name === 'availability') {
+      const words = value.trim().split(/\s+/);
+      if (words.length <= 250) {
+        setForm({ ...form, [name]: value });
+      } else {
+        setForm({ ...form, [name]: words.slice(0, 250).join(' ') });
+      }
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+
+    setErrors({ ...errors, [name]: '' });
   };
 
+  // ✅ Handle form submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -115,6 +136,9 @@ const ApplyForm: React.FC = () => {
                   style={styles.textarea}
                 />
                 {errors.experience && <div style={styles.errorText}>{errors.experience}</div>}
+                <div style={{ textAlign: 'right', fontSize: '14px', color: getWordCount(form.experience) >= 250 ? '#dc2626' : '#6b7280' }}>
+                  {getWordCount(form.experience)} / 250 words
+                </div>
               </div>
 
               {/* Availability */}
@@ -127,6 +151,9 @@ const ApplyForm: React.FC = () => {
                   style={styles.textarea}
                 />
                 {errors.availability && <div style={styles.errorText}>{errors.availability}</div>}
+                <div style={{ textAlign: 'right', fontSize: '14px', color: getWordCount(form.availability) >= 250 ? '#dc2626' : '#6b7280' }}>
+                  {getWordCount(form.availability)} / 250 words
+                </div>
               </div>
 
               {/* Submit Button */}
