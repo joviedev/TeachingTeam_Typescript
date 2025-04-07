@@ -52,21 +52,18 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
     if (!isSignedIn || userRole === 'guest') {
       return [
         { label: 'About', path: '/' },
-        { label: 'Opportunity', path: '/opportunity' },
         { label: 'Become a Tutor', path: '/become-a-tutor' },
       ];
     }
     if (userRole === 'tutor') {
       return [
         { label: 'Dashboard', path: '/tutor-dashboard' },
-        { label: 'Opportunity', path: '/opportunity' },
         { label: 'My Applications', path: '/my-applications' },
       ];
     }
     if (userRole === 'lecturer') {
       return [
         { label: 'Dashboard', path: '/lecturer-dashboard' },
-        { label: 'Opportunity', path: '/opportunity' },
         { label: 'Applications', path: '/applications' },
         { label: 'Review Tutors', path: '/review-tutors' },
       ];

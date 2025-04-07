@@ -142,16 +142,20 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
       setSuccessMessage('');
       const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
       const redirectCourseCode = localStorage.getItem('redirectCourseCode');
-
+  
       if (redirectAfterLogin === 'apply' && redirectCourseCode) {
         localStorage.removeItem('redirectAfterLogin');
-        navigate(`/apply/${redirectCourseCode}`); // redirect to ApplyPage with course code
+        localStorage.removeItem('redirectCourseCode');
+        navigate(`/apply/${redirectCourseCode}`);
       } else {
-        navigate(matchedUser.role === 'tutor' ? '/tutor-dashboard' : '/lecturer-dashboard');
+        if (matchedUser.role === 'tutor') {
+          navigate('/tutor-dashboard');
+        } else if (matchedUser.role === 'lecturer') {
+          navigate('/lecturer-dashboard');
+        } else {
+          navigate('/');
+        }
       }
-
-      const from = (location.state as { from?: string })?.from || '/';
-      navigate(from);
     }, 3000);
   };
 

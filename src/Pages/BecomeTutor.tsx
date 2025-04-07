@@ -6,7 +6,7 @@ const BecomeTutor: React.FC = () => {
   const navigate = useNavigate();
 
   const handleApply = () => {
-    navigate('/browse-all'); 
+    navigate('/login'); 
   };
 
   return (

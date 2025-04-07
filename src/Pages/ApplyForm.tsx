@@ -21,14 +21,8 @@ const ApplyForm: React.FC = () => {
   const [form, setForm] = useState({
     fullName: '',
     preferredName: '',
-    email: '',
     gender: '',
-    previousRole: '',
-    previousRoleOther: '',
-    currentRole: '',
-    currentRoleOther: '',
-    field: '',
-    experience: '',
+    roleType: '', // new: Part Time / Full Time
   });
 
   const [availability, setAvailability] = useState<{ [day: string]: string }>({});
@@ -49,19 +43,15 @@ const ApplyForm: React.FC = () => {
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
-    if (!form.email.trim()) {
-      newErrors.email = 'Email is required.';
-    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-      newErrors.email = 'Invalid Email Format.';
-    }
     if (!form.gender) newErrors.gender = 'Gender is required.';
+    if (!form.roleType) newErrors.roleType = 'Role Type is required.';
     daysOfWeek.forEach(day => {
       if (!availability[day]) newErrors[day] = `Select time for ${day}`;
     });
     return newErrors;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: '' });
   };
@@ -141,16 +131,6 @@ const ApplyForm: React.FC = () => {
                 style={styles.input}
               />
 
-              <input
-                name="email"
-                type="email"
-                placeholder="Email Address"
-                value={form.email}
-                onChange={handleChange}
-                style={styles.input}
-              />
-              {errors.email && <div style={styles.errorText}>{errors.email}</div>}
-
               <CustomDropdown
                 value={form.gender}
                 onChange={(value) => handleDropdownChange('gender', value)}
@@ -163,6 +143,17 @@ const ApplyForm: React.FC = () => {
                 ]}
               />
               {errors.gender && <div style={styles.errorText}>{errors.gender}</div>}
+
+              <CustomDropdown
+                value={form.roleType}
+                onChange={(value) => handleDropdownChange('roleType', value)}
+                options={[
+                  { value: '', label: 'Select Role Type' },
+                  { value: 'Part Time', label: 'Part Time' },
+                  { value: 'Full Time', label: 'Full Time' },
+                ]}
+              />
+              {errors.roleType && <div style={styles.errorText}>{errors.roleType}</div>}
 
               <div style={styles.availabilitySection}>
                 {daysOfWeek.map((day) => (

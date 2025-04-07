@@ -8,7 +8,6 @@ import ScrollToTop from './FixedComponent/ScrollToTop';
 import About from './Pages/About';         // Landing page
 import SignUp from './Component/SignUp';   // Sign-up page
 import Login from './Component/Login';     // Login page
-import Opportunity from './Pages/Opportunity';  // Opportunity page - Job list
 import BecomeTutor from './Pages/BecomeTutor';  // Sign up as tutor page
 import Applications from './Pages/Applications';  // Lecturer receive applications page
 import MyApplication from './Pages/MyApplication';  // Tutor lists of applications page
@@ -52,7 +51,6 @@ function App() {
               setUserRole={setUserRole}
             />
           } />
-          <Route path="/opportunity" element={<Opportunity />} />
           <Route path="/become-a-tutor" element={<BecomeTutor />} />
           <Route path="/tutor-dashboard" element={<TutorDashboard />} />
           <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
@@ -62,7 +60,7 @@ function App() {
           <Route path="/browse-all" element={<BrowseAll />} />
           <Route path="/apply/:code" element={<ApplyPage />} />
           <Route path="/apply-form" element={<ApplyForm />} />
-          <Route path="/inbox" element={<Inbox />} /> {/* ✅ NEW route for Inbox */}
+          <Route path="/inbox" element={<Inbox />} /> 
         </Routes>
       </div>
     </Router>

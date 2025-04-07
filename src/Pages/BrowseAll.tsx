@@ -25,8 +25,7 @@ const BrowseAll: React.FC = () => {
   const handleApplyNow = (courseCode: string, courseTitle: string) => {
     const isSignedIn = localStorage.getItem('isSignedIn');
     localStorage.setItem('selectedCourse', courseTitle);
-    localStorage.setItem('redirectCourseCode', courseCode);
-  
+
     if (isSignedIn === 'true') {
       navigate(`/apply/${courseCode}`);
     } else {
@@ -34,7 +33,6 @@ const BrowseAll: React.FC = () => {
       navigate('/login');
     }
   };
-  
 
   return (
     <>
