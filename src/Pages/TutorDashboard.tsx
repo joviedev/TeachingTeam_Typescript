@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const TutorDashboard: React.FC = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedRole, setSelectedRole] = useState('');
   const [selectedOpening, setSelectedOpening] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -23,12 +24,13 @@ const TutorDashboard: React.FC = () => {
     }
   };
 
-  // 🔍 Navigate to /browse-all with filters
+  // Navigate to /browse-all with filters
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (selectedCourse) params.append('course', selectedCourse);
     if (selectedLocation) params.append('location', selectedLocation);
     if (selectedOpening) params.append('opening', selectedOpening);
+    if (selectedRole) params.append('role', selectedRole);
     navigate(`/browse-all?${params.toString()}`);
   };
 
@@ -82,7 +84,10 @@ const TutorDashboard: React.FC = () => {
           setSelectedLocation={setSelectedLocation}
           selectedOpening={selectedOpening}
           setSelectedOpening={setSelectedOpening}
+          selectedRole={selectedRole}                
+          setSelectedRole={setSelectedRole} 
           onSearch={handleSearch}
+          layout="row"
         />
       </div>
 

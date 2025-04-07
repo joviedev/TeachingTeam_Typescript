@@ -12,12 +12,14 @@ const BrowseAll: React.FC = () => {
 
   const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '');
   const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || '');
+  const [selectedRole, setSelectedRole] = useState(searchParams.get('role') || '');
   const [selectedOpening, setSelectedOpening] = useState(searchParams.get('opening') || '');
 
   const filteredCourses = courses.filter((course) => {
     return (
       (selectedCourse === '' || course.courseType.toLowerCase() === selectedCourse.toLowerCase()) &&
       (selectedLocation === '' || course.location.toLowerCase() === selectedLocation.toLowerCase()) &&
+      (selectedRole === '' || course.role?.toLowerCase() === selectedRole.toLowerCase()) &&
       (selectedOpening === '' || course.opening.toLowerCase() === selectedOpening.toLowerCase())
     );
   });
@@ -80,14 +82,18 @@ const BrowseAll: React.FC = () => {
                   setSelectedCourse={setSelectedCourse}
                   selectedLocation={selectedLocation}
                   setSelectedLocation={setSelectedLocation}
+                  selectedRole={selectedRole}          
+                  setSelectedRole={setSelectedRole} 
                   selectedOpening={selectedOpening}
                   setSelectedOpening={setSelectedOpening}
                   mode="reset"
                   onReset={() => {
                     setSelectedCourse('');
                     setSelectedLocation('');
+                    setSelectedRole('');   
                     setSelectedOpening('');
                   }}
+                  layout="column"
                 />
               </div>
             </div>
