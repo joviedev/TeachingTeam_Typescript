@@ -3,15 +3,13 @@ import Footer from '../FixedComponent/Footer';
 import SearchFilterBar from '../FixedComponent/SearchFilterBar';
 import { courses } from '../Data/CourseList';
 import ScrollerToggle from '../FixedComponent/ScrollToggle';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const BrowseAll: React.FC = () => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
 
-  // Read values from URL query parameters on page load
   const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '');
   const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || '');
   const [selectedOpening, setSelectedOpening] = useState(searchParams.get('opening') || '');
@@ -22,7 +20,19 @@ const BrowseAll: React.FC = () => {
       (selectedLocation === '' || course.location.toLowerCase() === selectedLocation.toLowerCase()) &&
       (selectedOpening === '' || course.opening.toLowerCase() === selectedOpening.toLowerCase())
     );
-  });  
+  });
+
+  const handleApplyNow = (courseCode: string, courseTitle: string) => {
+    const isSignedIn = localStorage.getItem('isSignedIn');
+    localStorage.setItem('selectedCourse', courseTitle);
+
+    if (isSignedIn === 'true') {
+      navigate(`/apply/${courseCode}`);
+    } else {
+      localStorage.setItem('redirectAfterLogin', 'apply');
+      navigate('/login');
+    }
+  };
 
   return (
     <>
@@ -30,17 +40,13 @@ const BrowseAll: React.FC = () => {
         <div style={styles.container}>
           <div style={styles.contentWrapper}>
             <div style={styles.courseList}>
-              <h2 style={styles.heading}>
-                {filteredCourses.length} courses found
-              </h2>
+              <h2 style={styles.heading}>{filteredCourses.length} courses found</h2>
 
               {filteredCourses.map((course, idx) => (
                 <div key={idx} style={styles.courseCard}>
                   <div style={styles.cardLeft}>
                     <h3 style={styles.courseTitle}>{course.title}</h3>
-                    <span style={styles.courseTypeLabel}>
-                      {course.courseType.toUpperCase()}
-                    </span>
+                    <span style={styles.courseTypeLabel}>{course.courseType.toUpperCase()}</span>
                     <p style={styles.location}>{course.location.toUpperCase()}</p>
                     <p style={styles.description}>{course.description}</p>
                     <p>{course.date}</p>
@@ -50,6 +56,7 @@ const BrowseAll: React.FC = () => {
                   <div style={styles.cardRight}>
                     <button
                       style={styles.button}
+                      onClick={() => handleApplyNow(course.code, course.title)}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
                         e.currentTarget.style.color = '#000';
@@ -58,7 +65,6 @@ const BrowseAll: React.FC = () => {
                         e.currentTarget.style.backgroundColor = '#085DB7';
                         e.currentTarget.style.color = '#fff';
                       }}
-                      onClick={() => navigate(`/apply/${course.code}`)}
                     >
                       Apply Now
                     </button>

@@ -17,7 +17,7 @@ export const courses = [
     "code": "COSC1661",
     "title": "COSC1661 - Full Stack Development",
     "description": "This course is part of the Full Stack Development track within the Diploma program, providing students with a thorough understanding of both front-end and back-end web development. ",
-    "location": "",
+    "location": "Melbourne City",
     "courseType": "Bachelor Degrees",
     "opening": "Semester 1",
     "date": "6 Mar 2026 \u2013 10 Jun 2026",

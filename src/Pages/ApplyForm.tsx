@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomDropdown from '../FixedComponent/CustomDropdown';
+import { motion } from 'framer-motion';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 const timeOptions = [
   { value: '', label: 'Select Time Slot' },
   { value: '9am-12pm', label: '9am – 12pm' },
   { value: '1pm-5pm', label: '1pm – 5pm' },
   { value: '5pm-9pm', label: '5pm – 9pm' },
   { value: 'Full Day', label: 'Full Day' },
+  { value: 'Not Applicable', label: 'Not Applicable' },
 ];
 
 const ApplyForm: React.FC = () => {
+  const navigate = useNavigate();
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+
   const [form, setForm] = useState({
     fullName: '',
     preferredName: '',
@@ -28,17 +35,28 @@ const ApplyForm: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  useEffect(() => {
+    const isSignedIn = localStorage.getItem('isSignedIn');
+    if (isSignedIn !== 'true') {
+      // User is NOT signed in
+      localStorage.setItem('redirectAfterLogin', 'apply'); // So after login, know to come back
+      navigate('/login'); // Redirect them to login page
+    } else {
+      // Only if signed in, get course
+      const course = localStorage.getItem('selectedCourse');
+      setSelectedCourse(course);
+    }
+  }, [navigate]);
+
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
-    if (!form.email.includes('@')) newErrors.email = 'Valid Email is required.';
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required.';
+    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      newErrors.email = 'Invalid Email Format.';
+    }
     if (!form.gender) newErrors.gender = 'Gender is required.';
-    if (!form.previousRole) newErrors.previousRole = 'Previous Role is required.';
-    if (form.previousRole === 'Other' && !form.previousRoleOther.trim()) newErrors.previousRoleOther = 'Please specify other previous role.';
-    if (!form.currentRole) newErrors.currentRole = 'Current Role is required.';
-    if (form.currentRole === 'Other' && !form.currentRoleOther.trim()) newErrors.currentRoleOther = 'Please specify other current role.';
-    if (!form.field) newErrors.field = 'Field is required.';
-    if (!form.experience.trim()) newErrors.experience = 'Experience is required.';
     daysOfWeek.forEach(day => {
       if (!availability[day]) newErrors[day] = `Select time for ${day}`;
     });
@@ -66,35 +84,52 @@ const ApplyForm: React.FC = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      const applications = JSON.parse(localStorage.getItem("applications") || "[]");
+      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
       const newApplication = { ...form, availability, submittedAt: new Date().toISOString() };
-      localStorage.setItem("applications", JSON.stringify([newApplication, ...applications]));
+      localStorage.setItem('applications', JSON.stringify([newApplication, ...applications]));
       setSubmitted(true);
+
+      // ✅ Bonus: Clear selected course after submission
+      localStorage.removeItem('selectedCourse');
     }
   };
-  
 
   return (
     <div style={styles.pageWrapper}>
       <div style={styles.container}>
+        {/* ✅ Show course title if available */}
+        {selectedCourse && (
+          <div style={styles.courseTitleBox}>
+            <h2 style={styles.courseTitleText}>Applying for: {selectedCourse}</h2>
+          </div>
+        )}
+
         {submitted ? (
           <div style={styles.successBox}>
-          <div style={styles.successTitle}>🎉 Application Submitted!</div>
-          <p style={styles.successText}>
-            Thank you, <strong>{form.preferredName || form.fullName}</strong>, for submitting your application.
-          </p>
-          <p style={styles.successText}>We’ve received your availability and details. Our team will review your profile shortly.</p>
-        </div>
-        
+            <div style={styles.successTitle}>🎉 Application Submitted!</div>
+            <p style={styles.successText}>
+              Thank you, <strong>{form.preferredName || form.fullName}</strong>, for submitting your application.
+            </p>
+            <p style={styles.successText}>
+              We’ve received your availability and details. Our team will review your profile shortly.
+            </p>
+          </div>
         ) : (
           <>
-            <div style={styles.heading}>Tutor Application Form</div>
-            <p style={styles.subtext}>Fill in your details below to apply as a tutor.</p>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={styles.headingMotion}
+            >
+              Tutor Application Form
+            </motion.div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '30px' }}>
+            <p style={styles.subtextCenter}>Fill in your details below to apply as a tutor.</p>
+
+            <form onSubmit={handleSubmit} style={styles.formWrapper}>
               {/* Full Name */}
               <input
-                type="text"
                 name="fullName"
                 placeholder="Full Name"
                 value={form.fullName}
@@ -105,7 +140,6 @@ const ApplyForm: React.FC = () => {
 
               {/* Preferred Name */}
               <input
-                type="text"
                 name="preferredName"
                 placeholder="Preferred Name"
                 value={form.preferredName}
@@ -115,8 +149,8 @@ const ApplyForm: React.FC = () => {
 
               {/* Email */}
               <input
-                type="email"
                 name="email"
+                type="email"
                 placeholder="Email Address"
                 value={form.email}
                 onChange={handleChange}
@@ -138,90 +172,11 @@ const ApplyForm: React.FC = () => {
               />
               {errors.gender && <div style={styles.errorText}>{errors.gender}</div>}
 
-              {/* Previous Role */}
-              <CustomDropdown
-                value={form.previousRole}
-                onChange={(value) => handleDropdownChange('previousRole', value)}
-                options={[
-                  { value: '', label: 'Previous Role' },
-                  { value: 'Student', label: 'Student' },
-                  { value: 'TA', label: 'Teaching Assistant' },
-                  { value: 'Tutor', label: 'Tutor' },
-                  { value: 'Other', label: 'Other' },
-                ]}
-              />
-              {form.previousRole === 'Other' && (
-                <input
-                  type="text"
-                  name="previousRoleOther"
-                  placeholder="Specify Other Previous Role"
-                  value={form.previousRoleOther}
-                  onChange={handleChange}
-                  style={styles.input}
-                />
-              )}
-              {errors.previousRole && <div style={styles.errorText}>{errors.previousRole}</div>}
-              {errors.previousRoleOther && <div style={styles.errorText}>{errors.previousRoleOther}</div>}
-
-              {/* Current Role */}
-              <CustomDropdown
-                value={form.currentRole}
-                onChange={(value) => handleDropdownChange('currentRole', value)}
-                options={[
-                  { value: '', label: 'Current Role' },
-                  { value: 'Student', label: 'Student' },
-                  { value: 'Graduate', label: 'Graduate' },
-                  { value: 'Lecturer', label: 'Lecturer' },
-                  { value: 'Other', label: 'Other' },
-                ]}
-              />
-              {form.currentRole === 'Other' && (
-                <input
-                  type="text"
-                  name="currentRoleOther"
-                  placeholder="Specify Other Current Role"
-                  value={form.currentRoleOther}
-                  onChange={handleChange}
-                  style={styles.input}
-                />
-              )}
-              {errors.currentRole && <div style={styles.errorText}>{errors.currentRole}</div>}
-              {errors.currentRoleOther && <div style={styles.errorText}>{errors.currentRoleOther}</div>}
-
-              {/* Field */}
-              <CustomDropdown
-                value={form.field}
-                onChange={(value) => handleDropdownChange('field', value)}
-                options={[
-                  { value: '', label: 'Select Field' },
-                  { value: 'Computer Science', label: 'Computer Science' },
-                  { value: 'Business', label: 'Business' },
-                  { value: 'Engineering', label: 'Engineering' },
-                  { value: 'Design', label: 'Design' },
-                  { value: 'Other', label: 'Other' },
-                ]}
-              />
-              {errors.field && <div style={styles.errorText}>{errors.field}</div>}
-
-              {/* Experience */}
-              <textarea
-                name="experience"
-                placeholder="Describe your tutoring or teaching experience (max 250 characters)"
-                value={form.experience}
-                onChange={handleChange}
-                style={styles.textarea}
-                maxLength={250}
-              />
-              {errors.experience && <div style={styles.errorText}>{errors.experience}</div>}
-              <div style={{ textAlign: 'right', fontSize: '12px', color: '#64748b' }}>
-                {form.experience.length} / 250 characters
-              </div>
-
-              {/* Availability */}
+              {/* Availability Section */}
               <div style={styles.availabilitySection}>
                 {daysOfWeek.map((day) => (
                   <div key={day} style={styles.availabilityRow}>
-                    <span>{day}</span>
+                    <span style={styles.dayLabel}>{day}</span>
                     <CustomDropdown
                       value={availability[day] || ''}
                       onChange={(value) => handleAvailabilityChange(day, value)}
@@ -233,18 +188,7 @@ const ApplyForm: React.FC = () => {
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                style={styles.button}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-                  e.currentTarget.style.color = '#000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#085DB7';
-                  e.currentTarget.style.color = '#fff';
-                }}
-              >
+              <button type="submit" style={styles.button}>
                 Submit Application
               </button>
             </form>
@@ -256,8 +200,6 @@ const ApplyForm: React.FC = () => {
 };
 
 export default ApplyForm;
-
-// -------------------- Styles --------------------
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: {
     backgroundColor: '#fff',
@@ -268,33 +210,43 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: '0 auto',
     padding: '40px 20px',
   },
-  heading: {
-    fontSize: '22px',
-    fontWeight: 600,
-    marginBottom: '12px',
+  courseTitleBox: {
+    marginBottom: '24px',
+    textAlign: 'center',
   },
-  subtext: {
+  courseTitleText: {
+    fontSize: '24px',
+    fontWeight: 700,
+    color: '#085DB7',
+  },
+  headingMotion: {
+    fontSize: '36px',
+    fontWeight: 800,
+    color: '#085DB7',
+    marginBottom: '16px',
+    textAlign: 'center',
+  },
+  subtextCenter: {
     fontSize: '16px',
     color: '#374151',
     marginBottom: '20px',
+    textAlign: 'center',
+  },
+  formWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '30px',
+    marginTop: '30px',
   },
   input: {
     width: '100%',
-    padding: '12px',
-    borderRadius: '8px',
-    border: '1px solid #cbd5e1',
+    padding: '16px 20px',
+    borderRadius: '12px',
+    border: '1px solid #bfdbfe',
     backgroundColor: '#f8fafc',
-    fontSize: '14px',
-  },
-  textarea: {
-    width: '100%',
-    padding: '12px',
-    borderRadius: '8px',
-    border: '1px solid #cbd5e1',
-    backgroundColor: '#f8fafc',
-    fontSize: '14px',
-    resize: 'vertical',
-    minHeight: '100px',
+    fontSize: '18px',
+    appearance: 'none',
+    WebkitAppearance: 'none',
   },
   errorText: {
     color: '#dc2626',
@@ -309,18 +261,24 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   availabilityRow: {
     display: 'flex',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: '20px',
+  },
+  dayLabel: {
+    minWidth: '120px',
+    fontSize: '18px',
+    color: '#374151',
+    fontWeight: 500,
   },
   button: {
     backgroundColor: '#085DB7',
     color: '#fff',
-    padding: '12px 24px',
+    padding: '16px 20px',
     borderRadius: '30px',
     border: 'none',
     fontWeight: 600,
-    fontSize: '16px',
+    fontSize: '18px',
     cursor: 'pointer',
     marginTop: '20px',
   },
@@ -341,3 +299,4 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#334155',
   },
 };
+

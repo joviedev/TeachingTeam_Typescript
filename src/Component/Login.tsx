@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // 🔥 Add useLocation to get previous page
 
 /**
  * Login component for TeachTeam.
@@ -21,6 +21,8 @@ type LoginProps = {
 const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   // Used to redirect the user to another page
   const navigate = useNavigate();
+  const location = useLocation(); // 🔥 Get where the user came from (before login)
+
   // Store the email input from the user
   const [email, setEmail] = useState('');
   // Store the password input from the user
@@ -41,11 +43,9 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
 
   // Dummy users as required for phase 1
   const dummyUsers = [
-    // 3 tutor accounts to view different applications status and other functionalities on tutor dashboard
     { email: 'tutor1@tutor.com', password: 'Tutor123!', role: 'tutor' },
     { email: 'tutor2@tutor.com', password: 'Tutor234!', role: 'tutor' },
     { email: 'tutor3@tutor.com', password: 'Tutor345!', role: 'tutor' },
-    // 3 lecturer accounts to view different applications, change application status and other functionalities on lecturer dashboard
     { email: 'lecturer1@lecturer.com', password: 'Lecturer123!', role: 'lecturer' },
     { email: 'lecturer2@lecturer.com', password: 'Lecturer234!', role: 'lecturer' },
     { email: 'lecturer3@lecturer.com', password: 'Lecturer345!', role: 'lecturer' },
@@ -57,7 +57,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
       // Show error message if email is not in correct format
       setEmailError('Please enter a valid email address.');
     } else {
-      // Clear the error message if email is valid to avoid like error message still showing
+      // Clear the error message if email is valid
       setEmailError('');
     }
   };
@@ -68,7 +68,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
       // Show error message if password is too weak
       setPasswordError('Password must be at least 6 characters and include a number and uppercase letter.');
     } else {
-      // Clear the error message if password is strong to avoid error message keep showing
+      // Clear the error message if password is strong
       setPasswordError('');
     }
   };
@@ -121,6 +121,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     const matchedUser = dummyUsers.find(
       (user) => user.email === email && user.password === password
     );
+
     // If no match is found, show an error message and stop the login
     if (!matchedUser) {
       setError('Incorrect email or password.');
@@ -130,18 +131,25 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     // On successful login:
     // 1. Mark the user as signed in
     setIsSignedIn(true);
-     // 2. Set the user's role (either tutor or lecturer)
+    // 2. Set the user's role (either tutor or lecturer)
     setUserRole(matchedUser.role as 'tutor' | 'lecturer');
-     // 3. Show a success message cue in the center of the screen
+    localStorage.setItem('isSignedIn', 'true');
+    // 4. Show a success message cue in the center of the screen
     setSuccessMessage(`Successfully logged in as ${matchedUser.role}`);
 
-    // 4. Wait for 3 seconds, then:
-    // Hide the success message
-    // Redirect user to their role-specific dashboard
+    // 5. Wait for 3 seconds, then:
     setTimeout(() => {
       setSuccessMessage('');
-      // Redirect user to their role-specific dashboard
-      navigate(matchedUser.role === 'tutor' ? '/tutor-dashboard' : '/lecturer-dashboard');
+      const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
+        if (redirectAfterLogin === 'apply') {
+          localStorage.removeItem('redirectAfterLogin');
+          navigate('/apply-form'); // Go to application form
+        } else {
+          navigate(matchedUser.role === 'tutor' ? '/tutor-dashboard' : '/lecturer-dashboard');
+        }
+
+      const from = (location.state as { from?: string })?.from || '/';
+      navigate(from);
     }, 3000);
   };
 
