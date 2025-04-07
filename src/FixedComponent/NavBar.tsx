@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { MdInbox } from 'react-icons/md'; // ✅ Material Design Inbox Icon
+
 
 /**
  * NavBar component for TeachTeam.
@@ -13,22 +15,21 @@ interface NavBarProps {
   isSignedIn: boolean;
   // Sign in as what role (guest is when a user did not sign in to account)
   userRole: 'guest' | 'tutor' | 'lecturer';
-  // Execute when the user select "Log Out"
+   // Execute when the user select "Log Out"
   handleSignOut: () => void;
 }
 
 // NavBar functional component on whether the user is signed in, their role, and a logout handler
 const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) => {
-  const location = useLocation(); // Get the current route path
-  const currentPath = location.pathname; // Get the current page path
-  const navigate = useNavigate(); // Used to navigate to another page depends on role
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const navigate = useNavigate();
 
-  const [hoveredIcon, setHoveredIcon] = useState(false); // Whether logout button is hovered
-  const [logoutMessage, setLogoutMessage] = useState(''); // Message shown when user logs out
+  const [hoveredIcon, setHoveredIcon] = useState(false);
+  const [logoutMessage, setLogoutMessage] = useState('');
 
   // Component for nav links, highlight on hover or active
   const NavItem = ({ label, isActive, onClick }: { label: string; isActive: boolean; onClick: () => void }) => {
-    // Highlights when active or hovered
     const [hovered, setHovered] = useState(false);
     return (
       <a
@@ -47,7 +48,6 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
     );
   };
 
-  // Show different nav items based on login role
   const renderNavItems = () => {
     if (!isSignedIn || userRole === 'guest') {
       return [
@@ -71,12 +71,11 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
         { label: 'Review Tutors', path: '/review-tutors' },
       ];
     }
-    return []; // fallback
+    return [];
   };
 
   return (
     <>
-      {/* Logout message pop-up if exists */}
       {logoutMessage && (
         <div style={styles.successModalOverlay}>
           <div style={styles.successModal}>{logoutMessage}</div>
@@ -84,7 +83,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
       )}
 
       <nav style={styles.navBar}>
-        {/* Left section: navigation links */}
+        {/* Left nav links */}
         <div style={styles.navLinks}>
           {renderNavItems().map((item) => (
             <NavItem
@@ -96,7 +95,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
           ))}
         </div>
 
-        {/* Right section: auth buttons */}
+        {/* Right auth section */}
         <div
           style={styles.authWrapper}
           onMouseEnter={() => setHoveredIcon(true)}
@@ -104,7 +103,6 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
         >
           <div style={styles.buttonGroup}>
             {!isSignedIn ? (
-              // If not logged in, show Sign In and Create Account buttons
               <>
                 <button
                   style={styles.authButton}
@@ -137,33 +135,45 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
                 </button>
               </>
             ) : (
-              // If signed in, show logout button
-              <button
-                style={{
-                  ...styles.authButton,
-                  opacity: hoveredIcon ? 0.5 : 1,
-                  transition: 'opacity 0.2s ease-in-out',
-                }}
-                onClick={() => {
-                  handleSignOut();
-                  setLogoutMessage('You have been successfully logged out.');
-                  setTimeout(() => {
-                    setLogoutMessage('');
-                    navigate('/');
-                  }, 3000);
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-                  e.currentTarget.style.color = '#000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#085DB7';
-                  e.currentTarget.style.color = '#fff';
-                }}
-              >
-                <span className="material-icons" style={styles.authIcon}>logout</span>
-                Log Out
-              </button>
+              <>
+                {/* ✅ Inbox button */}
+                <button
+                  style={styles.inboxButton}
+                  onClick={() => navigate('/inbox')}
+                  title="Inbox"
+                >
+                  <span className="material-symbols-outlined">inbox</span>
+                  Inbox
+                </button>
+
+                {/* Logout button */}
+                <button
+                  style={{
+                    ...styles.authButton,
+                    opacity: hoveredIcon ? 0.5 : 1,
+                    transition: 'opacity 0.2s ease-in-out',
+                  }}
+                  onClick={() => {
+                    handleSignOut();
+                    setLogoutMessage('You have been successfully logged out.');
+                    setTimeout(() => {
+                      setLogoutMessage('');
+                      navigate('/');
+                    }, 3000);
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
+                    e.currentTarget.style.color = '#000';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#085DB7';
+                    e.currentTarget.style.color = '#fff';
+                  }}
+                >
+                  <span className="material-icons" style={styles.authIcon}>logout</span>
+                  Log Out
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -172,11 +182,10 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
   );
 };
 
-// Styling object for NavBar
 const styles: { [key: string]: React.CSSProperties } = {
   navBar: {
-    position: 'sticky', 
-    top: 84, 
+    position: 'sticky',
+    top: 84,
     zIndex: 1000,
     display: 'flex',
     justifyContent: 'space-between',
@@ -218,6 +227,20 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 600,
     cursor: 'pointer',
     transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
+  },
+  inboxButton: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '8px 16px',
+    backgroundColor: '#E0F2FE',
+    color: '#0369a1',
+    border: 'none',
+    borderRadius: '20px',
+    fontSize: '14px',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'all 0.2s ease-in-out',
   },
   authIcon: {
     fontSize: '18px',

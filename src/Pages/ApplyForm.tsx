@@ -66,19 +66,26 @@ const ApplyForm: React.FC = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log('Application Submitted:', { ...form, availability });
+      const applications = JSON.parse(localStorage.getItem("applications") || "[]");
+      const newApplication = { ...form, availability, submittedAt: new Date().toISOString() };
+      localStorage.setItem("applications", JSON.stringify([newApplication, ...applications]));
       setSubmitted(true);
     }
   };
+  
 
   return (
     <div style={styles.pageWrapper}>
       <div style={styles.container}>
         {submitted ? (
           <div style={styles.successBox}>
-            <div style={styles.successTitle}>Application Submitted!</div>
-            <p style={styles.successText}>Thank you for applying. We’ll get back to you soon.</p>
-          </div>
+          <div style={styles.successTitle}>🎉 Application Submitted!</div>
+          <p style={styles.successText}>
+            Thank you, <strong>{form.preferredName || form.fullName}</strong>, for submitting your application.
+          </p>
+          <p style={styles.successText}>We’ve received your availability and details. Our team will review your profile shortly.</p>
+        </div>
+        
         ) : (
           <>
             <div style={styles.heading}>Tutor Application Form</div>

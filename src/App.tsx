@@ -10,7 +10,7 @@ import SignUp from './Component/SignUp';   // Sign-up page
 import Login from './Component/Login';     // Login page
 import Opportunity from './Pages/Opportunity';  // Opportunity page - Job list
 import BecomeTutor from './Pages/BecomeTutor';  // Sign up as tutor page
-import Applications from './Pages/Applications';  // Lecturer receive applictaions page
+import Applications from './Pages/Applications';  // Lecturer receive applications page
 import MyApplication from './Pages/MyApplication';  // Tutor lists of applications page
 import LecturerDashboard from './Pages/LecturerDashboard';  // Lecturer dashboard page
 import ReviewTutors from './Pages/ReviewTutors';  // Page for lecturer to review tutors, to accept or reject and leave comments
@@ -18,10 +18,9 @@ import TutorDashboard from './Pages/TutorDashboard';  // Tutor dashboard page
 import BrowseAll from './Pages/BrowseAll';
 import ApplyPage from './Pages/ApplyPage';
 import ApplyForm from './Pages/ApplyForm';
+import Inbox from './Pages/Inbox';  // ✅ NEW Inbox page
 
-// Main landing page component
 function App() {
-  // App-level authentication state
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userRole, setUserRole] = useState<'guest' | 'tutor' | 'lecturer'>('guest');
 
@@ -44,6 +43,12 @@ function App() {
           <Route path="/" element={<About />} />
           <Route path="/about" element={<About />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={
+            <Login
+              setIsSignedIn={setIsSignedIn}
+              setUserRole={setUserRole}
+            />
+          } />
           <Route path="/opportunity" element={<Opportunity />} />
           <Route path="/become-a-tutor" element={<BecomeTutor />} />
           <Route path="/tutor-dashboard" element={<TutorDashboard />} />
@@ -54,15 +59,7 @@ function App() {
           <Route path="/browse-all" element={<BrowseAll />} />
           <Route path="/apply/:code" element={<ApplyPage />} />
           <Route path="/apply-form" element={<ApplyForm />} />
-          <Route
-            path="/login"
-            element={
-              <Login
-                setIsSignedIn={setIsSignedIn}
-                setUserRole={setUserRole}
-              />
-            }
-          />
+          <Route path="/inbox" element={<Inbox />} /> {/* ✅ NEW route for Inbox */}
         </Routes>
       </div>
     </Router>
