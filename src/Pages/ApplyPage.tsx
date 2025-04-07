@@ -4,25 +4,37 @@ import ScrollToggle from '../FixedComponent/ScrollToggle';
 import applyBanner from '../assets/apply.jpg';
 import { courses } from '../Data/CourseList';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const ApplyPage: React.FC = () => {
   const navigate = useNavigate();
   const { code } = useParams();
+
+  useEffect(() => {
+    const isSignedIn = localStorage.getItem('isSignedIn');
+    if (isSignedIn !== 'true') {
+      localStorage.setItem('redirectAfterLogin', 'apply');
+      const selectedCode = code || '';
+      localStorage.setItem('redirectCourseCode', selectedCode); // save which course
+      navigate('/login'); // not signed in? Redirect to login immediately
+    }
+  }, [navigate, code]);
   const selectedCourse = courses.find(course => course.code.toLowerCase() === (code || '').toLowerCase());
 
   if (!selectedCourse) return <p>Course not found.</p>;
 
   const handleApply = () => {
     const isSignedIn = localStorage.getItem('isSignedIn');
-    localStorage.setItem('selectedCourse', selectedCourse.title);
-
+    localStorage.setItem('selectedCourse', selectedCourse.title); // already doing this
+    localStorage.setItem('redirectCourseCode', selectedCourse.code); // ADD THIS LINE
+  
     if (isSignedIn === 'true') {
       navigate('/apply-form');
     } else {
       localStorage.setItem('redirectAfterLogin', 'apply');
       navigate('/login');
     }
-  };
+  };  
 
   return (
     <>

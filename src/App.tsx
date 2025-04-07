@@ -18,7 +18,7 @@ import TutorDashboard from './Pages/TutorDashboard';  // Tutor dashboard page
 import BrowseAll from './Pages/BrowseAll';
 import ApplyPage from './Pages/ApplyPage';
 import ApplyForm from './Pages/ApplyForm';
-import Inbox from './Pages/Inbox';  // ✅ NEW Inbox page
+import Inbox from './Pages/Inbox';  // NEW Inbox page
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -27,6 +27,9 @@ function App() {
   const handleSignOut = () => {
     setIsSignedIn(false);
     setUserRole('guest');
+    localStorage.removeItem('isSignedIn'); // Remove saved session
+    localStorage.removeItem('redirectAfterLogin'); // Remove any redirect
+    localStorage.removeItem('selectedCourse'); // Optional: clear selected course if needed
   };
 
   return (

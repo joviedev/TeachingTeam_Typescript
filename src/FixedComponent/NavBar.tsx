@@ -154,8 +154,15 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
                     transition: 'opacity 0.2s ease-in-out',
                   }}
                   onClick={() => {
-                    handleSignOut();
+                    // Clear session properly here
+                    localStorage.removeItem('isSignedIn');
+                    localStorage.removeItem('redirectAfterLogin');
+                    localStorage.removeItem('selectedCourse');
+                  
+                    handleSignOut(); // still call your App.tsx handleSignOut()
+                    
                     setLogoutMessage('You have been successfully logged out.');
+                  
                     setTimeout(() => {
                       setLogoutMessage('');
                       navigate('/');

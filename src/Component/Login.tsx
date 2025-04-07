@@ -21,7 +21,7 @@ type LoginProps = {
 const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   // Used to redirect the user to another page
   const navigate = useNavigate();
-  const location = useLocation(); // 🔥 Get where the user came from (before login)
+  const location = useLocation(); // Get where the user came from (before login)
 
   // Store the email input from the user
   const [email, setEmail] = useState('');
@@ -141,12 +141,14 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     setTimeout(() => {
       setSuccessMessage('');
       const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
-        if (redirectAfterLogin === 'apply') {
-          localStorage.removeItem('redirectAfterLogin');
-          navigate('/apply-form'); // Go to application form
-        } else {
-          navigate(matchedUser.role === 'tutor' ? '/tutor-dashboard' : '/lecturer-dashboard');
-        }
+      const redirectCourseCode = localStorage.getItem('redirectCourseCode');
+
+      if (redirectAfterLogin === 'apply' && redirectCourseCode) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(`/apply/${redirectCourseCode}`); // redirect to ApplyPage with course code
+      } else {
+        navigate(matchedUser.role === 'tutor' ? '/tutor-dashboard' : '/lecturer-dashboard');
+      }
 
       const from = (location.state as { from?: string })?.from || '/';
       navigate(from);

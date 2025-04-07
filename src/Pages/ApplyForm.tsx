@@ -38,11 +38,9 @@ const ApplyForm: React.FC = () => {
   useEffect(() => {
     const isSignedIn = localStorage.getItem('isSignedIn');
     if (isSignedIn !== 'true') {
-      // User is NOT signed in
-      localStorage.setItem('redirectAfterLogin', 'apply'); // So after login, know to come back
-      navigate('/login'); // Redirect them to login page
+      localStorage.setItem('redirectAfterLogin', 'apply');
+      navigate('/login');
     } else {
-      // Only if signed in, get course
       const course = localStorage.getItem('selectedCourse');
       setSelectedCourse(course);
     }
@@ -89,7 +87,6 @@ const ApplyForm: React.FC = () => {
       localStorage.setItem('applications', JSON.stringify([newApplication, ...applications]));
       setSubmitted(true);
 
-      // ✅ Bonus: Clear selected course after submission
       localStorage.removeItem('selectedCourse');
     }
   };
@@ -97,7 +94,6 @@ const ApplyForm: React.FC = () => {
   return (
     <div style={styles.pageWrapper}>
       <div style={styles.container}>
-        {/* ✅ Show course title if available */}
         {selectedCourse && (
           <div style={styles.courseTitleBox}>
             <h2 style={styles.courseTitleText}>Applying for: {selectedCourse}</h2>
@@ -106,7 +102,7 @@ const ApplyForm: React.FC = () => {
 
         {submitted ? (
           <div style={styles.successBox}>
-            <div style={styles.successTitle}>🎉 Application Submitted!</div>
+            <div style={styles.successTitle}>Application Submitted!</div>
             <p style={styles.successText}>
               Thank you, <strong>{form.preferredName || form.fullName}</strong>, for submitting your application.
             </p>
@@ -128,7 +124,6 @@ const ApplyForm: React.FC = () => {
             <p style={styles.subtextCenter}>Fill in your details below to apply as a tutor.</p>
 
             <form onSubmit={handleSubmit} style={styles.formWrapper}>
-              {/* Full Name */}
               <input
                 name="fullName"
                 placeholder="Full Name"
@@ -138,7 +133,6 @@ const ApplyForm: React.FC = () => {
               />
               {errors.fullName && <div style={styles.errorText}>{errors.fullName}</div>}
 
-              {/* Preferred Name */}
               <input
                 name="preferredName"
                 placeholder="Preferred Name"
@@ -147,7 +141,6 @@ const ApplyForm: React.FC = () => {
                 style={styles.input}
               />
 
-              {/* Email */}
               <input
                 name="email"
                 type="email"
@@ -158,7 +151,6 @@ const ApplyForm: React.FC = () => {
               />
               {errors.email && <div style={styles.errorText}>{errors.email}</div>}
 
-              {/* Gender */}
               <CustomDropdown
                 value={form.gender}
                 onChange={(value) => handleDropdownChange('gender', value)}
@@ -172,7 +164,6 @@ const ApplyForm: React.FC = () => {
               />
               {errors.gender && <div style={styles.errorText}>{errors.gender}</div>}
 
-              {/* Availability Section */}
               <div style={styles.availabilitySection}>
                 {daysOfWeek.map((day) => (
                   <div key={day} style={styles.availabilityRow}>
@@ -187,7 +178,6 @@ const ApplyForm: React.FC = () => {
                 ))}
               </div>
 
-              {/* Submit Button */}
               <button type="submit" style={styles.button}>
                 Submit Application
               </button>
@@ -200,6 +190,7 @@ const ApplyForm: React.FC = () => {
 };
 
 export default ApplyForm;
+
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: {
     backgroundColor: '#fff',
@@ -245,8 +236,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: '1px solid #bfdbfe',
     backgroundColor: '#f8fafc',
     fontSize: '18px',
-    appearance: 'none',
-    WebkitAppearance: 'none',
   },
   errorText: {
     color: '#dc2626',
@@ -299,4 +288,3 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#334155',
   },
 };
-
