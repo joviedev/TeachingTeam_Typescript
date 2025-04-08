@@ -145,13 +145,39 @@ const ApplyForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validate();
-
+  
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-      const newApplication = { ...form, availability, skills, academicResult, submittedAt: new Date().toISOString() };
-      localStorage.setItem('applications', JSON.stringify([newApplication, ...applications]));
+      const newApplication = {
+        ...form,
+        availability,
+        skills,
+        academicResult,
+        submittedAt: new Date().toISOString(),
+        course: selectedCourse, // Store the selected course name
+      };
+  
+      // Determine which lecturer dashboard to save to
+      let lecturerDashboard = '';
+  
+      if (selectedCourse?.toLowerCase().includes('diploma') || selectedCourse?.toLowerCase().includes('vocational')) {
+        lecturerDashboard = 'lecturer1Applications';
+      } else if (selectedCourse?.toLowerCase().includes('bachelor')) {
+        lecturerDashboard = 'lecturer2Applications';
+      } else {
+        lecturerDashboard = 'lecturer3Applications';
+      }
+  
+      // Get existing applications for that lecturer
+      const existingApplications = JSON.parse(localStorage.getItem(lecturerDashboard) || '[]');
+  
+      // Save the new application
+      const updatedApplications = [newApplication, ...existingApplications];
+      localStorage.setItem(lecturerDashboard, JSON.stringify(updatedApplications));
+  
+      console.log('Application saved to', lecturerDashboard);
+  
       setSubmitted(true);
       localStorage.removeItem('selectedCourse');
     }
