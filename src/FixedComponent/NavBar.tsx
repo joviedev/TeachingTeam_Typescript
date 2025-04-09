@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MdInbox } from 'react-icons/md'; // ✅ Material Design Inbox Icon
+import './navbar.css';
+import { useAuth } from '@/utils/auth/AuthProvider';
 
 
 /**
@@ -15,17 +16,18 @@ interface NavBarProps {
   isSignedIn: boolean;
   // Sign in as what role (guest is when a user did not sign in to account)
   userRole: 'guest' | 'tutor' | 'lecturer';
-   // Execute when the user select "Log Out"
+  // Execute when the user select "Log Out"
   handleSignOut: () => void;
 }
 
 // NavBar functional component on whether the user is signed in, their role, and a logout handler
-const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) => {
+const NavBar: React.FC<NavBarProps> = ({ userRole, handleSignOut }) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
 
-  const [hoveredIcon, setHoveredIcon] = useState(false);
+  const {isSignedIn, logout, role} = useAuth();
+
   const [logoutMessage, setLogoutMessage] = useState('');
 
   // Component for nav links, highlight on hover or active
@@ -49,19 +51,19 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
   };
 
   const renderNavItems = () => {
-    if (!isSignedIn || userRole === 'guest') {
+    if (!isSignedIn || role === 'guest') {
       return [
         { label: 'About', path: '/' },
         { label: 'Become a Tutor', path: '/become-a-tutor' },
       ];
     }
-    if (userRole === 'tutor') {
+    if (role === 'tutor') {
       return [
         { label: 'Dashboard', path: '/tutor-dashboard' },
         { label: 'My Applications', path: '/my-applications' },
       ];
     }
-    if (userRole === 'lecturer') {
+    if (role === 'lecturer') {
       return [
         { label: 'Dashboard', path: '/lecturer-dashboard' },
         { label: 'Applications', path: '/applications' },
@@ -79,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
         </div>
       )}
 
-      <nav style={styles.navBar}>
+      <nav className='nav-bar'>
         {/* Left nav links */}
         <div style={styles.navLinks}>
           {renderNavItems().map((item) => (
@@ -94,39 +96,22 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
 
         {/* Right auth section */}
         <div
-          style={styles.authWrapper}
-          onMouseEnter={() => setHoveredIcon(true)}
-          onMouseLeave={() => setHoveredIcon(false)}
+          className='auth-wrapper'
         >
           <div style={styles.buttonGroup}>
             {!isSignedIn ? (
               <>
                 <button
-                  style={styles.authButton}
+                  className='operation-button'
                   onClick={() => navigate('/login')}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-                    e.currentTarget.style.color = '#000';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#085DB7';
-                    e.currentTarget.style.color = '#fff';
-                  }}
                 >
-                  <span className="material-icons" style={styles.authIcon}>person</span>
+                  <span className="material-icons">person</span>
                   Sign In
                 </button>
                 <button
+                  className='operation-button'
                   style={styles.authButton}
                   onClick={() => navigate('/signup')}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-                    e.currentTarget.style.color = '#000';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#085DB7';
-                    e.currentTarget.style.color = '#fff';
-                  }}
                 >
                   Create Account
                 </button>
@@ -135,7 +120,7 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
               <>
                 {/* ✅ Inbox button */}
                 <button
-                  style={styles.inboxButton}
+                  className='inbox-button'
                   onClick={() => navigate('/inbox')}
                   title="Inbox"
                 >
@@ -145,33 +130,23 @@ const NavBar: React.FC<NavBarProps> = ({ isSignedIn, userRole, handleSignOut }) 
 
                 {/* Logout button */}
                 <button
-                  style={{
-                    ...styles.authButton,
-                    opacity: hoveredIcon ? 0.5 : 1,
-                    transition: 'opacity 0.2s ease-in-out',
-                  }}
+                  className='operation-button sign-out'
                   onClick={() => {
                     // Clear session properly here
                     localStorage.removeItem('isSignedIn');
                     localStorage.removeItem('redirectAfterLogin');
                     localStorage.removeItem('selectedCourse');
-                  
+
+                    logout();
+
                     handleSignOut(); // still call your App.tsx handleSignOut()
-                    
+
                     setLogoutMessage('You have been successfully logged out.');
-                  
+
                     setTimeout(() => {
                       setLogoutMessage('');
                       navigate('/');
                     }, 3000);
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-                    e.currentTarget.style.color = '#000';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#085DB7';
-                    e.currentTarget.style.color = '#fff';
                   }}
                 >
                   <span className="material-icons" style={styles.authIcon}>logout</span>
@@ -259,7 +234,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000,
+    zIndex: 10001,
   },
   successModal: {
     backgroundColor: '#d1fae5',

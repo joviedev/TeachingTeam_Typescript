@@ -4,11 +4,14 @@ import SearchFilterBar from '../FixedComponent/SearchFilterBar';
 import { courses } from '../Data/CourseList';
 import ScrollerToggle from '../FixedComponent/ScrollToggle';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/utils/auth/AuthProvider';
 
 const BrowseAll: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
+
+  const {isSignedIn} = useAuth();
 
   const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '');
   const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || '');
@@ -25,10 +28,9 @@ const BrowseAll: React.FC = () => {
   });
 
   const handleApplyNow = (courseCode: string, courseTitle: string) => {
-    const isSignedIn = localStorage.getItem('isSignedIn');
     localStorage.setItem('selectedCourse', courseTitle);
 
-    if (isSignedIn === 'true') {
+    if (isSignedIn) {
       navigate(`/apply/${courseCode}`);
     } else {
       localStorage.setItem('redirectAfterLogin', 'apply');

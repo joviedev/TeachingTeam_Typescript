@@ -5,31 +5,33 @@ import applyBanner from '../assets/apply.jpg';
 import { courses } from '../Data/CourseList';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useAuth } from '@/utils/auth/AuthProvider';
 
 const ApplyPage: React.FC = () => {
   const navigate = useNavigate();
   const { code } = useParams();
 
-  useEffect(() => {
-    const isSignedIn = localStorage.getItem('isSignedIn');
-    if (isSignedIn !== 'true') {
-      localStorage.setItem('redirectAfterLogin', 'apply');
-      const selectedCode = code || '';
-      localStorage.setItem('redirectCourseCode', selectedCode); // save which course
-      navigate('/login'); // not signed in? Redirect to login immediately
-    }
-  }, [navigate, code]);
+  const {isSignedIn} = useAuth();
+
+  // useEffect(() => {
+  //   const isSignedIn = localStorage.getItem('isSignedIn');
+  //   if (isSignedIn !== 'true') {
+  //     localStorage.setItem('redirectAfterLogin', 'apply');
+  //     const selectedCode = code || '';
+  //     localStorage.setItem('redirectCourseCode', selectedCode); // save which course
+  //     navigate('/login'); // not signed in? Redirect to login immediately
+  //   }
+  // }, [navigate, code]);
   const selectedCourse = courses.find(course => course.code.toLowerCase() === (code || '').toLowerCase());
 
   if (!selectedCourse) return <p>Course not found.</p>;
 
   const handleApply = () => {
-    const isSignedIn = localStorage.getItem('isSignedIn');
     localStorage.setItem('selectedCourse', selectedCourse.title); // already doing this
     localStorage.setItem('redirectCourseCode', selectedCourse.code); // ADD THIS LINE
   
-    if (isSignedIn === 'true') {
-      navigate('/apply-form');
+    if (isSignedIn) {
+      navigate(`/apply-form/${code}`);
     } else {
       localStorage.setItem('redirectAfterLogin', 'apply');
       navigate('/login');
@@ -54,7 +56,7 @@ const ApplyPage: React.FC = () => {
             </button>
             <button
               style={styles.enquireBtn}
-              onClick={() => navigate('/apply-form')}
+              onClick={() => navigate(`/apply-form/${code}`)}
             >
               Enquiry
             </button>

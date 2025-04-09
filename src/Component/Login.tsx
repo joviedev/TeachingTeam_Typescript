@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // 🔥 Add useLocation to get previous page
+import ReCaptcha from 'react-google-recaptcha';
+import { CAPTCHA_SITE_KEY } from '@/utils/constant';
+import { useAuth } from '@/utils/auth/AuthProvider';
 
 /**
  * Login component for TeachTeam.
@@ -35,6 +38,13 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   const [passwordError, setPasswordError] = useState('');
   // Message cue to show when login is successful
   const [successMessage, setSuccessMessage] = useState('');
+
+  // Store the CAPTCHA token
+  const [captchaToken, setCaptchaToken] = useState<string | null>('');
+
+  const [captchaError, setCaptchaError] = useState('');
+
+  const {login} = useAuth();
 
   // Rule to check if email is in a valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -91,6 +101,13 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     }
   };
 
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaToken(token);
+    if (token) {
+      setCaptchaError('');
+    }
+  };
+
   // Handle login runs when the user clicks the login button
   const handleLogin = (e: React.FormEvent) => {
     // Stop the page from refreshing
@@ -100,6 +117,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     setError('');
     setEmailError('');
     setPasswordError('');
+    setCaptchaError('');
 
     // Start by assuming everything is valid
     let valid = true;
@@ -112,6 +130,11 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     // Check if password is strong
     if (!strongPasswordRegex.test(password)) {
       setPasswordError('Password must be at least 6 characters and include a number and uppercase letter.');
+      valid = false;
+    }
+    // Check if CAPTCHA is completed
+    if (!captchaToken) {
+      setCaptchaError('Please complete the CAPTCHA.');
       valid = false;
     }
     // If email or password is invalid, stop the login process
@@ -133,7 +156,8 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     setIsSignedIn(true);
     // 2. Set the user's role (either tutor or lecturer)
     setUserRole(matchedUser.role as 'tutor' | 'lecturer');
-    localStorage.setItem('isSignedIn', 'true');
+    // localStorage.setItem('isSignedIn', 'true');
+    login({email: matchedUser.email, role: matchedUser.role});
     // 4. Show a success message cue in the center of the screen
     setSuccessMessage(`Successfully logged in as ${matchedUser.role}`);
 
@@ -142,7 +166,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
       setSuccessMessage('');
       const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
       const redirectCourseCode = localStorage.getItem('redirectCourseCode');
-  
+
       if (redirectAfterLogin === 'apply' && redirectCourseCode) {
         localStorage.removeItem('redirectAfterLogin');
         localStorage.removeItem('redirectCourseCode');
@@ -217,7 +241,12 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
         {/* CAPTCHA Placeholder (required by COSC2938 students) */}
         <div style={styles.captchaPlaceholder}>
           {/* Insert your CAPTCHA here in future (e.g., hCaptcha / reCAPTCHA) */}
+          <ReCaptcha
+            sitekey={CAPTCHA_SITE_KEY}
+            onChange={handleCaptchaChange}
+          />
         </div>
+        {captchaError && <p style={styles.error}>{captchaError}</p>}
 
         {/* Submit Button */}
         <button type="submit" style={styles.submitButton}>Login</button>
@@ -355,7 +384,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: 'none',
   },
   captchaPlaceholder: {
-    height: 60,
     marginTop: 10,
     marginBottom: 10,
     backgroundColor: 'transparent',

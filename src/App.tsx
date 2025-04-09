@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './FixedComponent/Header';
@@ -18,6 +18,8 @@ import BrowseAll from './Pages/BrowseAll';
 import ApplyPage from './Pages/ApplyPage';
 import ApplyForm from './Pages/ApplyForm';
 import Inbox from './Pages/Inbox';  // NEW Inbox page
+import ProtectedRoute from './Component/ProtectedRoute';
+import AuthProvider from './utils/auth/AuthProvider';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -32,38 +34,46 @@ function App() {
   };
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div style={{ backgroundColor: '#F8F9FA', minHeight: '100vh', fontFamily: "'Poppins', sans-serif" }}>
-        <Header />
-        <NavBar
-          isSignedIn={isSignedIn}
-          userRole={userRole}
-          handleSignOut={handleSignOut}
-        />
-        <Routes>
-          <Route path="/" element={<About />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={
-            <Login
-              setIsSignedIn={setIsSignedIn}
-              setUserRole={setUserRole}
-            />
-          } />
-          <Route path="/become-a-tutor" element={<BecomeTutor />} />
-          <Route path="/tutor-dashboard" element={<TutorDashboard />} />
-          <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
-          <Route path="/applications" element={<Applications />} />
-          <Route path="/my-application" element={<MyApplication />} />
-          <Route path="/review-tutors" element={<ReviewTutors />} />
-          <Route path="/browse-all" element={<BrowseAll />} />
-          <Route path="/apply/:code" element={<ApplyPage />} />
-          <Route path="/apply-form" element={<ApplyForm />} />
-          <Route path="/inbox" element={<Inbox />} /> 
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <div style={{ backgroundColor: '#F8F9FA', minHeight: '100vh', fontFamily: "'Poppins', sans-serif" }}>
+          <Header />
+          <NavBar
+            isSignedIn={isSignedIn}
+            userRole={userRole}
+            handleSignOut={handleSignOut}
+          />
+          <Routes>
+            <Route path="/" element={<About />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={
+              <Login
+                setIsSignedIn={setIsSignedIn}
+                setUserRole={setUserRole}
+              />
+            } />
+            <Route
+              path="/become-a-tutor"
+              element={
+                <ProtectedRoute>
+                  <BecomeTutor />
+                </ProtectedRoute>
+              } />
+            <Route path="/tutor-dashboard" element={<TutorDashboard />} />
+            <Route path="/lecturer-dashboard" element={<ProtectedRoute><LecturerDashboard /></ProtectedRoute>} />
+            <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
+            <Route path="/my-applications" element={<ProtectedRoute><MyApplication /></ProtectedRoute>} />
+            <Route path="/review-tutors" element={<ProtectedRoute><ReviewTutors /></ProtectedRoute>} />
+            <Route path="/browse-all" element={<ProtectedRoute><BrowseAll /></ProtectedRoute>} />
+            <Route path="/apply/:code" element={<ProtectedRoute><ApplyPage /></ProtectedRoute>} />
+            <Route path="/apply-form/:code" element={<ProtectedRoute><ApplyForm /></ProtectedRoute>} />
+            <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

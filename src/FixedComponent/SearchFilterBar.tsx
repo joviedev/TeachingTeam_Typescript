@@ -190,7 +190,6 @@ const styles: { [key: string]: React.CSSProperties } = {
   browseAllWrapper: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: '10px', 
     width: 'auto',
     alignItems: 'center',
   },

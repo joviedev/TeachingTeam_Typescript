@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CustomDropdown from '../FixedComponent/CustomDropdown';
 import { motion } from 'framer-motion';
+import { courses } from '@/Data/CourseList';
+import { useAuth } from '@/utils/auth/AuthProvider';
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -29,9 +31,26 @@ const skillOptions = [
   { value: 'Kotlin', label: 'Kotlin' },
 ];
 
+export type CourseType = {
+  code: string;
+  title: string;
+  description: string;
+  location: string;
+  courseType: string;
+  role?: string;
+  opening: string;
+  date: string;
+  time: string;
+  spacesLeft: number;
+};
+
 const ApplyForm: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const { code } = useParams();
+
+  const {userInfo} = useAuth();
+
+  const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null);
   const [form, setForm] = useState({
     fullName: '',
     preferredName: '',
@@ -42,19 +61,26 @@ const ApplyForm: React.FC = () => {
   const [availability, setAvailability] = useState<{ [day: string]: string[] }>({});
   const [skills, setSkills] = useState<string[]>([]);
   const [academicResult, setAcademicResult] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false); 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const isSignedIn = localStorage.getItem('isSignedIn');
-    if (isSignedIn !== 'true') {
-      localStorage.setItem('redirectAfterLogin', 'apply');
-      navigate('/login');
-    } else {
-      const course = localStorage.getItem('selectedCourse');
-      setSelectedCourse(course);
+    const targetCourse = courses.find((course) => course.code === code);
+    if (targetCourse) {
+      setSelectedCourse(targetCourse);
     }
-  }, [navigate]);
+  }, [code]);
+
+  // useEffect(() => {
+  //   const isSignedIn = localStorage.getItem('isSignedIn');
+  //   if (isSignedIn !== 'true') {
+  //     localStorage.setItem('redirectAfterLogin', 'apply');
+  //     navigate('/login');
+  //   } else {
+  //     const course = localStorage.getItem('selectedCourse');
+  //     setSelectedCourse(course);
+  //   }
+  // }, [navigate]);
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
@@ -149,21 +175,25 @@ const ApplyForm: React.FC = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
+      const {courseType} = selectedCourse || {};
       const newApplication = {
         ...form,
         availability,
         skills,
         academicResult,
         submittedAt: new Date().toISOString(),
-        course: selectedCourse, // Store the selected course name
+        coursetInfo: selectedCourse,
+        applicantEmail: userInfo?.email
       };
   
       // Determine which lecturer dashboard to save to
       let lecturerDashboard = '';
+
+      const lowerCourseType = courseType?.toLowerCase() || '';
   
-      if (selectedCourse?.toLowerCase().includes('diploma') || selectedCourse?.toLowerCase().includes('vocational')) {
+      if (lowerCourseType.includes('diploma') || lowerCourseType.includes('vocational')) {
         lecturerDashboard = 'lecturer1Applications';
-      } else if (selectedCourse?.toLowerCase().includes('bachelor')) {
+      } else if (lowerCourseType.includes('bachelor')) {
         lecturerDashboard = 'lecturer2Applications';
       } else {
         lecturerDashboard = 'lecturer3Applications';
@@ -179,7 +209,6 @@ const ApplyForm: React.FC = () => {
       console.log('Application saved to', lecturerDashboard);
   
       setSubmitted(true);
-      localStorage.removeItem('selectedCourse');
     }
   };
 
@@ -188,7 +217,7 @@ const ApplyForm: React.FC = () => {
       <div style={styles.container}>
         {selectedCourse && (
           <div style={styles.courseTitleBox}>
-            <h2 style={styles.courseTitleText}>Applying for: {selectedCourse}</h2>
+            <h2 style={styles.courseTitleText}>Applying for: {selectedCourse.title}</h2>
           </div>
         )}
 
