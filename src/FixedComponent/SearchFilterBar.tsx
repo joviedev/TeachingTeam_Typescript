@@ -22,7 +22,7 @@ interface Props {
   layout?: 'row' | 'column'; 
 }
 
-const courseOptions: Option[] = [
+export const courseOptions: Option[] = [
   { value: '', label: 'All Courses' },
   { value: 'Vocational', label: 'Vocational' },
   { value: 'Diploma', label: 'Diploma' },

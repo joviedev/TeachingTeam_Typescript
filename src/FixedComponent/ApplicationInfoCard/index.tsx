@@ -1,35 +1,39 @@
 import { CourseType } from '@/Pages/ApplyForm';
-import React from 'react';
+import React, { JSX } from 'react';
 import './style.css';
 
 interface ApplicationInfoCardProps {
   courseInfo: CourseType;
   status?: string;
+  operation?: JSX.Element;
+  children?: React.ReactNode;
 }
 
-const ApplicationInfoCard: React.FC<ApplicationInfoCardProps> = ({ courseInfo, status = 'processing' }) => {
+export const statusObj: Record<string, string> = {
+  processing: 'Pending',
+  approved: 'Approved',
+  rejected: 'Rejected'
+};
+
+const ApplicationInfoCard: React.FC<ApplicationInfoCardProps> = ({ courseInfo, status = 'processing', operation, children }) => {
   return (
     <div className='application-info-card'>
       <div className='left'>
         <h3 className='title'>{courseInfo.title}</h3>
         <span>{courseInfo.courseType.toUpperCase()}</span>
-        <p className='location'>{courseInfo.location.toUpperCase()}</p>
-        <p className='description'>{courseInfo.description}</p>
-        <p>{courseInfo.date}</p>
-        <p>{courseInfo.time}</p>
-        <p>{courseInfo.spacesLeft} spaces left</p>
+        {children}
         <div className='status'>
           <label>Status: </label>
-          <span className={`status ${status}`}>{status.toUpperCase()}</span>
+          <span className={`status ${status}`}>{statusObj[status]}</span>
         </div>
       </div>
-      <div className='right'>
-        <button
-          className='primary-button'
-        >
-          View Detail
-        </button>
-      </div>
+      {
+        operation ? (
+          <div className='right'>
+            {operation}
+          </div>
+        ) : null
+      }
     </div>
   );
 };

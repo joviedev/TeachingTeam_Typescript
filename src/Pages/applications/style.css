@@ -1,0 +1,23 @@
+.lecturer-applications {
+  h2 {
+    margin-top: 0;
+  }
+  .right {
+    flex: 1;
+    .application-info {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 9px;
+      .single {
+        label {
+          font-weight: 600;
+          margin-right: 6px;
+        }
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // 🔥 Add useLocation to get previous page
 import ReCaptcha from 'react-google-recaptcha';
-import { CAPTCHA_SITE_KEY } from '@/utils/constant';
+import { CAPTCHA_SITE_KEY, dummyUsers } from '@/utils/constant';
 import { useAuth } from '@/utils/auth/AuthProvider';
 
 /**
@@ -50,16 +50,6 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   // Rule to check if password is strong, using most common setup which is: at least 6 characters, with uppercase, lowercase, and a number
   const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
-
-  // Dummy users as required for phase 1
-  const dummyUsers = [
-    { email: 'tutor1@tutor.com', password: 'Tutor123!', role: 'tutor' },
-    { email: 'tutor2@tutor.com', password: 'Tutor234!', role: 'tutor' },
-    { email: 'tutor3@tutor.com', password: 'Tutor345!', role: 'tutor' },
-    { email: 'lecturer1@lecturer.com', password: 'Lecturer123!', role: 'lecturer' },
-    { email: 'lecturer2@lecturer.com', password: 'Lecturer234!', role: 'lecturer' },
-    { email: 'lecturer3@lecturer.com', password: 'Lecturer345!', role: 'lecturer' },
-  ];
 
   // When the user finishes typing email and clicks away, check if the email is valid
   const handleEmailBlur = () => {

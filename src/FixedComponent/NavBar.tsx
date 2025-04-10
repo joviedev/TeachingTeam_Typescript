@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MdInbox } from 'react-icons/md'; // ✅ Material Design Inbox Icon
 import './navbar.css';
 import { useAuth } from '@/utils/auth/AuthProvider';
+import { useInbox } from '@/utils/global/InBoxProvider';
 
 
 /**
@@ -26,9 +27,17 @@ const NavBar: React.FC<NavBarProps> = ({ userRole, handleSignOut }) => {
   const currentPath = location.pathname;
   const navigate = useNavigate();
 
-  const {isSignedIn, logout, role} = useAuth();
+  const {isSignedIn, logout, role, userInfo} = useAuth();
+  const {checkInbox, inboxCount, setInboxCount} = useInbox();
 
   const [logoutMessage, setLogoutMessage] = useState('');
+
+
+  useEffect(() => {
+    if (userInfo) {
+      checkInbox(userInfo);
+    }
+  }, [checkInbox, userInfo]);
 
   // Component for nav links, highlight on hover or active
   const NavItem = ({ label, isActive, onClick }: { label: string; isActive: boolean; onClick: () => void }) => {
@@ -120,8 +129,11 @@ const NavBar: React.FC<NavBarProps> = ({ userRole, handleSignOut }) => {
               <>
                 {/* ✅ Inbox button */}
                 <button
-                  className='inbox-button'
-                  onClick={() => navigate('/inbox')}
+                  className={`inbox-button ${inboxCount > 0 ? 'has-notification' : ''}`}
+                  onClick={() => {
+                    setInboxCount(0);
+                    navigate('/inbox');
+                  }}
                   title="Inbox"
                 >
                   <span className="material-symbols-outlined">inbox</span>

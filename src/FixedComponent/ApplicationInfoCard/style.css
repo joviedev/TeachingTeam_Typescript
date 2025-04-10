@@ -9,8 +9,8 @@
   background-color: #F3F9FF;
   box-shadow: 0 2px 4px rgba(0,0,0,0.04);
   font-size: 14px;
+  gap: 16px;
   .left {
-    max-width: 70%;
     .title {
       font-size: 20px;
       font-weight: 600;
@@ -27,17 +27,20 @@
       color: #374151;
     }
     .status {
+      padding: 3px 0;
       label {
         margin-right: 6px;
       }
       span {
-        font-weight: 600;
-        color: #1e3a8a;
+        color: #fff;
+        background-color: #1e3a8a;
+        padding: 3px 10px;
+        border-radius: 5px;
         &.rejected {
-          color: #dc2626;
+          background-color: #dc2626;
         }
         &.approved {
-          color: #16a34a;
+          background-color: #16a34a;
         }
       }
     }
@@ -45,5 +48,6 @@
   .right {
     display: flex;
     align-items: center;
+    white-space: nowrap;
   }
 }

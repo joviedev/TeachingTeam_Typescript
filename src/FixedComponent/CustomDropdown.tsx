@@ -1,18 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 
 interface Option {
   value: string;
   label: string;
 }
 
-interface CustomDropdownProps {
-  value: string;
-  onChange: (value: string) => void;
+interface CustomDropdownProps<T> {
+  value: T;
+  onChange: (value: T) => void;
   options: Option[];
   placeholder?: string;
+  multiple?: boolean;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  maxLength?: number;
 }
 
-const CustomDropdown: React.FC<CustomDropdownProps> = ({ value, onChange, options, placeholder }) => {
+const CustomDropdown = <T,>({ value, onChange, options, placeholder, multiple, disabled, style, maxLength }: CustomDropdownProps<T>) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -26,43 +30,89 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ value, onChange, option
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedOption = options.find(option => option.value === value);
+  const selectedOptions: Option[] = useMemo(() => {
+    if (!options?.length) {
+      return [];
+    }
+    if (multiple) {
+      return options.filter((option) => ((value ?? []) as string[]).includes(option.value));
+    }
+    return options.filter((option) => option.value === value);
+  }, [open, value, multiple]);
+
+  const judgeObj = useMemo(() => {
+    return selectedOptions.reduce((acc, cur) => {
+      acc.labels.push(cur.label);
+      acc.values.push(cur.value);
+      return acc;
+    }, { labels: [], values: [] } as { labels: string[], values: string[] });
+  }, [selectedOptions]);
+
+  const handleSelect = (val: string) => {
+    if (multiple) {
+      const newVal = Array.isArray(value) ? [...(value as string[])] : [];
+      if (newVal.includes(val)) {
+        newVal.splice(newVal.indexOf(val), 1);
+      } else {
+        newVal.push(val);
+      }
+      if (maxLength && newVal.length > maxLength) {
+        return;
+      }
+      onChange(newVal as T);
+    } else {
+      onChange(val as T);
+    }
+  };
 
   return (
     <div
       ref={dropdownRef}
-      style={styles.wrapper}
-      onClick={() => setOpen(prev => !prev)}
+      style={{
+        ...styles.wrapper,
+        ...(style || {}),
+        cursor: disabled ? 'not-allowed' : 'pointer'
+      }}
+      onClick={() => {
+        if (!disabled) {
+          setOpen(prev => !prev);
+        }
+      }}
     >
       <div style={styles.selectDisplay}>
-        {selectedOption ? selectedOption.label : placeholder || 'Select'}
+        {judgeObj?.labels?.length ? judgeObj?.labels.join(',') : placeholder || 'Select'}
         <span className="material-icons" style={styles.icon}>arrow_drop_down</span>
       </div>
 
       {open && (
         <ul style={styles.dropdownMenu}>
-          {options.map(option => (
-            <li
-              key={option.value}
-              onClick={(e) => {
-                e.stopPropagation();
-                onChange(option.value);
-                setOpen(false);
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = value === option.value ? 'rgba(8, 93, 183, 0.25)' : 'white';
-              }}
-              style={{
-                ...styles.dropdownItem,
-                backgroundColor: value === option.value ? 'rgba(8, 93, 183, 0.25)' : 'white',
-              }}
-            >
-              {option.label}
-            </li>
-          ))}
+          {options.map(option => {
+            const isSelected = judgeObj?.values?.includes(option.value);
+            return (
+              <li
+                key={option.value}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSelect(option.value);
+                  if (!multiple) {
+                    setOpen(false);
+                  }
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isSelected ? 'rgba(8, 93, 183, 0.25)' : 'white';
+                }}
+                style={{
+                  ...styles.dropdownItem,
+                  backgroundColor: isSelected ? 'rgba(8, 93, 183, 0.25)' : 'white',
+                }}
+              >
+                {option.label}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

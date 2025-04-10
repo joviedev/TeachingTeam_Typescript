@@ -6,3 +6,5 @@ export const formatJson = (json: string | null) => {
     return null;
   }
 }
+
+export const isEmpty = (value: any) => value === '' || value === null || value === undefined;

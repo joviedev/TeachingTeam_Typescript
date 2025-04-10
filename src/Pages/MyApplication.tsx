@@ -4,29 +4,38 @@ import ScrollerToggle from '@/FixedComponent/ScrollToggle';
 import TutorApplicationFilterBar from '@/FixedComponent/TutorApplicationFilterBar';
 import { useAuth } from '@/utils/auth/AuthProvider';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const lecturerArr: string[] = [
   'lecturer1Applications', 'lecturer2Applications', 'lecturer3Applications'
 ];
 
 const MyApplication = () => {
-  const location = useLocation();
-
-  const searchParams = new URLSearchParams(location.search);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { userInfo } = useAuth();
+  const navigate = useNavigate();
 
   const [applicationData, setApplicationData] = useState([]);
 
-  const [selectedStatus, setSelectedStatus] = useState(searchParams.get('status') || '');
+  const [filterParams, setFilterParams] = useState({ status: searchParams.get('status') || '' });
 
   const filteredApplications = useMemo(() => {
-    if (!selectedStatus) return applicationData;
+    if (!filterParams || !filterParams.status) return applicationData;
     return applicationData.filter((application: any) => {
       const status = (application.status || 'processing').toLowerCase();
-      return status === selectedStatus.toLowerCase();
+      return status === filterParams.status.toLowerCase();
     });
-  }, [applicationData, selectedStatus]);
+  }, [applicationData, filterParams]);
+
+  const resetSearch = () => {
+    setFilterParams({ status: '' });
+    setSearchParams({});
+  };
+
+  const confirmSearch = (param: { status: string }) => {
+    setFilterParams(param);
+    setSearchParams(param);
+  }
 
   useEffect(() => {
     const applyData = lecturerArr.reduce((acc, cur) => {
@@ -48,8 +57,9 @@ const MyApplication = () => {
       <div style={styles.container}>
         <div>
           <TutorApplicationFilterBar
-            status={selectedStatus}
-            onChange={setSelectedStatus}
+            onSearch={confirmSearch}
+            onReset={resetSearch}
+            value={filterParams}
           />
         </div>
         <div
@@ -61,12 +71,31 @@ const MyApplication = () => {
           <div>
             {
               filteredApplications.map((application: any, idx: number) => {
+                const courseInfo = application?.courseInfo || {};
                 return (
                   <ApplicationInfoCard
                     key={idx}
-                    courseInfo={application?.coursetInfo}
+                    courseInfo={courseInfo}
+                    operation={(
+                      <button
+                        className='primary-button'
+                        onClick={() => {
+                          navigate(`/my-applications/${application?.id}`);
+                        }}
+                      >
+                        View Detail
+                      </button>
+                    )}
                     status={application?.status}
-                  />
+                  >
+                    <>
+                      <p className='location'>{courseInfo.location.toUpperCase()}</p>
+                      <p className='description'>{courseInfo.description}</p>
+                      <p>{courseInfo.date}</p>
+                      <p>{courseInfo.time}</p>
+                      <p>{courseInfo.spacesLeft} spaces left</p>
+                    </>
+                  </ApplicationInfoCard>
                 );
               })
             }

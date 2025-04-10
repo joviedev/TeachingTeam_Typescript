@@ -4,32 +4,7 @@ import CustomDropdown from '../FixedComponent/CustomDropdown';
 import { motion } from 'framer-motion';
 import { courses } from '@/Data/CourseList';
 import { useAuth } from '@/utils/auth/AuthProvider';
-
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-const timeOptions = [
-  { value: '', label: 'Select Time Slot' },
-  { value: '9am-12pm', label: '9am – 12pm' },
-  { value: '1pm-5pm', label: '1pm – 5pm' },
-  { value: '5pm-9pm', label: '5pm – 9pm' },
-  { value: 'Full Day', label: 'Full Day' },
-  { value: 'Not Applicable', label: 'Not Applicable' },
-];
-
-const skillOptions = [
-  { value: 'Python', label: 'Python' },
-  { value: 'ReactJS', label: 'React.js' },
-  { value: 'NodeJS', label: 'Node.js' },
-  { value: 'ReactNative', label: 'React Native' },
-  { value: 'Java', label: 'Java' },
-  { value: 'C++', label: 'C++' },
-  { value: 'JavaScript', label: 'JavaScript' },
-  { value: 'SQL', label: 'SQL' },
-  { value: 'HTML/CSS', label: 'HTML/CSS' },
-  { value: 'SwiftUI', label: 'SwiftUI' },
-  { value: 'PHP', label: 'PHP' },
-  { value: 'Kotlin', label: 'Kotlin' },
-];
+import { daysOfWeek, skillOptions, timeOptions } from '@/utils/constant';
 
 export type CourseType = {
   code: string;
@@ -42,6 +17,24 @@ export type CourseType = {
   date: string;
   time: string;
   spacesLeft: number;
+};
+
+export interface ApplicationInterface {
+  fullName: string;
+  preferredName: string;
+  gender: string;
+  roleType: string;
+  availability: { [day: string]: string[] };
+  skills: string[];
+  academicResult: string;
+  submittedAt: string;
+  courseInfo: CourseType;
+  applicantEmail: string;
+  status?: string; // processing, approved, rejected
+  isLecturerRead?: boolean;
+  isTutorRead?: boolean;
+  reviewContent?: string;
+  id?: string;
 };
 
 const ApplyForm: React.FC = () => {
@@ -182,8 +175,9 @@ const ApplyForm: React.FC = () => {
         skills,
         academicResult,
         submittedAt: new Date().toISOString(),
-        coursetInfo: selectedCourse,
-        applicantEmail: userInfo?.email
+        courseInfo: selectedCourse,
+        applicantEmail: userInfo?.email,
+        id: String(+new Date())
       };
   
       // Determine which lecturer dashboard to save to
@@ -205,8 +199,6 @@ const ApplyForm: React.FC = () => {
       // Save the new application
       const updatedApplications = [newApplication, ...existingApplications];
       localStorage.setItem(lecturerDashboard, JSON.stringify(updatedApplications));
-  
-      console.log('Application saved to', lecturerDashboard);
   
       setSubmitted(true);
     }
@@ -291,7 +283,7 @@ const ApplyForm: React.FC = () => {
               {/* Role Type */}
               <CustomDropdown
                 value={form.roleType}
-                onChange={(value) => handleDropdownChange('roleType', value)}
+                onChange={(value: string) => handleDropdownChange('roleType', value)}
                 options={[
                   { value: '', label: 'Select Role Type' },
                   { value: 'Part Time', label: 'Part Time' },

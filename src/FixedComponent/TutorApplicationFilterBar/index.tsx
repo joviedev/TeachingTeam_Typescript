@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import CustomDropdown from '../CustomDropdown';
 import './style.css';
 
@@ -7,7 +7,7 @@ interface Option {
   label: string;
 }
 
-const statusOptions = [
+const statusOptions: Option[] = [
   { value: '', label: 'All Applications' },
   { value: 'processing', label: 'Processing' },
   { value: 'approved', label: 'Approved' },
@@ -15,21 +15,36 @@ const statusOptions = [
 ];
 
 interface Props {
-  status: string;
-  onChange: (value: string) => void;
+  value?: { status: string };
+  onSearch: ({status}: {status: string}) => void;
+  onReset?: () => void;
 };
 
-const TutorApplicationFilterBar: FC<Props> = ({ status, onChange }) => {
+const TutorApplicationFilterBar: FC<Props> = ({ onSearch, onReset, value }) => {
+  const [status, setStatus] = useState<string>('');
+
+  useEffect(() => {
+    setStatus(value?.status || '');
+  }, [value]);
+
   return (
     <div className='tutor-filter'>
       <div className='select-wrapper'>
-        <CustomDropdown options={statusOptions} value={status} onChange={onChange} />
+        <CustomDropdown options={statusOptions} value={status} onChange={setStatus} />
       </div>
       <div className='button-wrapper'>
-        <button>
+        <button
+          onClick={onReset}
+        >
           Reset
         </button>
-        <button>
+        <button
+          onClick={() => {
+            if (onSearch) {
+              onSearch({status});
+            }
+          }}
+        >
           SEARCH
         </button>
       </div>

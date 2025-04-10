@@ -87,7 +87,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     width: '100%',
     boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
   },
-  applicationBox: {
+  applicationbox: {
     backgroundColor: 'white',
     borderRadius: '16px',
     padding: '24px',
@@ -205,7 +205,7 @@ const About: React.FC = () => {
       <section id="how-to-apply" style={styles.section}>
         <div style={{ display: 'grid', gap: '48px', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           <motion.img src={applicationImage} alt="Students collaborating" style={styles.img} initial={{ scale: 0.9, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8 }} />
-          <motion.div style={styles.applicationBox} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
+          <motion.div style={styles.applicationbox} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
             <Accordion title="How do I apply?" expanded={isExpanded} toggle={() => setIsExpanded(!isExpanded)}>
               <p>To apply, log in or create an account on TeachTeam and follow these steps:</p>
               <ul style={{ paddingLeft: '20px', marginTop: '16px' }}>

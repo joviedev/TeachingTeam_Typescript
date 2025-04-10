@@ -1,0 +1,30 @@
+.lecturer-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px !important;
+  width: 100%;
+  .content {
+    display: flex;
+    gap: 20px;
+    .right {
+      flex: 1;
+      h2 {
+        margin-top: 0;
+      }
+    }
+    .field-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .single-info-item {
+      display: flex;
+      label {
+        margin-right: 6px;
+      }
+      div {
+        font-weight: 600;
+      }
+    }
+  }
+}

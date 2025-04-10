@@ -1,9 +1,11 @@
-import {createContext, PropsWithChildren, useContext, useEffect, useState} from 'react';
+import {createContext, PropsWithChildren, useContext, useEffect, useMemo, useState} from 'react';
 import { formatJson } from '..';
+import { ApplicationInterface } from '@/Pages/ApplyForm';
 
-type UserInfo = {
+export type UserInfo = {
   email: string;
   role: string;
+  applications?: ApplicationInterface;
 }
 
 type RoleType = 'guest' | 'tutor' | 'lecturer';
@@ -50,15 +52,17 @@ const AuthProvider = ({children}: PropsWithChildren) => {
     setUserInfo(null);
   };
 
+  const value = useMemo(() => ({
+    isSignedIn,
+    userInfo,
+    login,
+    logout,
+    role
+  }), [isSignedIn, userInfo, role]);
+
   return (
     <AuthContext.Provider
-      value={{
-        isSignedIn,
-        userInfo,
-        login,
-        logout,
-        role
-      }}
+      value={value}
     >
       {isReady ? children : null}
     </AuthContext.Provider>
