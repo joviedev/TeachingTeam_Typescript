@@ -16,6 +16,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     boxShadow: '0 2px 4px rgba(0,0,0,0.04)',
     fontSize: '14px',
     gap: '16px',
+    position: 'relative'
   },
   left: {},
   title: {
@@ -80,18 +81,66 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '4px',
     marginLeft: '5px',
   },
+  orderInput: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    zIndex: 1,
+    display: 'flex',
+    alignItems: 'center',
+  },
 };
 
 interface TutorInfoCardProps {
+  email: string;
   fullName: string;
   skills: string[];
   academicResult: string;
   applications: ApplicationInterface[];
+  order: number;
+  onOrderChange?: (email: string, order: number) => void;
 }
 
-const TutorInfoCard: React.FC<TutorInfoCardProps> = ({ fullName, skills, academicResult, applications }) => {
+const TutorInfoCard: React.FC<TutorInfoCardProps> = ({ email, fullName, skills, academicResult, applications, order, onOrderChange }) => {
+  const [orderValue, setOrderValue] = React.useState(order);
   return (
     <div style={styles.tutorInfoCard}>
+      <div style={styles.orderInput}>
+        <input
+          style={{
+            border: 'none',
+            background: 'transparent',
+            color: '#1e3a8a',
+            borderRadius: '5px',
+            padding: '5px',
+            width: '50px',
+            textAlign: 'center',
+            fontSize: '24px',
+            fontWeight: 600,
+          }}
+          type={'number'}
+          min={1}
+          defaultValue={orderValue || order}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              if (onOrderChange) {
+                onOrderChange(email, orderValue);
+              }
+              (e.target as HTMLInputElement).blur();
+            }
+          }}
+          onChange={(e) => {
+            let v = parseInt(e.target.value);
+            if (isNaN(v)) {
+              return;
+            }
+            if (v < 1) {
+              v = 1;
+            }
+            setOrderValue(v);
+          }}
+        />
+      </div>
       <div style={styles.left}>
         <h3 style={styles.title}>{fullName}</h3>
         <div style={styles.description}>

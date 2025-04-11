@@ -98,6 +98,10 @@ const ApplicationDetail = () => {
               <span>{applicationDetail?.skills.join(',')}</span>
             </p>
             <p>
+              <label>Previous Role: </label>
+              <span>{applicationDetail?.previousRole}</span>
+            </p>
+            <p>
               <label>GPA: </label>
               <span>{applicationDetail?.academicResult}</span>
             </p>
@@ -113,6 +117,10 @@ const ApplicationDetail = () => {
                     {day}: {slots.join(', ')}
                   </div>
                 )})}
+            </p>
+            <p>
+              <label>Applicant description: </label>
+              <span>{applicationDetail?.description}</span>
             </p>
           </div>
         </section>

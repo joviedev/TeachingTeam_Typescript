@@ -17,6 +17,8 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
   const [availability, setAvailability] = useState<{ [day: string]: string[] }>({});
   const [skills, setSkills] = useState<string[]>([]);
   const [academicResult, setAcademicResult] = useState('');
+  const [previousRole, setPreviousRole] = useState('');
+  const [description, setDescription] = useState('');
 
   useImperativeHandle(ref, () => {
     return {
@@ -43,6 +45,8 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
     setAvailability(availability || {});
     setAcademicResult(academicResult || '');
     setSkills(skills || []);
+    setPreviousRole(values.previousRole || '');
+    setDescription(values.description || '');
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -249,6 +253,23 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
           </div>
         </div>
 
+
+        {/* Previous Role */}
+        <div style={styles.inputWrapper}>
+          <label style={styles.label}>Previous Role</label>
+          <input
+            name="previousRole"
+            placeholder="Previous Role"
+            value={previousRole}
+            onChange={(e) => setPreviousRole(e.target.value)}
+            style={{
+              ...styles.input,
+              cursor: readOnly ? 'not-allowed' : 'text'
+            }}
+            disabled={readOnly}
+          />
+        </div>
+
         {/* Availability Section */}
         <div style={styles.availabilitySection}>
           {daysOfWeek.map((day) => (
@@ -318,6 +339,29 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
           <div style={styles.instructionText}>
             Please enter your GPA. Maximum GPA is <strong>4.0</strong>.
           </div>
+        </div>
+
+        {/* Describe Yourself */}
+        <div style={styles.inputWrapper}>
+          <label style={styles.label}>Describe Yourself</label>
+          <textarea
+            name="description"
+            placeholder="Please enter your description, limited to 250 characters"
+            value={description}
+            onChange={(e) => {
+              let v = e.target.value;
+              if (v.length > 250) {
+                v = v.slice(0, 250);
+              }
+              setDescription(v)
+            }}
+            style={{
+              ...styles.input,
+              height: '120px',
+              cursor: readOnly ? 'not-allowed' : 'text'
+            }}
+          />
+          {errors.description && <div style={styles.errorText}>{errors.description}</div>}
         </div>
 
 

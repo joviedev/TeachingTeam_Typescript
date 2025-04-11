@@ -29,7 +29,7 @@ const useApplicationFilter = ({initialItems}: UserFilterProps) => {
           count: 0
         };
       } else if (status === 'approved') {
-        acc.applicantEmail.count += 1;
+        acc[applicantEmail].count += 1;
       }
       return acc;
     }, {} as {[key: string] : {email: string, count: number}});

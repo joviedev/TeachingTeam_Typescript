@@ -27,6 +27,8 @@ export interface ApplicationInterface {
   availability: { [day: string]: string[] };
   skills: string[];
   academicResult: string;
+  previousRole?: string;
+  description?: string;
   submittedAt: string;
   courseInfo: CourseType;
   applicantEmail: string;
@@ -54,6 +56,8 @@ const ApplyForm: React.FC = () => {
   const [availability, setAvailability] = useState<{ [day: string]: string[] }>({});
   const [skills, setSkills] = useState<string[]>([]);
   const [academicResult, setAcademicResult] = useState('');
+  const [previousRole, setPreviousRole] = useState('');
+  const [description, setDescription] = useState('');
   const [submitted, setSubmitted] = useState(false); 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -174,6 +178,9 @@ const ApplyForm: React.FC = () => {
         availability,
         skills,
         academicResult,
+        previousRole,
+        description,
+        status: 'processing',
         submittedAt: new Date().toISOString(),
         courseInfo: selectedCourse,
         applicantEmail: userInfo?.email,
@@ -312,6 +319,19 @@ const ApplyForm: React.FC = () => {
                 </div>
               </div>
 
+              {/* Previous Role */}
+              <div style={styles.inputWrapper}>
+                <label style={styles.label}>Previous Role</label>
+                <input
+                  name="previousRole"
+                  placeholder="Enter your previous role"
+                  value={previousRole}
+                  onChange={(e) => setPreviousRole(e.target.value)}
+                  style={styles.input}
+                />
+                {errors.previousRole && <div style={styles.errorText}>{errors.previousRole}</div>}
+              </div>
+
               {/* Availability Section */}
               <div style={styles.availabilitySection}>
                 {daysOfWeek.map((day) => (
@@ -366,6 +386,24 @@ const ApplyForm: React.FC = () => {
                 </div>
               </div>
 
+              {/* Describe Yourself */}
+              <div style={styles.inputWrapper}>
+                <label style={styles.label}>Describe Yourself</label>
+                <textarea
+                  name="description"
+                  placeholder="Please enter your description, limited to 250 characters"
+                  value={description}
+                  onChange={(e) => {
+                    let v = e.target.value;
+                    if (v.length > 250) {
+                      v = v.slice(0, 250);
+                    }
+                    setDescription(v)
+                  }}
+                  style={{...styles.input, height: '120px'}}
+                />
+                {errors.description && <div style={styles.errorText}>{errors.description}</div>}
+              </div>
 
               {/* Submit Button */}
               <button type="submit" style={styles.button}>Submit Application</button>

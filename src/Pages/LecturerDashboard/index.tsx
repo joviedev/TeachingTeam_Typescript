@@ -88,6 +88,7 @@ const LecturerDashboard = () => {
                 return (
                   <ApplicationInfoCard
                     courseInfo={item?.courseInfo}
+                    status={item?.status}
                     key={idx}
                   >
                     <div className='field-wrapper'>
