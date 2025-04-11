@@ -1,5 +1,5 @@
 /**
- * Populate pre opening vacancy list as dummy data
+ * Populate pre opening vacancy list as dummy data to use for applying job and job poster
  */
 export const courses = [
   {

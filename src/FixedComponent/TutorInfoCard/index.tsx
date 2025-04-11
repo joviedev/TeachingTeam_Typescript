@@ -3,6 +3,7 @@ import React from 'react';
 import { statusObj } from '../ApplicationInfoCard';
 import { daysOfWeek } from '@/utils/constant';
 
+/* Styling for TutorInfoCard component*/
 const styles: { [key: string]: React.CSSProperties } = {
   tutorInfoCard: {
     display: 'flex',
