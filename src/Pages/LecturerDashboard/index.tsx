@@ -9,6 +9,7 @@ import ApplicationInfoCard from '@/FixedComponent/ApplicationInfoCard';
 import { ApplicationInterface } from '../ApplyForm';
 import { getAllApplications } from '@/utils/application';
 
+// Define which fields to display inside each application card
 const displayFields: {label: string, dataIndex: keyof ApplicationInterface}[] = [
   {
     label: 'Full Name',
@@ -33,22 +34,28 @@ const displayFields: {label: string, dataIndex: keyof ApplicationInterface}[] = 
 ];
 
 const LecturerDashboard = () => {
+  // Store all applications
   const [dataSource, setDataSource] = useState<ApplicationInterface[]>([]);
 
+  // Load applications from localStorage
   useEffect(() => {
     const totalApplications = getAllApplications();
     setDataSource(totalApplications);
   }, []);
 
+  // Initialize and manage filtering logic 
   const { filteredItems, setFilters, setItems, filters } = useApplicationFilter({initialItems: dataSource});
 
+  // Update the filter items whenever the data source changes
   useEffect(() => {
     setItems(dataSource);
   }, [dataSource]);
 
   return (
+    // Page layout container with a heading and content
     <PageContainer className='lecturer-dashboard'>
       <div>
+      {/* Heading with animation effect */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -60,6 +67,7 @@ const LecturerDashboard = () => {
       </div>
       <div className='content'>
         <div>
+        {/* Filter bar to filter applications by course and selection count */}
           <FilterBarCard
             dataSource={[
               { dataIndex: 'course', options: courseOptions },
@@ -83,6 +91,7 @@ const LecturerDashboard = () => {
             Found {filteredItems.length} Applications
           </h2>
           <div>
+          {/* Display list of applications based on filter */}
             {
               (filteredItems || []).map((item, idx) => {
                 return (
@@ -93,11 +102,15 @@ const LecturerDashboard = () => {
                   >
                     <div className='field-wrapper'>
                       {
-                        displayFields.map((field) => {
+                        displayFields.map((field) => { // Render each application field like name, skills, GPA
+                          // Get the field name and value for the current application
                           const fieldIndex = field.dataIndex;
                           const fieldValue = item[fieldIndex];
+                          // If the value is an array (like skills), join it into a single string
+                          // If the value is missing, show "--" instead
                           const displayValue = fieldValue ? Array.isArray(fieldValue) ? fieldValue.join(', ') : item[fieldIndex] : '--';
                           return (
+                            // Display each field (label + value) using SingleItem
                             <SingleItem
                               key={fieldIndex}
                               label={field.label}
@@ -122,7 +135,7 @@ type SingleItemProps = {
   label: string;
   value: string;
 };
-
+// SingleItem component: displays a label and its corresponding value
 const SingleItem = ({label, value}: SingleItemProps) => {
   return (
     <div className='single-info-item'>

@@ -1,14 +1,24 @@
+// Props for MessageModal
 interface MessageModalProps {
-  open: boolean;
-  children: React.ReactNode;
+  open: boolean;               // Whether the modal is visible or not
+  children: React.ReactNode;    // Content to display inside the modal
 }
+
+/**
+ * MessageModal component for TeachTeam.
+ * 
+ * - Displays a centered modal overlay with a message or custom content.
+ * - Shows or hides the modal based on the `open` prop.
+ * - Useful for showing success messages, alerts, or small notifications.
+ */
 
 const MessageModal = ({ open, children }: MessageModalProps) => {
   return (
+    // Modal overlay container
     <div
       style={{
-        ...styles.successModalOverlay,
-        display: open ? 'flex' : 'none'
+        ...styles.successModalOverlay,  // Base overlay styles (fixed position, semi-transparent background)
+        display: open ? 'flex' : 'none'  // Show modal only if `open` is true, otherwise hide
       }}
     >
       <div style={styles.successModal}>
@@ -20,6 +30,7 @@ const MessageModal = ({ open, children }: MessageModalProps) => {
 
 export default MessageModal;
 
+// Styling for MesageModal
 const styles: { [key: string]: React.CSSProperties } = {
   successModalOverlay: {
     position: 'fixed',

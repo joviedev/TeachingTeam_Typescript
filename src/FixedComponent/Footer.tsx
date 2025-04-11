@@ -1,6 +1,83 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Footer component for TeachTeam.
+ * 
+ * - Displays contact information, quick links, and general site info.
+ * - Organized into four columns: Contact, Quick Links, Info For, About.
+ * - Includes a bottom bar for copyright and extra links.
+ */
+
+const Footer: React.FC = () => {
+  return (
+    <footer style={styles.footer}>
+      {/* Top section with four columns */}
+      <div style={styles.row}>
+        {/* Contact Information Column */}
+        <div style={styles.column}>
+          <h4 style={styles.heading}>Contact</h4>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={styles.listItem}><a href="#" style={styles.link}>Online enquiry</a></li>
+            <li style={styles.listItem}>Future students: <span style={styles.link}>1800 626 481</span></li>
+            <li style={styles.listItem}>Current students: <span style={styles.link}>1800 72 4357</span></li>
+            <li style={styles.listItem}>International agents: <span style={styles.link}>+61 2 6620 3876</span></li>
+            <li style={styles.listItem}>24/7 Mental Health: <span style={styles.link}>1300 782 676</span></li>
+          </ul>
+        </div>
+
+        {/* Quick Links Column*/}
+        <div style={styles.column}>
+          <h4 style={styles.heading}>Quick Links</h4>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={styles.listItem}><a href="#" style={styles.link}>Directory</a></li>
+            <li style={styles.listItem}><Link to="/become-a-tutor" style={styles.link}>How to apply</Link></li>
+            <li style={styles.listItem}><a href="#" style={styles.link}>News</a></li>
+            <li style={styles.listItem}><a href="#" style={styles.link}>Careers</a></li>
+            <li style={styles.listItem}><a href="#" style={styles.link}>A-Z Courses</a></li>
+          </ul>
+        </div>
+
+        {/* Information For Column */}
+        <div style={styles.column}>
+          <h4 style={styles.heading}>Information for</h4>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={styles.listItem}>Students</li>
+            <li style={styles.listItem}>Lecturers</li>
+            <li style={styles.listItem}>Alumni</li>
+            <li style={styles.listItem}>Partners</li>
+            <li style={styles.listItem}>Staff</li>
+          </ul>
+        </div>
+
+        {/* About Column */}
+        <div style={styles.column}>
+          <h4 style={styles.heading}>About</h4>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={styles.listItem}>Our Team</li>
+            <li style={styles.listItem}>Vision & Mission</li>
+            <li style={styles.listItem}>Privacy Policy</li>
+            <li style={styles.listItem}>Terms of Service</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Bottom bar with copyright and extra links */}
+      <div style={styles.bottomBar}>
+        <p>© {new Date().getFullYear()} TeachTeam, RMIT University</p>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Feedback</a>
+          <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Accessibility</a>
+          <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Sitemap</a>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+
+// Styling for Footer
 const styles: { [key: string]: React.CSSProperties } = {
   footer: {
     backgroundColor: '#f3f4f6',
@@ -43,70 +120,3 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginBottom: '2rem',
   },
 };
-
-const Footer: React.FC = () => {
-  return (
-    <footer style={styles.footer}>
-      <div style={styles.row}>
-        {/* Contact */}
-        <div style={styles.column}>
-          <h4 style={styles.heading}>Contact</h4>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={styles.listItem}><a href="#" style={styles.link}>Online enquiry</a></li>
-            <li style={styles.listItem}>Future students: <span style={styles.link}>1800 626 481</span></li>
-            <li style={styles.listItem}>Current students: <span style={styles.link}>1800 72 4357</span></li>
-            <li style={styles.listItem}>International agents: <span style={styles.link}>+61 2 6620 3876</span></li>
-            <li style={styles.listItem}>24/7 Mental Health: <span style={styles.link}>1300 782 676</span></li>
-          </ul>
-        </div>
-
-        {/* Quick Links */}
-        <div style={styles.column}>
-          <h4 style={styles.heading}>Quick Links</h4>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={styles.listItem}><a href="#" style={styles.link}>Directory</a></li>
-            <li style={styles.listItem}><Link to="/become-a-tutor" style={styles.link}>How to apply</Link></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>News</a></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>Careers</a></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>A-Z Courses</a></li>
-          </ul>
-        </div>
-
-        {/* Info For */}
-        <div style={styles.column}>
-          <h4 style={styles.heading}>Information for</h4>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={styles.listItem}>Students</li>
-            <li style={styles.listItem}>Lecturers</li>
-            <li style={styles.listItem}>Alumni</li>
-            <li style={styles.listItem}>Partners</li>
-            <li style={styles.listItem}>Staff</li>
-          </ul>
-        </div>
-
-        {/* About */}
-        <div style={styles.column}>
-          <h4 style={styles.heading}>About</h4>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={styles.listItem}>Our Team</li>
-            <li style={styles.listItem}>Vision & Mission</li>
-            <li style={styles.listItem}>Privacy Policy</li>
-            <li style={styles.listItem}>Terms of Service</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div style={styles.bottomBar}>
-        <p>© {new Date().getFullYear()} TeachTeam, RMIT University</p>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Feedback</a>
-          <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Accessibility</a>
-          <a href="#" style={{ ...styles.link, fontWeight: 400 }}>Sitemap</a>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
-export default Footer;

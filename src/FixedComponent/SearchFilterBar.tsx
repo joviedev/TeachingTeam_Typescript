@@ -2,11 +2,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomDropdown from './CustomDropdown'; 
 
+/**
+ * SearchFilterBar component for TeachTeam.
+ * 
+ * - Provides multiple dropdowns to filter courses, locations, roles, and intakes.
+ * - Supports different layouts (row for banner / column for sidebar).
+ * - Includes Search, Reset, and Browse All buttons.
+ */
+
+// Option type for dropdowns
 interface Option {
   value: string;
   label: string;
 }
-
+// Props for the SearchFilterBar
 interface Props {
   selectedCourse: string;
   setSelectedCourse: (value: string) => void;
@@ -16,12 +25,13 @@ interface Props {
   setSelectedOpening: (value: string) => void;
   selectedRole: string;
   setSelectedRole: (value: string) => void;
-  mode?: 'search' | 'reset';
-  onSearch?: () => void;
-  onReset?: () => void;
-  layout?: 'row' | 'column'; 
+  mode?: 'search' | 'reset';  // If "reset", show reset button instead of search
+  onSearch?: () => void;        // Trigger when search button clicked
+  onReset?: () => void;         // Trigger when reset button clicked
+  layout?: 'row' | 'column';    // Layout direction (default column)
 }
 
+// Dropdown options for each filter
 export const courseOptions: Option[] = [
   { value: '', label: 'All Courses' },
   { value: 'Vocational', label: 'Vocational' },
@@ -50,7 +60,10 @@ const openingOptions: Option[] = [
   { value: 'Semester 2', label: 'Semester 2' },
   { value: 'Summer Intake', label: 'Summer Intake' },
 ];
-
+// SearchFilterBar component for TeachTeam
+// - Displays multiple dropdowns and buttons for filtering courses
+// - Supports different layouts (column for sidebar, row for banner)
+// - Can show Search or Reset mode
 const SearchFilterBar: React.FC<Props> = ({
   selectedCourse,
   setSelectedCourse,
@@ -63,10 +76,10 @@ const SearchFilterBar: React.FC<Props> = ({
   onSearch,
   onReset,
   mode,
-  layout = 'column', // ⭐ default = column for sidebar
+  layout = 'column', // Default layout
 }) => {
-  const navigate = useNavigate();
-  const isColumn = layout === 'column'; 
+  const navigate = useNavigate(); // Hook to programmatically navigate between pages
+  const isColumn = layout === 'column'; // Check if the layout should be column or row  
 
   return (
     <div
@@ -94,15 +107,18 @@ const SearchFilterBar: React.FC<Props> = ({
         <CustomDropdown value={selectedOpening} onChange={setSelectedOpening} options={openingOptions} />
       </div>
 
+      {/* If mode is 'reset', show the Reset button */}
       {mode === 'reset' ? (
         <button
-          style={styles.searchButton}
-          onClick={onReset}
+          style={styles.searchButton} // Apply search button styling
+          onClick={onReset} // Trigger onReset function when clicked
           onMouseEnter={(e) => {
+            // Change button background and text color on hover
             e.currentTarget.style.backgroundColor = 'rgba(8, 93, 183, 0.25)';
             e.currentTarget.style.color = '#000';
           }}
           onMouseLeave={(e) => {
+            // Reset button style back when not hovering
             e.currentTarget.style.backgroundColor = '#085DB7';
             e.currentTarget.style.color = '#fff';
           }}
@@ -155,6 +171,7 @@ const SearchFilterBar: React.FC<Props> = ({
 
 export default SearchFilterBar;
 
+// Styling for SearchFilterBar
 const styles: { [key: string]: React.CSSProperties } = {
   searchBar: {
     position: 'relative',

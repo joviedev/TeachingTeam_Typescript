@@ -7,27 +7,30 @@ import React, { useEffect, useState } from 'react';
  */
 
 const ScrollerToggle: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false); // Show/hide toggle button
+  const [isVisible, setIsVisible] = useState(false); // Show or hide toggle button
 
   // Monitor scroll position to decide when to show the button
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 200) {
-        setIsVisible(true);
+      if (window.scrollY > 200) { 
+        setIsVisible(true); // Show button when scrolled more than 200px
       } else {
-        setIsVisible(false);
+        setIsVisible(false); // Hide button when near the top of the page
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    // Add scroll event listener when component mounts
+    // Remove it when component unmounts to prevent memory leaks
+    window.addEventListener('scroll', toggleVisibility); // Listen for page scrolling
+    return () => window.removeEventListener('scroll', toggleVisibility); // Clean up listener
   }, []);
 
-  // Scroll smoothly to top
+  // Function to smoothly scroll back to the top when button is clicked
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });  // Smooth scroll to top
   };
 
+  // Render the "Back to Top" button if isVisible is true
   return isVisible ? (
     <button onClick={scrollToTop} style={styles.scrollButton} aria-label="Scroll to top">
       <span className="material-icons" style={styles.icon}>arrow_upward</span>
@@ -35,7 +38,7 @@ const ScrollerToggle: React.FC = () => {
   ) : null;
 };
 
-// Inline styles
+// Styling for ScrollToggle
 const styles: { [key: string]: React.CSSProperties } = {
   scrollButton: {
     position: 'fixed',

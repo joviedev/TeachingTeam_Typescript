@@ -15,7 +15,7 @@ const Header = () => {
   );
 };
 
-// Inline styling for the Header component
+// Styling for the Header component
 const styles: { [key: string]: React.CSSProperties } = {
   headerContainer: {
     position: 'sticky',

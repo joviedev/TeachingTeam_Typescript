@@ -23,25 +23,25 @@ interface NavBarProps {
 
 // NavBar functional component on whether the user is signed in, their role, and a logout handler
 const NavBar: React.FC<NavBarProps> = ({ userRole, handleSignOut }) => {
-  const location = useLocation();
-  const currentPath = location.pathname;
-  const navigate = useNavigate();
+  const location = useLocation(); // Get current URL path
+  const currentPath = location.pathname;// Store current path for active link highlighting
+  const navigate = useNavigate(); // Allow programmatic page navigation
 
-  const {isSignedIn, logout, role, userInfo} = useAuth();
-  const {checkInbox, inboxCount, setInboxCount} = useInbox();
+  const { isSignedIn, logout, role, userInfo } = useAuth(); // Get authentication state from custom hook
+  const { checkInbox, inboxCount, setInboxCount } = useInbox(); // Get inbox state from custom hook
 
-  const [logoutMessage, setLogoutMessage] = useState('');
+  const [logoutMessage, setLogoutMessage] = useState(''); // State to store logout success message
 
-
+  // When the component mounts or userInfo changes, check the user's inbox
   useEffect(() => {
     if (userInfo) {
-      checkInbox(userInfo);
+      checkInbox(userInfo); // Fetch inbox data for the logged-in user
     }
   }, [checkInbox, userInfo]);
 
   // Component for nav links, highlight on hover or active
   const NavItem = ({ label, isActive, onClick }: { label: string; isActive: boolean; onClick: () => void }) => {
-    const [hovered, setHovered] = useState(false);
+    const [hovered, setHovered] = useState(false); // Local state to track whether the item is being hovered
     return (
       <a
         href="#"

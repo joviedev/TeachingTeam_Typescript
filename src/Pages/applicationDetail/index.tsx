@@ -9,80 +9,95 @@ import ApplyStatus from '@/FixedComponent/ApplyStatus';
 import { daysOfWeek } from '@/utils/constant';
 import { MdCheck } from 'react-icons/md';
 
+/**
+ * ApplicationDetail page for TeachTeam
+ * 
+ * - Displays a full detail view of an application
+ * - Lecturer can review and update status (approve or reject)
+ * - Shows submitted application information including skills, GPA, and availability
+ * - If reviewed already, disables editing
+ * - Includes success modal after submitting review
+ */
+
 const ApplicationDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get application ID from URL
 
   const navigate = useNavigate();
 
-  const [applicationDetail, setApplicationDetail] = useState<ApplicationInterface | null>(null);
+  const [applicationDetail, setApplicationDetail] = useState<ApplicationInterface | null>(null); // Current application detail
+  const [selectStatus, setSelectStatus] = useState<string>(''); // Selected review status (approved/rejected)
+  const [inputReview, setInputReview] = useState<string | undefined>(undefined); // Text review input
+  const { status = 'processing', reviewContent } = applicationDetail || {}; // Destructure status and review content
 
-  const [selectStatus, setSelectStatus] = useState<string>('');
+  const isReviewed = useMemo(() => status !== 'processing', [status]); // Check if already reviewed
+  const [showMessageModal, setShowMessageModal] = useState(false); // Control success modal display
+  const [showTips, setShowTips] = useState(false); // Control missing selection tip
 
-  const [inputReview, setInputReview] = useState<string | undefined>(undefined);
-
-  const { status = 'processing', reviewContent } = applicationDetail || {};
-
-  const isReviewed = useMemo(() => status !== 'processing', [status]);
-
-  const [showMessageModal, setShowMessageModal] = useState(false);
-
-  const [showTips, setShowTips] = useState(false);
-
+  // Load application details on page load
   useEffect(() => {
-    const detail = getApplicationById(id);
+    const detail = getApplicationById(id); // Get the application detail by ID
     if (id && detail && !detail.isLecturerRead) {
-      detail.isLecturerRead = true;
-      updateApplication(id, detail);
+      detail.isLecturerRead = true; // Mark application as "read" when lecturer views it
+      updateApplication(id, detail); // Save updated status to database (or local storage)
     }
-    setApplicationDetail(detail);
+    setApplicationDetail(detail); // Store application detail in component state
   }, [id]);
 
+  // Confirm and submit review and decision
   const confirmEdit = () => {
     if (id) {
+      // Validation: Check if review and decision are filled
       if (!inputReview || !selectStatus || selectStatus === 'processing') {
-        setShowTips(true);
+        setShowTips(true); // Show tips if missing input
         setTimeout(() => {
-          setShowTips(false);
+          setShowTips(false); // Hide tips after 2 seconds
         }, 2000);
-        return;
+        return; // Stop submission if missing fields
       };
+      // Create a new application object with updated status and review
       const newApplication = {...applicationDetail, status: selectStatus, reviewContent: inputReview} as ApplicationInterface;
-      setApplicationDetail(newApplication);
-      updateApplication(id, newApplication);
-      setShowMessageModal(true);
+      setApplicationDetail(newApplication); // Update local state
+      updateApplication(id, newApplication); // Update database (or local storage)
+      setShowMessageModal(true); // Show success modal
       setTimeout(() => {
-        setShowMessageModal(false);
+        setShowMessageModal(false); // Hide success modal after 2 second
       }, 2000);
     }
   };
-
+  // Memoize course information to avoid recalculating on every render
   const courseInfo: CourseType | undefined = useMemo(() => {
-    return applicationDetail?.courseInfo;
+    return applicationDetail?.courseInfo; // Extract course info from application detail
   }, [applicationDetail]);
 
+  // Check if lecturer has selected status and written review
   const isOk = !!selectStatus && selectStatus !== 'processing' && !!inputReview;
 
   return (
     <PageContainer>
       <div style={styles.pageWrapper}>
+        {/* Top Navigation Bar with Back Button and Status Badge */}
         <div style={styles.top}>
           <button
             className='primary-button'
             onClick={() => {
-              navigate(-1);
+              navigate(-1); // Go back to previous page
             }}
           >
             Back
           </button>
+          {/* Show current application status */}
           <ApplyStatus status={status} />
         </div>
+        {/* Page Title */}
         <header style={styles.pageTitle}>
           <h3 style={styles.titleHeader}>
             Application for {applicationDetail?.courseInfo?.title}
           </h3>
         </header>
+        {/* Application Details Section */}
         <section style={styles.section}>
           <h3>{applicationDetail?.fullName}</h3>
+          {/* Course Details */}
           <span>{courseInfo?.courseType.toUpperCase()}</span>
           <div>
             <p>{courseInfo?.location.toUpperCase()}</p>
@@ -90,6 +105,7 @@ const ApplicationDetail = () => {
             <p>{courseInfo?.date}</p>
             <p>{courseInfo?.time}</p>
             <p>
+              {/* Applicant Details */}
               <label>Applicant: </label>
               <span>{applicationDetail?.fullName}</span>
             </p>
@@ -106,12 +122,15 @@ const ApplicationDetail = () => {
               <span>{applicationDetail?.academicResult}</span>
             </p>
             <p>
+              {/* Applicant Availability (by Day) */}
               <label>availability: </label>
+              {/*  Get selected time slots for the current day */}
               {daysOfWeek.map((day) => {
                 const slots = applicationDetail?.availability[day] || [];
                 if (slots.length === 0) {
-                  return null;
+                  return null; // Skip if no availability on this day
                 }
+                // Display day and available time slots
                 return (
                   <div key={day} style={styles.availabilityStyle}>
                     {day}: {slots.join(', ')}
@@ -119,6 +138,7 @@ const ApplicationDetail = () => {
                 )})}
             </p>
             <p>
+              {/* Applicant Self-Description */}
               <label>Applicant description: </label>
               <span>{applicationDetail?.description}</span>
             </p>
@@ -132,6 +152,7 @@ const ApplicationDetail = () => {
             display: isReviewed ? 'none' : 'flex',
           }}
         >
+          {/* Approve Button */}
           <button
             className='primary-button approved'
             style={{
@@ -147,6 +168,7 @@ const ApplicationDetail = () => {
           >
             Approve
           </button>
+          {/* Pending Button (Disabled) */}
           <button
             className='primary-button'
             style={{
@@ -164,6 +186,7 @@ const ApplicationDetail = () => {
           >
             Pending
           </button>
+          {/* Reject Button */}
           <button
             className='primary-button rejected'
             style={{
@@ -180,15 +203,18 @@ const ApplicationDetail = () => {
             Reject
           </button>
         </div>
+        {/* Show tips if no decision or review is entered */}
         <p style={{ ...styles.tips, display: showTips ? 'block' : 'none' }}>
           Please select Accept or Reject and enter your review
         </p>
+        {/* Review Section */}
         <div>
           <h3 style={styles.reviewHeader}>
             Review From Lecturer:
           </h3>
           <section style={styles.section}>
-            {isReviewed ? (reviewContent) : (
+            {isReviewed ? (reviewContent) : ( // Show submitted review if already reviewed
+            // Otherwise show textarea to enter review
               <textarea
                 style={styles.textarea}
                 placeholder='Please write your review here'
@@ -199,6 +225,7 @@ const ApplicationDetail = () => {
             )}
           </section>
         </div>
+        {/* Submit Review Button (only if not reviewed yet) */}
         <div
           style={{
             ...styles.operationWrapper,
@@ -219,6 +246,7 @@ const ApplicationDetail = () => {
             Submit Review and Result
           </button>
         </div>
+        {/* Success Modal */}
         <MessageModal
           open={showMessageModal}
         >
@@ -229,6 +257,7 @@ const ApplicationDetail = () => {
   );
 };
 
+// Styling for applicationDetail
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: {
     display: 'flex',
