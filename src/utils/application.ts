@@ -21,7 +21,6 @@ export const getAllApplications = (): ApplicationInterface[] => {
 export const getApplicationById = (id?: string): ApplicationInterface | null => {
   if (!id) return null;
   const totalApplications = getAllApplications();
-  console.log('totalApplications', totalApplications);
   const application = totalApplications.find((application) => application.id === id);
   return application || null;
 }
@@ -64,6 +63,9 @@ export const filterApplications = (applications: ApplicationInterface[], searchP
           return application.courseInfo?.courseType.toLowerCase() === (value as string).toLowerCase();
         } else if (key === 'keyword') {
           return application.courseInfo.title.toLowerCase().includes((value as string).toLowerCase()) || application.fullName.toLowerCase().includes((value as string).toLowerCase());
+        } else if (key === 'status') {
+          const selectStatus = (value || []) as string[];
+          return !selectStatus.length || selectStatus.includes((application.status || '').toLowerCase());
         } else if (key === 'availability') {
           const availability = (value as Record<string, string[]>);
           return Object.entries(availability).every(([day, time]) => {

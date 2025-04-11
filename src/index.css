@@ -41,6 +41,20 @@ html, body {
     background-color: rgba(8, 93, 183, 0.25);
     color: #000;
   }
+  &.approved {
+    background-color: #16a34a;
+    &:hover {
+      background-color: rgba(22, 163, 74, 0.25);
+      color: #000;
+    }
+  }
+  &.rejected {
+    background-color: #dc2626;
+    &:hover {
+      background-color: rgba(220, 38, 38, 0.25);
+      color: #000;
+    }
+  }
 }
 
 .back-button {

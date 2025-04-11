@@ -67,6 +67,16 @@ const ReviewTutors = () => {
               ]
             },
             {
+              dataIndex: 'status',
+              placeholder: 'All Status',
+              multiple: true,
+              options: [
+                { value: 'processing', label: 'Processing' },
+                { value: 'approved', label: 'Approved' },
+                { value: 'rejected', label: 'Rejected' }
+              ]
+            },
+            {
               dataIndex: 'keyword',
               type: 'input'
             },

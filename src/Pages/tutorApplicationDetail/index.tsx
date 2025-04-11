@@ -28,6 +28,10 @@ const TutorApplicationDetail = () => {
 
   useEffect(() => {
     const detail = getApplicationById(id);
+    if (id && detail && !detail.isTutorRead) {
+      detail.isTutorRead = true;
+      updateApplication(id, detail);
+    }
     setApplicationDetail(detail);
     if (formRef.current) {
       formRef.current.setFieldsValue(detail as Record<string, any>);

@@ -8,8 +8,10 @@ import ApplicationInfoCard from '@/FixedComponent/ApplicationInfoCard';
 import './style.css';
 import { skillOptions } from '@/utils/constant';
 import { filterApplications } from '@/utils/application';
+import { useNavigate } from 'react-router-dom';
 
 const Applications = () => {
+  const navigate = useNavigate();
   const { userInfo } = useAuth();
 
   const [applications, setApplications] = useState<ApplicationInterface[]>([]);
@@ -28,22 +30,6 @@ const Applications = () => {
   }, [userInfo]);
 
   const displayedApplications: ApplicationInterface[] = useMemo(() => {
-    // const validParams = Object.entries((searchParams || {})).filter(([_, value]) => value !== '' && value !== undefined);
-    // if (validParams.length === 0) {
-    //   return applications;
-    // }
-    // return applications.filter((application) => {
-    //   return validParams.every(([key, value]) => {
-    //     if (key === 'skill') {
-    //       return (value as string[]).every((skill: string) => application.skills.includes(skill));
-    //     } else if (key === 'course') {
-    //       return application.courseInfo?.courseType.toLowerCase() === (value as string).toLowerCase();
-    //     } else if (key === 'keyword') {
-    //       return application.courseInfo.title.toLowerCase().includes((value as string).toLowerCase()) || application.fullName.toLowerCase().includes((value as string).toLowerCase());
-    //     }
-    //     return true;
-    //   });
-    // });
     return filterApplications(applications, searchParams);
   }, [applications, searchParams]);
 
@@ -84,6 +70,16 @@ const Applications = () => {
                   key={idx}
                   courseInfo={courseInfo}
                   status={application?.status}
+                  operation={(
+                    <button
+                      className='primary-button'
+                      onClick={() => {
+                        navigate(`/applications/${application?.id}`);
+                      }}
+                    >
+                      View Detail
+                    </button>
+                  )}
                 >
                   <div className='application-info'>
                     <p className='location'>{courseInfo.location.toUpperCase()}</p>

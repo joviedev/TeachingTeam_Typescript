@@ -1,18 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import CustomDropdown from '../CustomDropdown';
 import './style.css';
-
-interface Option {
-  value: string;
-  label: string;
-}
-
-const statusOptions: Option[] = [
-  { value: '', label: 'All Applications' },
-  { value: 'processing', label: 'Processing' },
-  { value: 'approved', label: 'Approved' },
-  { value: 'rejected', label: 'Rejected' }
-];
+import { statusOptions } from '@/utils/constant';
 
 interface Props {
   value?: { status: string };

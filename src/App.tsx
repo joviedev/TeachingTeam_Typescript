@@ -22,6 +22,7 @@ import ProtectedRoute from './Component/ProtectedRoute';
 import AuthProvider from './utils/auth/AuthProvider';
 import TutorApplicationDetail from './Pages/tutorApplicationDetail';
 import InboxProvider from './utils/global/InBoxProvider';
+import ApplicationDetail from './Pages/applicationDetail';
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -67,6 +68,7 @@ function App() {
               <Route path="/tutor-dashboard" element={<TutorDashboard />} />
               <Route path="/lecturer-dashboard" element={<ProtectedRoute><LecturerDashboard /></ProtectedRoute>} />
               <Route path="/applications" element={<ProtectedRoute><Applications /></ProtectedRoute>} />
+              <Route path="/applications/:id" element={<ProtectedRoute><ApplicationDetail /></ProtectedRoute>} />
               <Route path="/my-applications" element={<ProtectedRoute><MyApplication /></ProtectedRoute>} />
               <Route path="/my-applications/:id" element={<ProtectedRoute><TutorApplicationDetail /></ProtectedRoute>} />
               <Route path="/review-tutors" element={<ProtectedRoute><ReviewTutors /></ProtectedRoute>} />

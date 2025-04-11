@@ -21,6 +21,16 @@ const Inbox: React.FC = () => {
                   key={idx}
                   courseInfo={courseInfo}
                   status={application?.status}
+                  operation={(
+                    <button
+                      className='primary-button'
+                      onClick={() => {
+                        navigate(`/applications/${application?.id}`);
+                      }}
+                    >
+                      View Detail
+                    </button>
+                  )}
                 >
                   <div className='application-info'>
                     <p className='location'>{courseInfo.location.toUpperCase()}</p>
@@ -87,9 +97,13 @@ const Inbox: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <h2 style={{ fontSize: '24px', marginBottom: '1rem' }}>📬 Inbox – Your Submitted Applications</h2>
+      <h2 style={{ fontSize: '24px', marginBottom: '1rem' }}>
+        📬 Inbox – {userInfo?.role === 'lecturer' ? 'you have received new applications' : 'you have received new updates on your application '}
+      </h2>
       {inboxMessage.length === 0 ? (
-        <p style={{ color: '#64748b' }}>No applications submitted yet.</p>
+        <p style={{ color: '#64748b' }}>
+          {userInfo?.role === 'lecturer' ? 'No applications received yet.' : 'No applications update.'}
+        </p>
       ) : getList()}
     </div>
   );

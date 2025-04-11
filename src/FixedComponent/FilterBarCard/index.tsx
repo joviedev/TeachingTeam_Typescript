@@ -9,6 +9,7 @@ interface Option {
 interface FilterItemType {
   dataIndex: string;
   options?: Option[],
+  placeholder?: string;
   type?: string;
   multiple?: boolean;
   days?: string[];
@@ -107,6 +108,7 @@ const FilterBarCard: FC<FilterBarCardProps> = ({sortOptions, dataSource, onReset
                 options={item.options || []}
                 multiple={item.multiple}
                 key={item.dataIndex}
+                placeholder={item.placeholder || ''}
                 value={selectedValue[item.dataIndex] || ''}
                 onChange={(value: SingleValue) => {
                   setSelectedValue((prev) => ({ ...prev, [item.dataIndex]: value }));

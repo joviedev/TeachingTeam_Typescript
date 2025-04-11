@@ -34,3 +34,15 @@ export const timeOptions = [
   { value: 'Full Day', label: 'Full Day' },
   { value: 'Not Applicable', label: 'Not Applicable' },
 ];
+
+interface Option {
+  value: string;
+  label: string;
+}
+
+export const statusOptions: Option[] = [
+  { value: '', label: 'All Applications' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'rejected', label: 'Rejected' }
+];
