@@ -2,31 +2,49 @@ import CustomDropdown from '@/FixedComponent/CustomDropdown';
 import { daysOfWeek, skillOptions, timeOptions } from '@/utils/constant';
 import { useImperativeHandle, useState } from 'react';
 
+// Apply props that ApplicationForm component can receive
 interface ApplicationFormProps {
+  // ref: is to allow the parent component to call functions inside ApplicationForm
   ref?: React.Ref<ApplicationFormHandle>;
+  // readOnly: if it is true, then makes the form not editable
   readOnly?: boolean;
 }
 
+// This interface is to define what functions are available if the parent component uses 'ref' to control the form
 export interface ApplicationFormHandle {
+  // validateForm: is to check if the form is valid or not
+  // If it is invalid, it will return false. If it is valid, it will return all the form data.
   validateForm: () => boolean | Record<string, any>;
-  setFieldsValue: (values: Record<string, any>) => void;
+  // we set this to allow setting the form fields from outside the component such as fill the form with existing data
+  setFieldsValue: (values: Record<string, any>) => void; 
 }
 
+// ApplicationForm functional component
 const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
+  // stores error messages for each field if the format is incorrect or invalid
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    // stores selected available time slots for each day - select from our fixed data
   const [availability, setAvailability] = useState<{ [day: string]: string[] }>({});
+  // list of skills selected by the user - select from our fixed data
   const [skills, setSkills] = useState<string[]>([]);
+  // stores applicant's GPA as a string
   const [academicResult, setAcademicResult] = useState('');
+  // stores applicant's previous job title
   const [previousRole, setPreviousRole] = useState('');
+  // stores applicant's description text
   const [description, setDescription] = useState('');
 
+  // useImperativeHandle allows the parent component to use 'ref' to call functions inside this form.
   useImperativeHandle(ref, () => {
     return {
+  // parent can call this to check if the form is valid and get the form data.
       validateForm: handleSubmit,
+      // parent can call this to set the form fields with given values.
       setFieldsValue: setFormFieldsValue
     };
   });
 
+  // stores the basic text fields in the form, field listed below under this section
   const [form, setForm] = useState<Record<string, any>>({
     fullName: '',
     preferredName: '',
@@ -34,14 +52,18 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
     roleType: '',
   });
 
+  // this section fills the form fields with given values from outside the component, parent can call this.
+  // it updates all related states listed below including form, availability, skills, GPA, previous role, and description.
   const setFormFieldsValue = (values: Record<string, any>) => {
     const { availability, fullName, preferredName, gender, roleType, academicResult, skills } = values || {};
+    // form is set to be updated together since it is all form field
     setForm({
       fullName,
       preferredName,
       gender,
       roleType
     });
+    // set update others field seperately
     setAvailability(availability || {});
     setAcademicResult(academicResult || '');
     setSkills(skills || []);
@@ -49,98 +71,122 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
     setDescription(values.description || '');
   }
 
+  // handleChanges function runs when user types in an input field 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Update the form state with the new value
     setForm({ ...form, [e.target.name]: e.target.value });
 
-    // Validate full name immediately
+    // Special validation for the 'fullName' field as the user types
     if (e.target.name === 'fullName') {
       const newErrors = { ...errors };
+      // this function is to check if full name matches the correct format
       if (!/^[A-Za-z]+,\s[A-Za-z]+$/.test(e.target.value)) {
         newErrors.fullName = 'Please enter your full name in the format: First Name, Last Name. Example: Jovie, Sin';
       } else {
+        // Clean the error if format is correct
         newErrors.fullName = '';
       }
+      //  Update error state here
       setErrors(newErrors);
     }
-
+    // Clear error for the field being edited on other fields
     setErrors({ ...errors, [e.target.name]: '' });
   };
 
+  // handleDropdownChange function will run when user selects a value from a dropdown
   const handleDropdownChange = (name: string, value: string) => {
+    // Update the form field with the selected value
     setForm({ ...form, [name]: value });
+    // Clear any previous error for this dropdown field
     setErrors({ ...errors, [name]: '' });
   };
 
+  // handleAvailabilityChange runs when user selects a time slot for a specific day
   const handleAvailabilityChange = (day: string, value: string) => {
+    // If no time slot is selected, do nothing
     if (!value) return;
-
+    // Get the current selected slots for that day
     const currentSlots = availability[day] || [];
-
+    // If the same slot is already selected, do nothing to prevent any duplications
     if (currentSlots.includes(value)) return;
-
+    // If user already selected 2 slots for that day, show an error and disable the selection
     if (currentSlots.length >= 2) {
       setErrors((prev) => ({ ...prev, [day]: 'You can select maximum 2 time slots.' }));
       return;
     }
-
+    // Add the new time slot to the list for that day
     const newAvailability = { ...availability, [day]: [...currentSlots, value] };
     setAvailability(newAvailability);
+    // Clear error message if any because user already made a valid selection
     setErrors((prev) => ({ ...prev, [day]: '' }));
   };
-
+  // This function runs when user clicks to remove a selected time slot from a day
   const handleRemoveTimeSlot = (day: string, slot: string) => {
+    // Remove the selected slot from the list for that day
     const newSlots = (availability[day] || []).filter((s) => s !== slot);
     setAvailability({ ...availability, [day]: newSlots });
-
+    // If no slots are left after removal, show an error asking user to select at least 1 time slot
     if (newSlots.length === 0) {
       setErrors((prev) => ({ ...prev, [day]: `Please select at least 1 time slot for ${day}` }));
     }
   };
-
+  // This function runs when user selects a new skill from the dropdown
   const handleSkillSelect = (skill: string) => {
+    // Add the skill to the list only if it's not already selected
     if (skill && !skills.includes(skill)) {
       setSkills([...skills, skill]);
     }
   };
-
+  // This function runs when user clicks to remove a selected skill
   const handleSkillRemove = (skill: string) => {
+    // Remove the selected skill from the skills list
     setSkills(skills.filter((s) => s !== skill));
   };
-
+  // Checks if all form fields are correctly filled in
   const validate = () => {
+    // Create a new object to store any error messages found during validation
     const newErrors: { [key: string]: string } = {};
-
+    // Check if fullName is filled
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
+    // Check if fullName matches the correct format
     else if (!/^[A-Za-z]+,\s[A-Za-z]+$/.test(form.fullName.trim())) {
       newErrors.fullName = 'Please enter your full name in the format: First Name, Last Name. Example: Jovie, Sin';
     }
-
+    // Check if gender is selected
     if (!form.gender) newErrors.gender = 'Gender is required.';
+    // Check if roleType is selected
     if (!form.roleType) newErrors.roleType = 'Role Type is required.';
+    // Check if at least one skill is selected
     if (skills.length === 0) newErrors.skills = 'Please select at least one skill.';
 
+    // Check each day of the week to make sure user selected at least one time slot
     daysOfWeek.forEach((day) => {
       if (!availability[day] || availability[day].length === 0) {
         newErrors[day] = `Please select a time slot for ${day}`;
       }
 
-      // GPA validation
+      // GPA validation (this part should ideally be outside the loop, but explaining as written)
+      // Check if GPA is filled
       if (!academicResult.trim()) {
         newErrors.academicResult = 'GPA is required.';
+        // Check if GPA is a valid number and not greater than 4.0
       } else if (isNaN(Number(academicResult)) || Number(academicResult) > 4.0) {
         newErrors.academicResult = 'GPA must be a number not greater than 4.0.';
       }
     });
-
+    // Return all the collected errors
     return newErrors;
   };
-
+  // This function runs when the form is submitted or when parent calls validateForm
   const handleSubmit = () => {
+    // First, validate the form fields
     const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return false;
+    // If there are any errors, show them and stop the form from submitting
+    if (Object.keys(validationErrors).length > 0) { 
+      setErrors(validationErrors); // Display validation error messages
+      return false; // Return false to indicate form is invalid
     }
+    // If everything is valid, show the final application data on those fields
     const newApplication = {
       ...form,
       availability,
@@ -152,10 +198,9 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
 
   return (
     <div style={styles.container}>
-      <form
-        style={styles.formWrapper}
-      >
-        {/* Full Name */}
+      {/* Form wrapper with overall styling */}
+      <form style={styles.formWrapper}>
+        {/* Full Name section*/}
         <div style={styles.inputWrapper}>
           <label style={styles.label}>Full Name</label>
           <input
@@ -166,11 +211,13 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
             onBlur={handleChange}
             style={{
               ...styles.input,
-              cursor: readOnly ? 'not-allowed' : 'text'
+              cursor: readOnly ? 'not-allowed' : 'text' // If readOnly is true, then disable typing
             }}
-            disabled={readOnly}
+            disabled={readOnly} // Completely disable input if form is read-only
           />
+          {/* Show error message under Full Name if there is one */}
           {errors.fullName && <div style={styles.errorText}>{errors.fullName}</div>}
+          {/* Instruction text to help user understand how to enter the name */}
           <div style={styles.instructionText}>
             Please enter your full name in the format: <strong>First Name, Last Name</strong>.
           </div>
@@ -203,13 +250,14 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
             { value: 'Non-Binary', label: 'Non-Binary' },
             { value: 'Prefer not to say', label: 'Prefer not to say' },
           ]}
-          disabled={readOnly}
+          disabled={readOnly} // If readOnly is true, show disabled cursor
         />
-        {errors.gender && <div style={styles.errorText}>{errors.gender}</div>}
+        {errors.gender && <div style={styles.errorText}>{errors.gender}</div>} 
 
         {/* Role Type */}
-        <CustomDropdown
-          value={form.roleType}
+        <CustomDropdown 
+          value={form.roleType} // Current selected value from form state
+          // Update form when user selects a role type
           onChange={(value: string) => handleDropdownChange('roleType', value)}
           options={[
             { value: '', label: 'Select Role Type' },
@@ -224,13 +272,15 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
         <div style={styles.inputWrapper}>
           <label style={styles.label}>Skills</label>
           <CustomDropdown
-            value=""
-            onChange={handleSkillSelect}
-            options={skillOptions.filter((opt) => !skills.includes(opt.value))}
+            value="" // No pre-selected value
+            onChange={handleSkillSelect} // Add skill to list when selected
+            // Show only skills that are not being selected
+            options={skillOptions.filter((opt) => !skills.includes(opt.value))}  
             placeholder="Select Skills (e.g., PHP, Python, ReactJS)"
             disabled={readOnly}
           />
           {errors.skills && <div style={styles.errorText}>{errors.skills}</div>}
+          {/* Show selected skills as badges */}
           <div style={styles.skillsContainer}>
             {skills.map((skill) => (
               <div key={skill} style={styles.skillBadge}>
@@ -242,7 +292,7 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
                   }}
                   onClick={() => {
                     if (!readOnly) {
-                      handleSkillRemove(skill);
+                      handleSkillRemove(skill); // Remove skill when user clicks
                     }
                   }}
                 >
@@ -375,6 +425,7 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
 
 export default ApplicationForm;
 
+// overall styling
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     maxWidth: '900px',

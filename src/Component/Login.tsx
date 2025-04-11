@@ -41,9 +41,9 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
 
   // Store the CAPTCHA token
   const [captchaToken, setCaptchaToken] = useState<string | null>('');
-
+  // Store error message if CAPTCHA validation fails
   const [captchaError, setCaptchaError] = useState('');
-
+  // Get login function from custom authentication hook (useAuth)
   const {login} = useAuth();
 
   // Rule to check if email is in a valid format
@@ -77,25 +77,28 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
+    // If the password matches the strong password pattern, clear any password error
     if (strongPasswordRegex.test(newPassword)) {
-      setPasswordError('');
+      setPasswordError(''); // No error if password is strong
     }
   };
 
   // Clear email error as user types valid input
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value;
-    setEmail(newEmail);
-    if (emailRegex.test(newEmail)) {
-      setEmailError('');
+    const newEmail = e.target.value; // Get the new email the user typed
+    setEmail(newEmail); // Update the email state
+     // If the email matches the correct email pattern, clear any email error
+    if (emailRegex.test(newEmail)) { 
+      setEmailError(''); // No error if email format is valid
     }
   };
-
+  // This function runs when the CAPTCHA (checkbox) is completed or updated
   const handleCaptchaChange = (token: string | null) => {
-    setCaptchaToken(token);
+    setCaptchaToken(token); // Save the CAPTCHA token
+    // If a valid token exists, clear any CAPTCHA error
     if (token) {
-      setCaptchaError('');
-    }
+      setCaptchaError(''); // No error if CAPTCHA is completed
+    } 
   };
 
   // Handle login runs when the user clicks the login button
@@ -153,21 +156,26 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
 
     // 5. Wait for 3 seconds, then:
     setTimeout(() => {
-      setSuccessMessage('');
+      setSuccessMessage(''); // Clear the success message
+      // Try to get redirect information from localStorage
       const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
       const redirectCourseCode = localStorage.getItem('redirectCourseCode');
-
+      // If user was applying for a course before login
       if (redirectAfterLogin === 'apply' && redirectCourseCode) {
+        // Clear the stored redirect info
         localStorage.removeItem('redirectAfterLogin');
         localStorage.removeItem('redirectCourseCode');
+        // Redirect user to the course application page
         navigate(`/apply/${redirectCourseCode}`);
       } else {
+        // Otherwise, redirect based on user's role
         if (matchedUser.role === 'tutor') {
           navigate('/tutor-dashboard');
         } else if (matchedUser.role === 'lecturer') {
           navigate('/lecturer-dashboard');
         } else {
-          navigate('/');
+          // Back to home page
+          navigate('/'); 
         }
       }
     }, 3000);
@@ -255,7 +263,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
 
 export default Login;
 
-// Inline styling object for the section
+// styling
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex',
