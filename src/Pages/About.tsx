@@ -1,129 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-
 import heroImage from '../assets/study-group2.jpg';
 import applicationImage from '../assets/study-group4.jpg';
-
 import ScrollToggle from '../FixedComponent/ScrollToggle';
 import Footer from '../FixedComponent/Footer';
 
-const styles: { [key: string]: React.CSSProperties } = {
-  pageWrapper: {
-    fontFamily: 'sans-serif',
-    color: '#1f2937',
-    scrollBehavior: 'smooth',
-  },
-  heroSection: {
-    backgroundImage: `url(${heroImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    height: '90vh',
-    color: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    position: 'relative',
-    padding: '0 48px',
-  },
-  heroTitle: {
-    fontSize: '40px',
-    fontWeight: 800,
-    marginBottom: '24px',
-    lineHeight: '1.25',
-  },
-  heroText: {
-    fontSize: '18px',
-    marginBottom: '32px',
-    color: '#f3f4f6',
-  },
-  heroButton: {
-    display: 'inline-block',
-    backgroundColor: '#2563eb',
-    color: 'white',
-    padding: '12px 32px',
-    borderRadius: '9999px',
-    fontWeight: 500,
-    textDecoration: 'none',
-  },
-  overlay: {
-    position: 'absolute',
-    inset: '0',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-  },
-  sectionDivider: {
-    borderTop: '1px solid #e5e7eb',
-  },
-  section: {
-    padding: '80px 24px',
-  },
-  sectionTitle: {
-    fontSize: '32px',
-    fontWeight: 700,
-    textAlign: 'center',
-    color: '#1e40af',
-    marginBottom: '48px',
-  },
-  card: {
-    backgroundColor: '#f9fafb',
-    padding: '24px',
-    borderRadius: '12px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-  },
-  cardTitle: {
-    fontSize: '24px',
-    color: '#1d4ed8',
-    fontWeight: 600,
-    marginBottom: '16px',
-  },
-  grid: {
-    display: 'grid',
-    gap: '48px',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-  },
-  img: {
-    borderRadius: '16px',
-    width: '100%',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-  },
-  applicationbox: {
-    backgroundColor: 'white',
-    borderRadius: '16px',
-    padding: '24px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
-  },
-  optionCardGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  ctaSection: {
-    padding: '80px 24px',
-    background: 'linear-gradient(to right, #1d4ed8, #3b82f6)',
-    color: 'white',
-    textAlign: 'center',
-  },
-  ctaTitle: {
-    fontSize: '32px',
-    fontWeight: 700,
-    marginBottom: '16px',
-  },
-  ctaText: {
-    fontSize: '18px',
-    marginBottom: '32px',
-  },
-  ctaButtonGroup: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '24px',
-    flexWrap: 'wrap',
-  },
-};
-
+// Define animation variants for cards using Framer Motion.
+// Cards will fade in and slide up with a slight delay based on their index.
 const cardVariant = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
@@ -133,14 +17,16 @@ const cardVariant = {
   }),
 };
 
+// About page component.
+// Manages expand/collapse state for FAQ accordions and handles navigation.
 const About: React.FC = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isSelectionExpanded, setSelectionExpanded] = useState(false);
-  const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false); // Controls expansion of "How do I apply?" section
+  const [isSelectionExpanded, setSelectionExpanded] = useState(false); // Controls expansion of "How does the selection process work?" section
+  const navigate = useNavigate(); // Hook for navigation to other pages
 
   return (
     <div style={styles.pageWrapper}>
-      {/* Hero */}
+      {/* Hero Banner Section */}
       <section style={styles.heroSection}>
         <div style={styles.overlay}></div>
         <motion.div
@@ -154,6 +40,7 @@ const About: React.FC = () => {
             TeachTeam helps students and lecturers connect through an efficient tutoring platform.
             Apply, review, and collaborate – all in one place.
           </p>
+          {/* Scroll to Features Section Button */}
           <motion.a href="#features" whileHover={{ scale: 1.05 }} style={styles.heroButton}>
             Learn How It Works
           </motion.a>
@@ -162,11 +49,12 @@ const About: React.FC = () => {
 
       <div style={styles.sectionDivider} />
 
-      {/* Features */}
+      {/* Features Section */}
       <section id="features" style={styles.section}>
         <motion.h2 style={styles.sectionTitle} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }}>
           How TeachTeam Helps
         </motion.h2>
+        {/* Feature Cards */}
         <div style={styles.grid}>
           {['For Tutors', 'For Lecturers'].map((title, i) => (
             <motion.div
@@ -307,3 +195,120 @@ const Accordion: React.FC<{
 );
 
 export default About;
+
+// Styling for About - act as landing page too
+const styles: { [key: string]: React.CSSProperties } = {
+  pageWrapper: {
+    fontFamily: 'sans-serif',
+    color: '#1f2937',
+    scrollBehavior: 'smooth',
+  },
+  heroSection: {
+    backgroundImage: `url(${heroImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '90vh',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    position: 'relative',
+    padding: '0 48px',
+  },
+  heroTitle: {
+    fontSize: '40px',
+    fontWeight: 800,
+    marginBottom: '24px',
+    lineHeight: '1.25',
+  },
+  heroText: {
+    fontSize: '18px',
+    marginBottom: '32px',
+    color: '#f3f4f6',
+  },
+  heroButton: {
+    display: 'inline-block',
+    backgroundColor: '#085DB7',
+    color: 'white',
+    padding: '12px 32px',
+    borderRadius: '9999px',
+    fontWeight: 500,
+    textDecoration: 'none',
+  },
+  overlay: {
+    position: 'absolute',
+    inset: '0',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  sectionDivider: {
+    borderTop: '1px solid #e5e7eb',
+  },
+  section: {
+    padding: '80px 24px',
+  },
+  sectionTitle: {
+    fontSize: '32px',
+    fontWeight: 700,
+    textAlign: 'center',
+    color: '#085DB7',
+    marginBottom: '48px',
+  },
+  card: {
+    backgroundColor: '#f9fafb',
+    padding: '24px',
+    borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+  },
+  cardTitle: {
+    fontSize: '24px',
+    color: '#085DB7',
+    fontWeight: 600,
+    marginBottom: '16px',
+  },
+  grid: {
+    display: 'grid',
+    gap: '48px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  },
+  img: {
+    borderRadius: '16px',
+    width: '100%',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+  },
+  applicationbox: {
+    backgroundColor: 'white',
+    borderRadius: '16px',
+    padding: '24px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+  },
+  optionCardGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  ctaSection: {
+    padding: '80px 24px',
+    background: '085DB7',
+    color: 'white',
+    textAlign: 'center',
+  },
+  ctaTitle: {
+    fontSize: '32px',
+    fontWeight: 700,
+    marginBottom: '16px',
+  },
+  ctaText: {
+    fontSize: '18px',
+    marginBottom: '32px',
+  },
+  ctaButtonGroup: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '24px',
+    flexWrap: 'wrap',
+  },
+};

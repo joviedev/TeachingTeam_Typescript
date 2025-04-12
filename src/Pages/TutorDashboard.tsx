@@ -6,34 +6,44 @@ import SearchFilterBar from '../FixedComponent/SearchFilterBar';
 import { useNavigate } from 'react-router-dom';
 
 const TutorDashboard: React.FC = () => {
+  // State for selected filter values
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedOpening, setSelectedOpening] = useState('');
+  // State for current carousel slide index
   const [currentSlide, setCurrentSlide] = useState(0);
-
+  // Ref to control carousel scrolling
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
 
-  const scrollToSlide = (index: number) => {
-    if (carouselRef.current) {
-      const container = carouselRef.current;
-      const scrollAmount = index === 0 ? 0 : container.scrollWidth - container.clientWidth;
-      container.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-      setCurrentSlide(index);
-    }
-  };
+// Function to scroll the carousel to a specific slide
+const scrollToSlide = (index: number) => {
+  if (carouselRef.current) {
+    const container = carouselRef.current;
+    // Calculate how much to scroll:
+    // If index is 0 (first slide), scroll to start (left = 0)
+    // Otherwise, scroll to the end (left = total scrollWidth - visible width)
+    const scrollAmount = index === 0 ? 0 : container.scrollWidth - container.clientWidth;
+    // Smoothly scroll the carousel
+    container.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+    // Update the current slide index
+    setCurrentSlide(index);
+  }
+};
+
 
   // Navigate to /browse-all with filters
   const handleSearch = () => {
     const params = new URLSearchParams();
+     // Append each selected filter to the URL if it has a value
     if (selectedCourse) params.append('course', selectedCourse);
     if (selectedLocation) params.append('location', selectedLocation);
     if (selectedOpening) params.append('opening', selectedOpening);
     if (selectedRole) params.append('role', selectedRole);
-    navigate(`/browse-all?${params.toString()}`);
+    navigate(`/browse-all?${params.toString()}`); // Navigate to /browse-all with constructed query string
   };
-
+  // List of course categories to display in the Tutor Dashboard carousel
   const courseCards = [
     {
       title: 'Vocational',
@@ -139,6 +149,7 @@ const TutorDashboard: React.FC = () => {
 
 export default TutorDashboard;
 
+// Styling for TutorDashboard
 const styles: { [key: string]: React.CSSProperties } = {
   page: {
     fontFamily: 'Poppins, sans-serif',

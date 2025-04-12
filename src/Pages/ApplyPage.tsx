@@ -7,11 +7,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '@/utils/auth/AuthProvider';
 
+// ApplyPage component - handles page for applying to a course
 const ApplyPage: React.FC = () => {
-  const navigate = useNavigate();
-  const { code } = useParams();
-
-  const {isSignedIn} = useAuth();
+  const navigate = useNavigate();  // Hook for programmatic navigation
+  const { code } = useParams();    // Get course code from the URL parameters
+  const { isSignedIn } = useAuth(); // Get user signed-in status from authentication context
 
   // useEffect(() => {
   //   const isSignedIn = localStorage.getItem('isSignedIn');
@@ -22,21 +22,26 @@ const ApplyPage: React.FC = () => {
   //     navigate('/login'); // not signed in? Redirect to login immediately
   //   }
   // }, [navigate, code]);
-  const selectedCourse = courses.find(course => course.code.toLowerCase() === (code || '').toLowerCase());
+  // Find the selected course based on the course code from URL
+const selectedCourse = courses.find(course => course.code.toLowerCase() === (code || '').toLowerCase());
 
-  if (!selectedCourse) return <p>Course not found.</p>;
+// If course not found, show a simple error message
+if (!selectedCourse) return <p>Course not found.</p>;
 
-  const handleApply = () => {
-    localStorage.setItem('selectedCourse', selectedCourse.title); // already doing this
-    localStorage.setItem('redirectCourseCode', selectedCourse.code); // ADD THIS LINE
-  
-    if (isSignedIn) {
-      navigate(`/apply-form/${code}`);
-    } else {
-      localStorage.setItem('redirectAfterLogin', 'apply');
-      navigate('/login');
-    }
-  };  
+// Handle Apply button click
+const handleApply = () => {
+  localStorage.setItem('selectedCourse', selectedCourse.title); // Save selected course title (already existing behavior)
+  localStorage.setItem('redirectCourseCode', selectedCourse.code); // Save selected course code (NEW line added)
+
+  // If user is signed in, navigate directly to application form
+  if (isSignedIn) {
+    navigate(`/apply-form/${code}`);
+  } else {
+    // If not signed in, store redirect intent and send user to login page
+    localStorage.setItem('redirectAfterLogin', 'apply');
+    navigate('/login');
+  }
+};
 
   return (
     <>
@@ -98,7 +103,7 @@ const ApplyPage: React.FC = () => {
 
 export default ApplyPage;
 
-// Styling
+// Styling for ApplyPage
 const styles: { [key: string]: React.CSSProperties } = {
   bannerWrapper: {
     position: 'relative',

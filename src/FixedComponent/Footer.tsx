@@ -19,10 +19,10 @@ const Footer: React.FC = () => {
           <h4 style={styles.heading}>Contact</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             <li style={styles.listItem}><a href="#" style={styles.link}>Online enquiry</a></li>
-            <li style={styles.listItem}>Future students: <span style={styles.link}>1800 626 481</span></li>
-            <li style={styles.listItem}>Current students: <span style={styles.link}>1800 72 4357</span></li>
-            <li style={styles.listItem}>International agents: <span style={styles.link}>+61 2 6620 3876</span></li>
-            <li style={styles.listItem}>24/7 Mental Health: <span style={styles.link}>1300 782 676</span></li>
+            <li style={styles.listItem}>Future students: <span style={styles.link}>1800 666 666</span></li>
+            <li style={styles.listItem}>Current students: <span style={styles.link}>1800 88 8888</span></li>
+            <li style={styles.listItem}>International agents: <span style={styles.link}>+61 4 1219 0417</span></li>
+            <li style={styles.listItem}>24/7 Mental Health: <span style={styles.link}>1300 888 888</span></li>
           </ul>
         </div>
 
@@ -32,9 +32,7 @@ const Footer: React.FC = () => {
           <ul style={{ listStyle: 'none', padding: 0 }}>
             <li style={styles.listItem}><a href="#" style={styles.link}>Directory</a></li>
             <li style={styles.listItem}><Link to="/become-a-tutor" style={styles.link}>How to apply</Link></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>News</a></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>Careers</a></li>
-            <li style={styles.listItem}><a href="#" style={styles.link}>A-Z Courses</a></li>
+            <li style={styles.listItem}><a href="./Pages/BrowseAll" style={styles.link}>Careers</a></li>
           </ul>
         </div>
 

@@ -2,11 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
+// BecomeTutor page component
 const BecomeTutor: React.FC = () => {
-  const navigate = useNavigate();
-
+  const navigate = useNavigate(); // Hook to navigate between routes
+  // Handle Apply button click
   const handleApply = () => {
-    navigate('/login'); 
+    navigate('/login');  // Redirect the user to the login page
   };
 
   return (
@@ -69,6 +70,7 @@ const BecomeTutor: React.FC = () => {
 
 export default BecomeTutor;
 
+// Styling for BecomeTutor
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     padding: '32px 24px',

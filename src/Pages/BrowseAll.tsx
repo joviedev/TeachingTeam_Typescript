@@ -6,34 +6,44 @@ import ScrollerToggle from '../FixedComponent/ScrollToggle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/utils/auth/AuthProvider';
 
+// BrowseAll page component
 const BrowseAll: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
+  const location = useLocation(); // Hook to access the current URL
+  const navigate = useNavigate(); // Hook to programmatically navigate between routes
+  const searchParams = new URLSearchParams(location.search); // Parse query parameters from URL
 
-  const {isSignedIn} = useAuth();
+  const { isSignedIn } = useAuth(); // Get user's sign-in status
 
+  // Initialize selected filter states based on URL query parameters
   const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '');
   const [selectedLocation, setSelectedLocation] = useState(searchParams.get('location') || '');
   const [selectedRole, setSelectedRole] = useState(searchParams.get('role') || '');
   const [selectedOpening, setSelectedOpening] = useState(searchParams.get('opening') || '');
-
+  // Filter the list of all courses based on the selected filters
   const filteredCourses = courses.filter((course) => {
     return (
+      // If no course type is selected OR the course's type matches the selected one
       (selectedCourse === '' || course.courseType.toLowerCase() === selectedCourse.toLowerCase()) &&
+      // If no location is selected OR the course's location matches the selected one
       (selectedLocation === '' || course.location.toLowerCase() === selectedLocation.toLowerCase()) &&
+      // If no role is selected OR the course's role matches the selected one
       (selectedRole === '' || course.role?.toLowerCase() === selectedRole.toLowerCase()) &&
+      // If no opening is selected OR the course's opening matches the selected one
       (selectedOpening === '' || course.opening.toLowerCase() === selectedOpening.toLowerCase())
     );
   });
-
+  // Handle "Apply Now" button click
   const handleApplyNow = (courseCode: string, courseTitle: string) => {
+    // Save the selected course title into localStorage for later use
     localStorage.setItem('selectedCourse', courseTitle);
 
     if (isSignedIn) {
+      // If user is already signed in, navigate directly to the application form page
       navigate(`/apply/${courseCode}`);
     } else {
+      // If user is NOT signed in, set a flag to redirect them back after login
       localStorage.setItem('redirectAfterLogin', 'apply');
+      // Redirect user to login page
       navigate('/login');
     }
   };
@@ -43,11 +53,13 @@ const BrowseAll: React.FC = () => {
       <div style={styles.pageWrapper}>
         <div style={styles.container}>
           <div style={styles.contentWrapper}>
+            {/* Course List Section */}
             <div style={styles.courseList}>
               <h2 style={styles.heading}>{filteredCourses.length} courses found</h2>
-
+              {/* Render each course */}
               {filteredCourses.map((course, idx) => (
                 <div key={idx} style={styles.courseCard}>
+                  {/* Left Side: Course Information */}
                   <div style={styles.cardLeft}>
                     <h3 style={styles.courseTitle}>{course.title}</h3>
                     <span style={styles.courseTypeLabel}>{course.courseType.toUpperCase()}</span>
@@ -57,6 +69,7 @@ const BrowseAll: React.FC = () => {
                     <p>{course.time}</p>
                     <p>{course.spacesLeft} spaces left</p>
                   </div>
+                  {/* Right Side: Apply Now Button */}
                   <div style={styles.cardRight}>
                     <button
                       style={styles.button}
@@ -76,7 +89,7 @@ const BrowseAll: React.FC = () => {
                 </div>
               ))}
             </div>
-
+            {/* Sidebar Section: Search and Filter */}
             <div style={styles.sidebar}>
               <div style={styles.searchFilterShadow}>
                 <SearchFilterBar
@@ -88,28 +101,29 @@ const BrowseAll: React.FC = () => {
                   setSelectedRole={setSelectedRole} 
                   selectedOpening={selectedOpening}
                   setSelectedOpening={setSelectedOpening}
-                  mode="reset"
-                  onReset={() => {
+                  mode="reset" 
+                  onReset={() => { // Reset all filters to default
                     setSelectedCourse('');
                     setSelectedLocation('');
                     setSelectedRole('');   
                     setSelectedOpening('');
                   }}
-                  layout="column"
+                  layout="column" // Column layout for sidebar
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <ScrollerToggle />
-      <Footer />
+      <ScrollerToggle /> {/* Scroll to Top Button */}
+      <Footer /> {/* Footer */}
     </>
   );
 };
 
 export default BrowseAll;
 
+// Styling for BrowseAll page
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: {
     backgroundColor: '#fff',

@@ -6,67 +6,79 @@ import { courses } from '@/Data/CourseList';
 import { useAuth } from '@/utils/auth/AuthProvider';
 import { daysOfWeek, skillOptions, timeOptions } from '@/utils/constant';
 
+// Define the structure for a Course object
 export type CourseType = {
-  code: string;
-  title: string;
-  description: string;
-  location: string;
-  courseType: string;
-  role?: string;
-  opening: string;
-  date: string;
-  time: string;
-  spacesLeft: number;
+  code: string;           // Unique course code 
+  title: string;          // Course title 
+  description: string;    // Short description of the course
+  location: string;       // Campus location 
+  courseType: string;     // Course type 
+  role?: string;          // (Optional) Role associated 
+  opening: string;        // Opening session 
+  date: string;           // Course starting date
+  time: string;           // Course timing 
+  spacesLeft: number;     // Number of spaces left for applicants
 };
 
+// Define the structure for an Applicant's submitted Application
 export interface ApplicationInterface {
-  fullName: string;
-  preferredName: string;
-  gender: string;
-  roleType: string;
-  availability: { [day: string]: string[] };
-  skills: string[];
-  academicResult: string;
-  previousRole?: string;
-  description?: string;
-  submittedAt: string;
-  courseInfo: CourseType;
-  applicantEmail: string;
-  status?: string; // processing, approved, rejected
-  isLecturerRead?: boolean;
-  isTutorRead?: boolean;
-  reviewContent?: string;
-  id?: string;
+  fullName: string;                // Applicant's full legal name (First Name, Last Name)
+  preferredName: string;           // Applicant's preferred name
+  gender: string;                  // Applicant's gender
+  roleType: string;                // Role type applying for 
+  availability: { [day: string]: string[] }; // Availability mapping
+  skills: string[];                // List of skills selected by applicant 
+  academicResult: string;          // Applicant's GPA
+  previousRole?: string;           // (Optional) Previous role held 
+  description?: string;            // (Optional) Applicant's short self-description
+  submittedAt: string;             // ISO timestamp of when application was submitted
+  courseInfo: CourseType;          // The course the applicant is applying for 
+  applicantEmail: string;          // Applicant's email address
+  status?: string;                 // (Optional) Application status 
+  isLecturerRead?: boolean;        // (Optional) Whether lecturer has read the application
+  isTutorRead?: boolean;           // (Optional) Whether tutor has read lecturer's review
+  reviewContent?: string;          // (Optional) Lecturer's review content for the applicant
+  id?: string;                     // (Optional) Unique ID of the application
 };
 
 const ApplyForm: React.FC = () => {
-  const navigate = useNavigate();
-  const { code } = useParams();
-
-  const {userInfo} = useAuth();
-
+  const navigate = useNavigate();  // Hook to programmatically navigate between routes
+  const { code } = useParams();    // Get dynamic URL parameter (course code) from the route
+  const { userInfo } = useAuth();  // Get current logged-in user info from AuthProvider
+  // State to hold the selected course details based on URL code
   const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null);
+  // State to hold form input values (user-entered data)
   const [form, setForm] = useState({
-    fullName: '',
-    preferredName: '',
-    gender: '',
-    roleType: '',
+    fullName: '',       // Applicant's full name
+    preferredName: '',  // Applicant's preferred name (optional)
+    gender: '',         // Selected gender
+    roleType: '',       // Selected role type (e.g., Part Time / Full Time)
   });
 
-  const [availability, setAvailability] = useState<{ [day: string]: string[] }>({});
-  const [skills, setSkills] = useState<string[]>([]);
-  const [academicResult, setAcademicResult] = useState('');
-  const [previousRole, setPreviousRole] = useState('');
-  const [description, setDescription] = useState('');
-  const [submitted, setSubmitted] = useState(false); 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  useEffect(() => {
-    const targetCourse = courses.find((course) => course.code === code);
-    if (targetCourse) {
-      setSelectedCourse(targetCourse);
-    }
-  }, [code]);
+    // State to hold applicant's weekly availability 
+    const [availability, setAvailability] = useState<{ [day: string]: string[] }>({});
+    // State to hold applicant's selected skills 
+    const [skills, setSkills] = useState<string[]>([]);
+    // State to store applicant's GPA result
+    const [academicResult, setAcademicResult] = useState('');
+    // State to store applicant's previous role (optional)
+    const [previousRole, setPreviousRole] = useState('');
+    // State to store applicant's personal description (optional)
+    const [description, setDescription] = useState('');
+    // State to indicate whether the form has been successfully submitted
+    const [submitted, setSubmitted] = useState(false); 
+    // State to store form validation errors (key: field name, value: error message)
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
+    // When the component mounts or the course code changes,
+    // find and set the selected course information from the courses list
+    useEffect(() => {
+      const targetCourse = courses.find((course) => course.code === code);
+      if (targetCourse) {
+        setSelectedCourse(targetCourse);
+      }
+    }, [code]);
+  
 
   // useEffect(() => {
   //   const isSignedIn = localStorage.getItem('isSignedIn');
@@ -81,133 +93,152 @@ const ApplyForm: React.FC = () => {
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
-
+    // Check if full name is provided
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
+    // Check if full name follows the format: "First Name, Last Name"
     else if (!/^[A-Za-z]+,\s[A-Za-z]+$/.test(form.fullName.trim())) {
       newErrors.fullName = 'Please enter your full name in the format: First Name, Last Name. Example: Jovie, Sin';
     }
-
+    // Check if gender is selected
     if (!form.gender) newErrors.gender = 'Gender is required.';
+    // Check if role type is selected
     if (!form.roleType) newErrors.roleType = 'Role Type is required.';
+    // Check if at least one skill is selected
     if (skills.length === 0) newErrors.skills = 'Please select at least one skill.';
-
+    // Loop through each day of the week
     daysOfWeek.forEach((day) => {
+      // Check if availability is selected for each day
       if (!availability[day] || availability[day].length === 0) {
         newErrors[day] = `Please select a time slot for ${day}`;
       }
     
      // GPA validation
     if (!academicResult.trim()) {
-      newErrors.academicResult = 'GPA is required.';
-    } else if (isNaN(Number(academicResult)) || Number(academicResult) > 4.0) {
+      newErrors.academicResult = 'GPA is required.'; // GPA field must not be empty
+    } else if (isNaN(Number(academicResult)) || Number(academicResult) > 4.0) { // GPA must be a valid number <= 4.0
       newErrors.academicResult = 'GPA must be a number not greater than 4.0.';
     }
     });
 
-    return newErrors;
+    return newErrors; // Return all accumulated validation errors
   };
-
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Update form field value
     setForm({ ...form, [e.target.name]: e.target.value });
-
     // Validate full name immediately
     if (e.target.name === 'fullName') {
-      const newErrors = { ...errors };
+      const newErrors = { ...errors }; 
+      // Create a copy of the current errors object so we don't mutate state directly
       if (!/^[A-Za-z]+,\s[A-Za-z]+$/.test(e.target.value)) {
+        // Check if the fullName does NOT match the format: FirstName, LastName
         newErrors.fullName = 'Please enter your full name in the format: First Name, Last Name. Example: Jovie, Sin';
       } else {
+        // If valid format, clear the fullName error
         newErrors.fullName = '';
       }
-      setErrors(newErrors);
+      setErrors(newErrors); // Update the errors state immediately after checking fullName
     }
-
+    // Regardless of which field was changed (gender, roleType, etc.), clear its specific error
     setErrors({ ...errors, [e.target.name]: '' });
   };
-
+  
   const handleDropdownChange = (name: string, value: string) => {
-    setForm({ ...form, [name]: value });
-    setErrors({ ...errors, [name]: '' });
+    setForm({ ...form, [name]: value }); // Update the form state field when a dropdown value is selected
+    setErrors({ ...errors, [name]: '' }); // Clear any existing validation error for this field
   };
 
   const handleAvailabilityChange = (day: string, value: string) => {
-    if (!value) return;
+    if (!value) return; // If no time slot is selected, exit the function early
 
-    const currentSlots = availability[day] || [];
+    const currentSlots = availability[day] || []; // Get the current selected time slots for the given day. 
+    // If none exist yet, initialize as an empty array.
 
-    if (currentSlots.includes(value)) return;
-
+    if (currentSlots.includes(value)) return; // If the selected time slot already exists for that day, do nothing (prevent duplicates).
     if (currentSlots.length >= 2) {
+      // If already 2 slots selected, show an error: 
       setErrors((prev) => ({ ...prev, [day]: 'You can select maximum 2 time slots.' }));
       return;
     }
 
     const newAvailability = { ...availability, [day]: [...currentSlots, value] };
-    setAvailability(newAvailability);
-    setErrors((prev) => ({ ...prev, [day]: '' }));
+    // Create a new availability object by copying the existing one 
+    // and adding the new selected time slot to the day's slots.
+    setAvailability(newAvailability); // Update the state with the new availability.
+    setErrors((prev) => ({ ...prev, [day]: '' })); // Clear any error for this day after successful selection.
   };
 
   const handleRemoveTimeSlot = (day: string, slot: string) => {
     const newSlots = (availability[day] || []).filter((s) => s !== slot);
+    // Remove the selected time slot from the day's list.
     setAvailability({ ...availability, [day]: newSlots });
-
-    if (newSlots.length === 0) {
+    // Update the availability state without the removed time slot.
+    if (newSlots.length === 0) { // If no slots left for this day after removal, show an error.
       setErrors((prev) => ({ ...prev, [day]: `Please select at least 1 time slot for ${day}` }));
     }
   };
-
+  // Add a skill to the selected skills list if it is not already added
   const handleSkillSelect = (skill: string) => {
     if (skill && !skills.includes(skill)) {
-      setSkills([...skills, skill]);
+      setSkills([...skills, skill]); // Add new skill to the existing list
     }
   };
-
+  // Remove a skill from the selected skills list
   const handleSkillRemove = (skill: string) => {
-    setSkills(skills.filter((s) => s !== skill));
+    setSkills(skills.filter((s) => s !== skill)); // Keep only skills that are NOT the one being removed
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validationErrors = validate();
+    e.preventDefault(); // Prevent the default form submission behavior (page reload)
   
+    const validationErrors = validate(); // Validate form fields
+  
+    // If there are validation errors, update the errors state
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      const {courseType} = selectedCourse || {};
-      const newApplication = {
-        ...form,
-        availability,
-        skills,
-        academicResult,
-        previousRole,
-        description,
-        status: 'processing',
-        submittedAt: new Date().toISOString(),
-        courseInfo: selectedCourse,
-        applicantEmail: userInfo?.email,
-        id: String(+new Date())
-      };
+      const { courseType } = selectedCourse || {}; // Extract course type from selected course
   
+      // Build a new application object with all the form data
+      const newApplication = {
+        ...form,                      // fullName, preferredName, gender, roleType
+        availability,                 // Availability per day
+        skills,                       // Selected skills
+        academicResult,               // GPA
+        previousRole,                 // Previous role (optional)
+        description,                  // Personal description (optional)
+        status: 'processing',          // Initial application status
+        submittedAt: new Date().toISOString(), // Timestamp of submission
+        courseInfo: selectedCourse,    // Selected course details
+        applicantEmail: userInfo?.email, // Email of the applicant
+        id: String(+new Date())        // Unique ID generated from timestamp
+      };
       // Determine which lecturer dashboard to save to
       let lecturerDashboard = '';
 
-      const lowerCourseType = courseType?.toLowerCase() || '';
-  
-      if (lowerCourseType.includes('diploma') || lowerCourseType.includes('vocational')) {
-        lecturerDashboard = 'lecturer1Applications';
-      } else if (lowerCourseType.includes('bachelor')) {
-        lecturerDashboard = 'lecturer2Applications';
-      } else {
-        lecturerDashboard = 'lecturer3Applications';
-      }
-  
-      // Get existing applications for that lecturer
-      const existingApplications = JSON.parse(localStorage.getItem(lecturerDashboard) || '[]');
-  
-      // Save the new application
-      const updatedApplications = [newApplication, ...existingApplications];
-      localStorage.setItem(lecturerDashboard, JSON.stringify(updatedApplications));
-  
-      setSubmitted(true);
+      // Normalize courseType to lowercase for easier comparison
+const lowerCourseType = courseType?.toLowerCase() || '';
+
+// Decide lecturer dashboard based on course type
+if (lowerCourseType.includes('diploma') || lowerCourseType.includes('vocational')) {
+  lecturerDashboard = 'lecturer1Applications';  // Save to Lecturer 1 dashboard
+} else if (lowerCourseType.includes('bachelor')) {
+  lecturerDashboard = 'lecturer2Applications';  // Save to Lecturer 2 dashboard
+} else {
+  lecturerDashboard = 'lecturer3Applications';  // Save to Lecturer 3 dashboard (default for Masters, others)
+}
+
+// Get existing applications already stored for this lecturer
+const existingApplications = JSON.parse(localStorage.getItem(lecturerDashboard) || '[]');
+
+// Add the new application to the beginning of the list
+const updatedApplications = [newApplication, ...existingApplications];
+
+// Save the updated list back to localStorage
+localStorage.setItem(lecturerDashboard, JSON.stringify(updatedApplications));
+
+// Set submitted state to true to show success message
+setSubmitted(true);
     }
   };
 
@@ -418,7 +449,7 @@ const ApplyForm: React.FC = () => {
 
 export default ApplyForm;
 
-
+// Styling for ApplyForm
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: { 
     backgroundColor: '#fff', 
