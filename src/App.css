@@ -1,38 +1,56 @@
+/* ---------------------------------------------
+   Base styling for the root App container
+--------------------------------------------- */
 .App {
-  text-align: center;
+  text-align: center; /* Center-align all text inside the app */
 }
 
+/* ---------------------------------------------
+   Logo styles
+--------------------------------------------- */
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 40vmin; /* Responsive height relative to viewport */
+  pointer-events: none; /* Disable mouse interactions on the logo */
 }
 
+/* ---------------------------------------------
+   Animation for spinning logo (if motion allowed)
+--------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear; /* Slow continuous spin */
   }
 }
 
+/* ---------------------------------------------
+   Header section styling
+--------------------------------------------- */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #282c34; /* Dark background */
+  min-height: 100vh; /* Full viewport height */
+  display: flex; /* Flex layout for centering */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Horizontally center children */
+  justify-content: center; /* Vertically center children */
+  font-size: calc(10px + 2vmin); /* Responsive font size */
+  color: white; /* White text */
 }
 
+/* ---------------------------------------------
+   Link styling inside the App
+--------------------------------------------- */
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* React blue for links */
 }
 
+/* ---------------------------------------------
+   Keyframes for rotating the logo
+--------------------------------------------- */
 @keyframes App-logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* Start at 0 degrees */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* Rotate full circle */
   }
 }

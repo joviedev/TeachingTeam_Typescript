@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CustomDropdown from '../FixedComponent/CustomDropdown';
 import { motion } from 'framer-motion';
-import { courses } from '@/Data/CourseList';
-import { useAuth } from '@/utils/auth/AuthProvider';
-import { daysOfWeek, skillOptions, timeOptions } from '@/utils/constant';
+import { courses } from '../Data/CourseList';
+import { useAuth } from '../utils/auth/AuthProvider';
+import { daysOfWeek, skillOptions, timeOptions } from '../utils/constant';
 
 export type CourseType = {
   code: string;
