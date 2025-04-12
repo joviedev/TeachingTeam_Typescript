@@ -1,18 +1,25 @@
 const path = require('path');
-
+ 
 module.exports = {
-  webpack: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-  },
+ 
+  // Optional: Jest customization
   jest: {
+
     configure: {
-      moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/src/$1',
-        '^react-router-dom$': '<rootDir>/node_modules/react-router-dom', // ✅ add this line
-      },
+
       moduleDirectories: ['node_modules', 'src'],
+
+      testEnvironment: 'jsdom',
+
+    },
+
+  },
+ 
+ 
+  // Optional: PostCSS for TailwindCSS
+  style: {
+    postcss: {
+      plugins: [require('tailwindcss'), require('autoprefixer')],
     },
   },
 };

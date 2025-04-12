@@ -1,14 +1,16 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import Footer from '../FixedComponent/Footer';
+import { MemoryRouter } from 'react-router-dom';
 
-test('renders footer content', () => {
+test('renders footer content and contact info', () => {
   render(
     <MemoryRouter>
       <Footer />
     </MemoryRouter>
   );
 
-  // Adjust the text match below based on real content in your Footer component
-  expect(screen.getByText(/©|teachteam|contact/i)).toBeInTheDocument();
+  // Check for expected text in the footer
+  expect(screen.getByText(/contact/i)).toBeInTheDocument();
+  expect(screen.getByText(/about/i)).toBeInTheDocument();
 });
