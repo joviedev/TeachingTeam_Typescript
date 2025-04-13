@@ -292,7 +292,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   ctaSection: {
     padding: '80px 24px',
-    background: '085DB7',
+    background: '#085DB7',
     color: 'white',
     textAlign: 'center',
   },

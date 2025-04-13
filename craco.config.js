@@ -1,6 +1,12 @@
 const path = require('path');
  
 module.exports = {
+
+  webpack: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    }
+  },
  
   // Optional: Jest customization
   jest: {
