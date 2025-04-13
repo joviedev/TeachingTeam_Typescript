@@ -122,6 +122,8 @@ useEffect(() => {
     </div>
   );
 };
+
+// Styling for MyApplication
 const styles: { [key: string]: React.CSSProperties } = {
   pageWrapper: {
     backgroundColor: '#fff',
