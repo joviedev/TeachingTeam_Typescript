@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // 🔥 Add useLocation to get previous page
+import { useNavigate, useLocation } from 'react-router-dom'; 
 import ReCaptcha from 'react-google-recaptcha';
-import { CAPTCHA_SITE_KEY, dummyUsers } from '@/utils/constant';
+import { CAPTCHA_SITE_KEY, dummyUsers, User } from '@/utils/constant';
 import { useAuth } from '@/utils/auth/AuthProvider';
 
 /**
@@ -41,9 +41,9 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
 
   // Store the CAPTCHA token
   const [captchaToken, setCaptchaToken] = useState<string | null>('');
-  // Store error message if CAPTCHA validation fails
   const [captchaError, setCaptchaError] = useState('');
-  // Get login function from custom authentication hook (useAuth)
+
+  // Get the login function from the custom authentication context (useAuth)
   const {login} = useAuth();
 
   // Rule to check if email is in a valid format
@@ -77,28 +77,25 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    // If the password matches the strong password pattern, clear any password error
     if (strongPasswordRegex.test(newPassword)) {
-      setPasswordError(''); // No error if password is strong
+      setPasswordError('');
     }
   };
 
   // Clear email error as user types valid input
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value; // Get the new email the user typed
-    setEmail(newEmail); // Update the email state
-     // If the email matches the correct email pattern, clear any email error
-    if (emailRegex.test(newEmail)) { 
-      setEmailError(''); // No error if email format is valid
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    if (emailRegex.test(newEmail)) {
+      setEmailError('');
     }
   };
-  // This function runs when the CAPTCHA (checkbox) is completed or updated
+
   const handleCaptchaChange = (token: string | null) => {
-    setCaptchaToken(token); // Save the CAPTCHA token
-    // If a valid token exists, clear any CAPTCHA error
+    setCaptchaToken(token);
     if (token) {
-      setCaptchaError(''); // No error if CAPTCHA is completed
-    } 
+      setCaptchaError('');
+    }
   };
 
   // Handle login runs when the user clicks the login button
@@ -133,6 +130,18 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     // If email or password is invalid, stop the login process
     if (!valid) return;
 
+    // Retrieve the stored users list from localStorage
+    const usersString = localStorage.getItem('users');
+    // Initialize an empty array to hold the parsed users
+    let users: User[] = [];
+    // If a users list exists in localStorage, try to parse it
+    if (usersString) {
+      try {
+        users = JSON.parse(usersString); // Parse the JSON string into an array of User objects
+      } catch (error) {
+        console.error('Error parsing users from localStorage:', error); // Log error if parsing fails
+      }
+    }
     // Check if the input email and password match any data in the dummy user list above
     const matchedUser = dummyUsers.find(
       (user) => user.email === email && user.password === password
@@ -154,28 +163,27 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
     // 4. Show a success message cue in the center of the screen
     setSuccessMessage(`Successfully logged in as ${matchedUser.role}`);
 
-    // 5. Wait for 3 seconds, then:
+    // 5. Wait for 3 seconds after successful login before redirecting
     setTimeout(() => {
       setSuccessMessage(''); // Clear the success message
-      // Try to get redirect information from localStorage
+      // Get any stored redirect information (for apply form)
       const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
       const redirectCourseCode = localStorage.getItem('redirectCourseCode');
-      // If user was applying for a course before login
+      // If the user was trying to apply for a course before login
       if (redirectAfterLogin === 'apply' && redirectCourseCode) {
-        // Clear the stored redirect info
+        // Clear the stored redirect data
         localStorage.removeItem('redirectAfterLogin');
         localStorage.removeItem('redirectCourseCode');
         // Redirect user to the course application page
         navigate(`/apply/${redirectCourseCode}`);
       } else {
-        // Otherwise, redirect based on user's role
+        // Otherwise, redirect based on user role
         if (matchedUser.role === 'tutor') {
-          navigate('/tutor-dashboard');
+          navigate('/tutor-dashboard'); // Tutor dashboard
         } else if (matchedUser.role === 'lecturer') {
-          navigate('/lecturer-dashboard');
+          navigate('/lecturer-dashboard'); // Lecturer dashboard
         } else {
-          // Back to home page
-          navigate('/'); 
+          navigate('/'); // Default: Home page
         }
       }
     }, 3000);
@@ -263,7 +271,7 @@ const Login: React.FC<LoginProps> = ({ setIsSignedIn, setUserRole }) => {
 
 export default Login;
 
-// styling
+// Inline styling object for the section
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex',

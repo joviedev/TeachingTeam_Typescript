@@ -1,8 +1,21 @@
+
 /**
  * Site key used for Google reCAPTCHA verification.
  * Replace with your own reCAPTCHA site key when deploying.
  */
-export const CAPTCHA_SITE_KEY = '6LerUwwrAAAAAN6kDX6p0h_JibgEx7xzZ51b15X1';
+
+// recaptcha v2 key - link from jovie's google account
+export const CAPTCHA_SITE_KEY = '6LerUwwrAAAAAN6kDX6p0h_JibgEx7xzZ51b15X1'; 
+
+/**
+ * User type definition for authentication and user management.
+ */
+
+export type User = {
+  email: string;
+  password: string;
+  role: string;
+};
 
 /**
  * Dummy user accounts for testing login functionality.
@@ -10,6 +23,7 @@ export const CAPTCHA_SITE_KEY = '6LerUwwrAAAAAN6kDX6p0h_JibgEx7xzZ51b15X1';
  * - Includes both tutors and lecturers.
  * - Each user has a predefined email, password, and role.
  */
+
 export const dummyUsers = [
   { email: 'tutor1@tutor.com', password: 'Tutor123!', role: 'tutor' },
   { email: 'tutor2@tutor.com', password: 'Tutor234!', role: 'tutor' },
@@ -22,8 +36,9 @@ export const dummyUsers = [
 /**
  * Predefined skill options available for application forms.
  * 
- * - Each object has a `value` (for logic) and a `label` (for UI).
+ * - Each object has a `value` (for logic) and a `label` (for UI display).
  */
+
 export const skillOptions = [
   { value: 'Python', label: 'Python' },
   { value: 'ReactJS', label: 'React.js' },
@@ -42,19 +57,19 @@ export const skillOptions = [
 /**
  * Days of the week used for availability selection.
  * 
- * - Typically mapped to applicant availability preferences.
+ * - Typically mapped to tutor or applicant availability.
  */
-export const daysOfWeek = [
-  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-];
+
+export const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 /**
- * Time slot options for availability forms.
+ * Time slot options for availability selection in application forms.
  * 
  * - Includes half-day, full-day, and not applicable options.
  */
+
 export const timeOptions = [
-  { value: '', label: 'Select Time Slot' },         // Default option
+  // { value: '', label: 'Select Time Slot' }, default placeholder
   { value: '9am-12pm', label: '9am – 12pm' },
   { value: '1pm-5pm', label: '1pm – 5pm' },
   { value: '5pm-9pm', label: '5pm – 9pm' },
@@ -63,21 +78,23 @@ export const timeOptions = [
 ];
 
 /**
- * Generic interface for dropdown/selectable options.
+ * Generic option type used for dropdown/selectable lists.
  */
+
 interface Option {
   value: string;
   label: string;
+  
 }
-
 /**
- * Status filter options for application views.
+ * Status filter options for tutor application views.
  * 
- * - Used to filter applications by current processing status.
+ * - Used to filter applications by their current processing status.
  */
+
 export const statusOptions: Option[] = [
-  { value: '', label: 'All Applications' },         // Show all
-  { value: 'processing', label: 'Processing' },     // Pending review
-  { value: 'approved', label: 'Approved' },         // Accepted applications
-  { value: 'rejected', label: 'Rejected' },         // Denied applications
+  { value: '', label: 'All Applications' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'rejected', label: 'Rejected' }
 ];
