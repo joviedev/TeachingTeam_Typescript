@@ -115,7 +115,7 @@ const ApplicationDetail = () => {
             </p>
             <p>
               <label>Previous Role: </label>
-              <span>{applicationDetail?.previousRole}</span>
+              <span>{applicationDetail?.previousRole || 'N/A'}</span>
             </p>
             <p>
               <label>GPA: </label>

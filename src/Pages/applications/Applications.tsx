@@ -97,6 +97,10 @@ const Applications = () => {
                       <span>{application.fullName}</span>
                     </div>
                     <div className='single'>
+                      <label>Previous Role: </label>
+                      <span>{application.previousRole || 'N/A'}</span>
+                    </div>
+                    <div className='single'>
                       <label>Skills: </label>
                       <span>{application.skills.join(',')}</span>
                     </div>
