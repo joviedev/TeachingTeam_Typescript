@@ -42,6 +42,7 @@ export interface ApplicationInterface {
 };
 
 const ApplyForm: React.FC = () => {
+  const [submitError, setSubmitError] = useState<string>(''); 
   const navigate = useNavigate();  // Hook to programmatically navigate between routes
   const { code } = useParams();    // Get dynamic URL parameter (course code) from the route
   const { userInfo } = useAuth();  // Get current logged-in user info from AuthProvider
@@ -188,17 +189,54 @@ const ApplyForm: React.FC = () => {
     setSkills(skills.filter((s) => s !== skill)); // Keep only skills that are NOT the one being removed
   };
 
+  // Prevent the default form submission behavior 
+  // otherwise the page would reload and we would lose all form data
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the default form submission behavior (page reload)
-  
-    const validationErrors = validate(); // Validate form fields
-  
-    // If there are validation errors, update the errors state
+    e.preventDefault();
+    
+    // Run validation function to check if the user filled the form properly
+    const validationErrors = validate();
+    // If there are validation errors, save them into state so we can display red error messages next to fields
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      const { courseType } = selectedCourse || {}; // Extract course type from selected course
+      // Stop the form from submitting if validation fails
+      return; 
+    }
+
+    // Extract the courseType from the selected course. 
+    // If no course is selected, default to an empty object.
+    const { courseType } = selectedCourse || {};
+
+    // Convert courseType to lowercase for easier comparison. 
+    // If courseType is undefined, default to an empty string.
+    const lowerCourseType = courseType?.toLowerCase() || '';
   
+    let lecturerDashboardName = ''; // Initialize a variable to store which lecturer dashboard to save the application to.
+    
+    // If the course is a diploma or vocational course, save to lecturer 1's dashboard.
+    if (lowerCourseType.includes('diploma') || lowerCourseType.includes('vocational')) {
+      lecturerDashboardName = 'lecturer1Applications';
+      // If the course is a bachelor course, save to lecturer 2's dashboard.
+    } else if (lowerCourseType.includes('bachelor')) {
+      lecturerDashboardName = 'lecturer2Applications';
+    } else {
+      // If the course is neither diploma, vocational, nor bachelor, save to lecturer 3's dashboard (default for master's or other courses).
+      lecturerDashboardName = 'lecturer3Applications';
+    }
+
+    // Retrieve existing applications from localStorage based on the lecturer dashboard name.
+    // If there are no existing applications yet, default to an empty array.
+    const existingApplications = JSON.parse(localStorage.getItem(lecturerDashboardName) || '[]');
+  
+    // Check if there is already an application submitted by the same user (same email address) for the same course (same course code).
+    const isDuplicate = existingApplications.some((app: ApplicationInterface) =>
+      app.applicantEmail === userInfo?.email && app.courseInfo.code === selectedCourse?.code
+    );
+    // If a duplicate application is found, set an error message and stop the form submission.
+    if (isDuplicate) {
+      setSubmitError('You have already submitted an application for this course.');
+      return;
+    }
       // Build a new application object with all the form data
       const newApplication = {
         ...form,                      // fullName, preferredName, gender, roleType
@@ -213,33 +251,16 @@ const ApplyForm: React.FC = () => {
         applicantEmail: userInfo?.email, // Email of the applicant
         id: String(+new Date())        // Unique ID generated from timestamp
       };
-      // Determine which lecturer dashboard to save to
-      let lecturerDashboard = '';
-
-      // Normalize courseType to lowercase for easier comparison
-const lowerCourseType = courseType?.toLowerCase() || '';
-
-// Decide lecturer dashboard based on course type
-if (lowerCourseType.includes('diploma') || lowerCourseType.includes('vocational')) {
-  lecturerDashboard = 'lecturer1Applications';  // Save to Lecturer 1 dashboard
-} else if (lowerCourseType.includes('bachelor')) {
-  lecturerDashboard = 'lecturer2Applications';  // Save to Lecturer 2 dashboard
-} else {
-  lecturerDashboard = 'lecturer3Applications';  // Save to Lecturer 3 dashboard (default for Masters, others)
-}
-
-// Get existing applications already stored for this lecturer
-const existingApplications = JSON.parse(localStorage.getItem(lecturerDashboard) || '[]');
 
 // Add the new application to the beginning of the list
 const updatedApplications = [newApplication, ...existingApplications];
 
 // Save the updated list back to localStorage
-localStorage.setItem(lecturerDashboard, JSON.stringify(updatedApplications));
+localStorage.setItem(lecturerDashboardName, JSON.stringify(updatedApplications));
 
 // Set submitted state to true to show success message
 setSubmitted(true);
-    }
+  
   };
 
   return (
@@ -250,7 +271,11 @@ setSubmitted(true);
             <h2 style={styles.courseTitleText}>Applying for: {selectedCourse.title}</h2>
           </div>
         )}
-
+        {submitError && (
+          <div style={styles.errorBox}>
+            {submitError}
+          </div>
+        )}
         {submitted ? (
           <div style={styles.successBox}>
             <div style={styles.successTitle}>Application Submitted!</div>
@@ -583,5 +608,15 @@ const styles: { [key: string]: React.CSSProperties } = {
   successText: { 
     fontSize: '16px', 
     color: '#334155' 
+  },
+  errorBox: {
+    backgroundColor: '#fee2e2',
+    color: '#b91c1c',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    marginBottom: '20px',
+    fontWeight: 600,
+    textAlign: 'center',
   }
+  
 };

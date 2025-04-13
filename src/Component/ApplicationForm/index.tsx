@@ -146,25 +146,25 @@ const ApplicationForm = ({ ref, readOnly = false }: ApplicationFormProps) => {
   const validate = () => {
     // Create a new object to store any error messages found during validation
     const newErrors: { [key: string]: string } = {};
-    // Check if fullName is filled
+    // Validation Rule 1: Full Name must be entered and match the format "First Name, Last Name"
     if (!form.fullName.trim()) newErrors.fullName = 'Full Name is required.';
-    // Check if fullName matches the correct format
     else if (!/^[A-Za-z]+,\s[A-Za-z]+$/.test(form.fullName.trim())) {
       newErrors.fullName = 'Please enter your full name in the format: First Name, Last Name. Example: Jovie, Sin';
     }
-    // Check if gender is selected
+    // Validation Rule 2: Gender must be selected
     if (!form.gender) newErrors.gender = 'Gender is required.';
-    // Check if roleType is selected
+    // Validation Rule 3: Previous Role must be entered (NEW validation added)
     if (!form.roleType) newErrors.roleType = 'Role Type is required.';
-    // Check if at least one skill is selected
+    // Validation Rule 4: At least one skill must be selected
     if (skills.length === 0) newErrors.skills = 'Please select at least one skill.';
 
-    // Check each day of the week to make sure user selected at least one time slot
+    // Validation Rule 5: Availability must have at least one selected time slot per day
     daysOfWeek.forEach((day) => {
       if (!availability[day] || availability[day].length === 0) {
         newErrors[day] = `Please select a time slot for ${day}`;
       }
 
+      // Validation Rule 6: GPA must be entered and must be a valid number ≤ 4.0
       // GPA validation (this part should ideally be outside the loop, but explaining as written)
       // Check if GPA is filled
       if (!academicResult.trim()) {
