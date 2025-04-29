@@ -1,3 +1,25 @@
+TeachTeam (TT) is a React TypeScript front-end prototype web application designed to assist the School of Computer Science in selecting and hiring casual tutors.
+The system allows:
+Tutor applicants to submit applications detailing their qualifications, availability, and skills.
+Lecturers to browse, select, rank, and comment on tutor candidates.
+
+Technologies Used
+React (with TypeScript) — Client-side prototype development
+TailwindCSS — Styling and responsive layout
+HTML5 LocalStorage — Temporary data storage (no database)
+Custom Hooks — State management and reusable logic
+Vite — Project scaffolding and fast development serve
+Google reCaptcha v2
+
+📋 Core Features
+Home Page: Landing page introducing the TeachTeam system.
+Navigation Bar: Links to About, Become a Tutor, Sign In, Create Account, and Sign Out. Sign in with different position (tutor or lecturer) will show different elements in navigation bar.
+Sign Up/Sign In Pages: (Sign Up link only; Sign In is functional with LocalStorage validation).
+Tutor Application Page: Allows tutors to apply, selecting courses and providing personal credentials.
+Lecturer Management Page: Allows lecturers to view, rank, and comment on applicants.
+LocalStorage: Stores applicant and login session data for simulation.
+Responsive Design: Mobile-friendly layouts and professional presentation.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
